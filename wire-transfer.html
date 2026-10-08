@@ -264,19 +264,19 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;height:64px;display:flex;alig
 
 <!-- NAV -->
 <nav>
-  <a href="home" class="nav-logo">
+  <a href="home.html" class="nav-logo">
     <div class="nav-logo-mark">
       <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M9 2L16 6V12L9 16L2 12V6L9 2Z" stroke="white" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 6L12 8V12L9 14L6 12V8L9 6Z" fill="white" opacity="0.7"/></svg>
     </div>
     <span class="nav-logo-txt">GLOBAL<span>EASYTRANSASSET</span></span>
   </a>
   <div class="nav-mid">
-    <a href="dashboard" class="nav-link">Dashboard</a>
-    <a href="virtual-card" class="nav-link">Virtual Card</a>
-    <a href="wire-transfer" class="nav-link active">Wire Transfer</a>
+    <a href="dashboard.html" class="nav-link">Dashboard</a>
+    <a href="virtual-card.html" class="nav-link">Virtual Card</a>
+    <a href="wire-transfer.html" class="nav-link active">Wire Transfer</a>
   </div>
   <div class="nav-right">
-    <a href="dashboard" class="nav-back"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Dashboard</a>
+    <a href="dashboard.html" class="nav-back"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Dashboard</a>
     <div class="nav-secure"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>SSL Encrypted</div>
   </div>
 </nav>
@@ -712,7 +712,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;height:64px;display:flex;alig
       <div class="succ-ref">Transaction Reference<strong id="txRef">GA-TXN-xxxxxxxx</strong></div>
       <div class="succ-btns">
         <button class="btn-new" onclick="resetForm()">Send Another</button>
-        <a href="dashboard" class="btn-dash"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a>
+        <a href="dashboard.html" class="btn-dash"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a>
       </div>
     </div>
 
@@ -863,9 +863,9 @@ let buyWalletAddresses = {
   try {
     // Check auth
     const authRes = await fetch('/api/check-auth', { credentials: 'same-origin' });
-    if (!authRes.ok) { window.location.href = '/login'; return; }
+    if (!authRes.ok) { window.location.href = 'login.html'; return; }
     const authData = await authRes.json();
-    if (!authData.success || !authData.user) { window.location.href = '/login'; return; }
+    if (!authData.success || !authData.user) { window.location.href = 'login.html'; return; }
 
     // Load wire transfer options
     const optRes = await fetch('/api/wire-transfer/options', { credentials: 'same-origin' });
@@ -946,7 +946,7 @@ function renderBuyPanel() {
 }
 
 function redirectToVirtualCard() {
-  window.location.href = 'virtual-card';
+  window.location.href = 'virtual-card.html';
 }
 
 function selectBuyCrypto(crypto) {
@@ -1308,7 +1308,7 @@ async function confirmTransfer(){
     const pinData = await pinRes.json();
     if (!pinData.hasPin) {
       if (confirm('You need to set a transaction PIN to send money. Go to Settings now?')) {
-        window.location.href = '/settings';
+        window.location.href = 'settings.html';
       }
       return;
     }

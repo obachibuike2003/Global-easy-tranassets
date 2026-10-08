@@ -706,7 +706,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:#F0F4FA;color:#0A0A0A
 
 <!-- ──────── SIDEBAR ──────── -->
 <aside class="sidebar" id="sidebar">
-  <a href="home" class="sb-logo">
+  <a href="home.html" class="sb-logo">
     <div class="sb-logo-mark">
       <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
         <path d="M9 2L16 6V12L9 16L2 12V6L9 2Z" stroke="white" stroke-width="1.8" stroke-linejoin="round"/>
@@ -745,7 +745,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:#F0F4FA;color:#0A0A0A
     <div class="sb-section-label" style="margin-top:8px">Banking</div>
 
     <!-- Wire Transfer -->
-    <button class="sb-link" onclick="window.location.href='/wire-transfer'">
+    <button class="sb-link" onclick="window.location.href='wire-transfer.html'">
       <div class="sb-link-icon">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
@@ -768,7 +768,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:#F0F4FA;color:#0A0A0A
     </button>
 
     <!-- Virtual Card -->
-    <a class="sb-link" href="virtual-card">
+    <a class="sb-link" href="virtual-card.html">
       <div class="sb-link-icon">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
@@ -779,7 +779,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:#F0F4FA;color:#0A0A0A
     </a>
 
     <!-- Transaction History -->
-    <a class="sb-link" href="transaction-history">
+    <a class="sb-link" href="transaction-history.html">
       <div class="sb-link-icon">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
@@ -792,7 +792,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:#F0F4FA;color:#0A0A0A
   </nav>
 
   <div class="sb-bottom">
-    <a class="sb-bottom-link" href="settings">
+    <a class="sb-bottom-link" href="settings.html">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
       Settings
     </a>
@@ -858,7 +858,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:#F0F4FA;color:#0A0A0A
         </div>
       </div>
       <div class="balance-hero-right">
-        <button class="balance-action-btn primary" onclick="window.location.href='/wire-transfer'">
+        <button class="balance-action-btn primary" onclick="window.location.href='wire-transfer.html'">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           Send Money
         </button>
@@ -871,21 +871,21 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:#F0F4FA;color:#0A0A0A
 
     <!-- Quick Actions -->
     <div class="quick-actions">
-      <button class="qa-btn" onclick="window.location.href='/wire-transfer'">
+      <button class="qa-btn" onclick="window.location.href='wire-transfer.html'">
         <div class="qa-icon" style="background:rgba(30,107,255,0.10)">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1E6BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
         </div>
         <div class="qa-label">Wire Transfer</div>
         <div class="qa-sub">Send globally</div>
       </button>
-      <button class="qa-btn" onclick="window.location.href='/virtual-card'">
+      <button class="qa-btn" onclick="window.location.href='virtual-card.html'">
         <div class="qa-icon" style="background:rgba(245,158,11,0.10)">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
         </div>
         <div class="qa-label">Virtual Card</div>
         <div class="qa-sub">Instant cards</div>
       </button>
-      <button class="qa-btn" onclick="window.location.href='/transaction-history'">
+      <button class="qa-btn" onclick="window.location.href='transaction-history.html'">
         <div class="qa-icon" style="background:rgba(34,197,94,0.10)">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
         </div>
@@ -971,7 +971,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:#F0F4FA;color:#0A0A0A
               <div class="card-title">Monthly Overview</div>
               <div class="card-sub">Transaction volume</div>
             </div>
-            <button class="card-action" onclick="window.location.href='/transaction-history'">Full Report</button>
+            <button class="card-action" onclick="window.location.href='transaction-history.html'">Full Report</button>
           </div>
           <div class="card-body">
             <div class="chart-wrap" id="chartWrap"></div>
@@ -986,7 +986,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:#F0F4FA;color:#0A0A0A
               <div class="card-title">Recent Transactions</div>
               <div class="card-sub">Last 5 activities</div>
             </div>
-            <button class="card-action" onclick="window.location.href='/transaction-history'">See All</button>
+            <button class="card-action" onclick="window.location.href='transaction-history.html'">See All</button>
           </div>
           <div class="txn-list" id="recentTransactions">
             <!-- Transactions will be populated here -->
@@ -1001,7 +1001,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:#F0F4FA;color:#0A0A0A
         <div class="card">
           <div class="card-header">
             <div class="card-title">Virtual Card</div>
-            <button class="card-action" onclick="window.location.href='/virtual-card'">Manage</button>
+            <button class="card-action" onclick="window.location.href='virtual-card.html'">Manage</button>
           </div>
           <div class="card-body">
             <div id="virtualCardMini"></div>
@@ -1042,7 +1042,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:#F0F4FA;color:#0A0A0A
               <div class="card-title">Active Virtual Card</div>
               <div class="card-sub">Mastercard and Visa options available.</div>
             </div>
-            <button class="card-action" onclick="window.location.href='/virtual-card'">Manage</button>
+            <button class="card-action" onclick="window.location.href='virtual-card.html'">Manage</button>
           </div>
           <div class="card-body">
             <div class="vc-real-card">
@@ -1236,7 +1236,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:#F0F4FA;color:#0A0A0A
     
     if (!authResponse.ok) {
       console.log('Dashboard: Not logged in (status ' + authResponse.status + '), redirecting to login');
-      window.location.href = '/login';
+      window.location.href = 'login.html';
       return;
     }
 
@@ -1246,7 +1246,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:#F0F4FA;color:#0A0A0A
     if (!authData.success || !authData.user) {
       console.log('Dashboard: Auth check failed - success:', authData.success, 'user:', authData.user);
       console.log('Dashboard: Redirecting to login');
-      window.location.href = '/login';
+      window.location.href = 'login.html';
       return;
     }
 
@@ -1329,7 +1329,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:#F0F4FA;color:#0A0A0A
     console.error('Dashboard load error:', error.message);
     console.error('Error stack:', error.stack);
     console.error('=======================');
-    window.location.href = '/login';
+    window.location.href = 'login.html';
   }
 })();
 
@@ -1384,10 +1384,10 @@ function handleLogout(e) {
   console.log('=== LOGOUT CLICKED ===');
   fetch('/api/logout', { method: 'GET', credentials: 'same-origin' })
     .then(() => {
-      window.location.href = '/login';
+      window.location.href = 'login.html';
     })
     .catch(() => {
-      window.location.href = '/login';
+      window.location.href = 'login.html';
     });
 }
 
