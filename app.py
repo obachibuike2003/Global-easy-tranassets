@@ -19,8 +19,10 @@ if os.path.exists(_env_path):
 
 app = Flask(__name__, static_folder='.', static_url_path='')
 _db_url = os.environ.get('DATABASE_URL', 'sqlite:///banking_app.db').strip()
-if _db_url.startswith('postgres://'):
-    _db_url = _db_url.replace('postgres://', 'postgresql://', 1)
+# Always use the psycopg2 driver (the one in requirements.txt)
+for _prefix in ('postgres://', 'postgresql://'):
+    if _db_url.startswith(_prefix):
+        _db_url = 'postgresql+psycopg2://' + _db_url[len(_prefix):]
 app.config['SQLALCHEMY_DATABASE_URI'] = _db_url
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_pre_ping': True}
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
