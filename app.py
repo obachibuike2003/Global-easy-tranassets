@@ -72,6 +72,9 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
+# Public site address used in email links (Render sets RENDER_EXTERNAL_URL)
+BASE_URL = (os.environ.get('BASE_URL') or os.environ.get('RENDER_EXTERNAL_URL') or 'http://127.0.0.1:5000').rstrip('/')
+
 # SMTP configuration (from environment / .env)
 SMTP_HOST = os.environ.get('SMTP_HOST', 'smtp.gmail.com')
 SMTP_PORT = int(os.environ.get('SMTP_PORT', 587))
@@ -723,7 +726,7 @@ def api_verify_otp():
           <p style="color: #6B7280; font-size: 14px;">You can now log in and start using our banking services.</p>
         ''',
         button_text='Go to Dashboard',
-        button_url='http://127.0.0.1:5000/dashboard'
+        button_url=f'{BASE_URL}/dashboard'
     )
     send_email(
         to_email=email,
@@ -1264,7 +1267,7 @@ def api_forgot_password():
           <p style="color: #9CA3AF; font-size: 13px; margin-top: 20px;">If you didn't request a password reset, you can safely ignore this email.</p>
         ''',
         button_text='Go to Login',
-        button_url='http://127.0.0.1:5000/login'
+        button_url=f'{BASE_URL}/login'
     )
     send_email(
         to_email=email,
@@ -1325,7 +1328,7 @@ def api_reset_password():
           <p style="color: #6B7280; font-size: 14px;">If you didn't make this change, please contact support immediately.</p>
         ''',
         button_text='Go to Login',
-        button_url='http://127.0.0.1:5000/login'
+        button_url=f'{BASE_URL}/login'
     )
     send_email(
         to_email=email,
@@ -1608,7 +1611,7 @@ def admin_user_action(user_id, action):
                   <p style="color: #6B7280; font-size: 14px;">Log in to your dashboard to view your updated balance.</p>
                 ''',
                 button_text='View Dashboard',
-                button_url='http://127.0.0.1:5000/dashboard',
+                button_url=f'{BASE_URL}/dashboard',
                 to_email=user.email
             )
             send_email(
