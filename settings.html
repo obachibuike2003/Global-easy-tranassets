@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Settings — GLOBALEASYTRANSASSET</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;height:100%}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#F0F4FA;color:#0A0A0A;min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+:root{--bg:#F0F4FA;--card:#FFFFFF;--blue:#1E6BFF;--blue-deep:#0B3D91;--blue-accent:#4DA3FF;--blue-light:#EBF2FF;--text:#0A0A0A;--text-sec:#6B7280;--border:#E5EAF2;--radius:14px;--shadow:0 4px 24px rgba(30,107,255,0.09);--shadow-lg:0 16px 56px rgba(11,61,145,0.13);--transition:0.28s cubic-bezier(0.4,0,0.2,1);--success:#22C55E;--error:#EF4444;--warning:#F59E0B;--nav-w:256px;--topbar-h:70px}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--blue-accent);border-radius:99px}
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--nav-w);background:linear-gradient(180deg,#060f22 0%,#0B3D91 60%,#0d52c2 100%);display:flex;flex-direction:column;z-index:200;border-right:1px solid rgba(255,255,255,0.06)}
+.sidebar::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);background-size:36px 36px;pointer-events:none}
+.sb-logo{display:flex;align-items:center;gap:10px;padding:22px 22px 20px;text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.07);position:relative;z-index:1}
+.sb-logo-mark{width:36px;height:36px;background:linear-gradient(135deg,var(--blue) 0%,rgba(255,255,255,0.15) 100%);border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(30,107,255,0.40);border:1px solid rgba(255,255,255,0.15)}
+.sb-logo-text{font-size:15px;font-weight:800;letter-spacing:-0.3px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px}
+.sb-logo-text span{color:var(--blue-accent)}
+.sb-user{display:flex;align-items:center;gap:12px;padding:18px 22px;border-bottom:1px solid rgba(255,255,255,0.07);position:relative;z-index:1}
+.sb-avatar{width:40px;height:40px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--blue),rgba(255,255,255,0.2));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;border:2px solid rgba(255,255,255,0.2)}
+.sb-user-name{font-size:14px;font-weight:700;color:#fff}
+.sb-user-id{font-size:11px;color:rgba(255,255,255,0.45);margin-top:2px}
+.sb-user-badge{margin-left:auto;display:flex;align-items:center;gap:4px;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.25);padding:3px 8px;border-radius:99px}
+.sb-user-badge-dot{width:5px;height:5px;border-radius:50%;background:#22C55E;animation:pulse 2s infinite}
+.sb-user-badge span{font-size:10px;font-weight:700;color:#22C55E}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+.sb-nav{flex:1;overflow-y:auto;padding:16px 12px;display:flex;flex-direction:column;gap:2px;position:relative;z-index:1}
+.sb-nav::-webkit-scrollbar{width:3px}
+.sb-nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15)}
+.sb-section-label{font-size:10px;font-weight:700;color:rgba(255,255,255,0.3);letter-spacing:1px;text-transform:uppercase;padding:12px 10px 6px}
+.sb-link{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-size:14px;font-weight:600;color:rgba(255,255,255,0.6);cursor:pointer;text-decoration:none;transition:all var(--transition);border:1px solid transparent;background:none;width:100%;font-family:inherit;text-align:left;position:relative}
+.sb-link:hover{color:rgba(255,255,255,0.9);background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.08)}
+.sb-link.active{color:#fff;background:rgba(30,107,255,0.25);border-color:rgba(30,107,255,0.30);box-shadow:0 4px 16px rgba(30,107,255,0.15)}
+.sb-link-icon{width:36px;height:36px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.5);transition:all var(--transition)}
+.sb-link:hover .sb-link-icon{background:rgba(255,255,255,0.10);color:rgba(255,255,255,0.8)}
+.sb-link.active .sb-link-icon{background:rgba(30,107,255,0.30)}
+.sb-link-label{flex:1}
+.sb-bottom{padding:14px 12px 18px;border-top:1px solid rgba(255,255,255,0.07);position:relative;z-index:1;display:flex;flex-direction:column;gap:2px}
+.sb-bottom-link{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:600;color:rgba(255,255,255,0.45);cursor:pointer;transition:all var(--transition);text-decoration:none;background:none;border:none;font-family:inherit;width:100%;text-align:left}
+.sb-bottom-link:hover{color:rgba(255,255,255,0.8);background:rgba(255,255,255,0.06)}
+.sb-overlay{display:none;position:fixed;inset:0;z-index:190;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px)}
+.main{margin-left:var(--nav-w);min-height:100vh;display:flex;flex-direction:column}
+.topbar{position:sticky;top:0;z-index:100;height:var(--topbar-h);background:rgba(255,255,255,0.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 36px 0 28px;gap:16px}
+.topbar-menu-btn{display:none;width:38px;height:38px;border-radius:9px;border:1.5px solid var(--border);background:#fff;cursor:pointer;align-items:center;justify-content:center;transition:all var(--transition)}
+.topbar-menu-btn:hover{border-color:var(--blue);color:var(--blue)}
+.topbar-greeting{flex:1}
+.topbar-title{font-size:18px;font-weight:800;color:var(--text);letter-spacing:-0.3px}
+.topbar-sub{font-size:13px;color:var(--text-sec);margin-top:1px}
+.topbar-actions{display:flex;align-items:center;gap:10px}
+.topbar-search{display:flex;align-items:center;gap:8px;background:var(--bg);border:1.5px solid var(--border);padding:9px 14px;border-radius:10px;cursor:text;transition:all var(--transition)}
+.topbar-search:hover,.topbar-search:focus-within{border-color:var(--blue)}
+.topbar-search input{border:none;background:none;font-size:13px;font-weight:500;color:var(--text);outline:none;width:160px;font-family:inherit}
+.topbar-search input::placeholder{color:var(--text-sec)}
+.topbar-icon-btn{width:38px;height:38px;border-radius:9px;border:1.5px solid var(--border);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-sec);transition:all var(--transition);position:relative}
+.topbar-icon-btn:hover{border-color:var(--blue);color:var(--blue)}
+.topbar-notif-dot{position:absolute;top:7px;right:7px;width:8px;height:8px;border-radius:50%;background:#EF4444;border:2px solid #fff}
+.topbar-user{display:flex;align-items:center;gap:10px;padding:7px 12px;border-radius:10px;border:1.5px solid var(--border);cursor:pointer;transition:all var(--transition);background:#fff}
+.topbar-user:hover{border-color:var(--blue)}
+.topbar-user-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--blue-deep));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0}
+.topbar-user-name{font-size:13px;font-weight:700;color:var(--text)}
+.content{padding:32px 36px;flex:1}
+.card{background:var(--card);border-radius:var(--radius);border:1.5px solid var(--border);overflow:hidden}
+.card-header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 16px;border-bottom:1px solid var(--border)}
+.card-title{font-size:15px;font-weight:800;color:var(--text)}
+.card-sub{font-size:12px;color:var(--text-sec);margin-top:2px}
+.card-action{font-size:13px;font-weight:600;color:var(--blue);text-decoration:none;cursor:pointer;transition:color var(--transition);background:none;border:none;font-family:inherit}
+.card-action:hover{color:var(--blue-deep)}
+.card-body{padding:20px 24px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px}
+.page-header{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:24px}
+.page-header-title{font-size:28px;font-weight:800;color:var(--text);margin-bottom:6px}
+.page-header-sub{font-size:14px;color:var(--text-sec);max-width:640px;line-height:1.6}
+.form-row{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.form-label{font-size:13px;font-weight:700;color:var(--text)}
+.form-input,.form-select,.form-textarea{width:100%;border:1.5px solid var(--border);border-radius:12px;padding:14px 16px;font-size:14px;color:var(--text);background:#fff;outline:none;transition:border-color var(--transition)}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--blue)}
+.form-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;background-size:16px 16px}
+.toggle-row{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border:1px solid var(--border);border-radius:14px;background:#fff;margin-bottom:14px}
+.toggle-label{font-size:14px;font-weight:700;color:var(--text)}
+.toggle-status{font-size:13px;color:var(--text-sec)}
+.form-footnote{font-size:13px;color:var(--text-sec);line-height:1.6}
+.support-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}
+.support-item{background:var(--card);border:1.5px solid var(--border);border-radius:16px;padding:22px;transition:all var(--transition)}
+.support-item:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+.help-article{border:1.5px solid var(--border);border-radius:16px;padding:20px;margin-bottom:16px}
+.help-article-title{font-size:15px;font-weight:800;color:var(--text);margin-bottom:8px}
+.help-article-text{font-size:14px;color:var(--text-sec);line-height:1.7}
+.balance-action-btn{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.18);padding:10px 18px;border-radius:10px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;transition:all var(--transition);font-family:inherit;white-space:nowrap}
+.balance-action-btn:hover{background:rgba(255,255,255,0.20);border-color:rgba(255,255,255,0.30)}
+.balance-action-btn.primary{background:rgba(30,107,255,0.5);border-color:rgba(30,107,255,0.6)}
+.balance-action-btn.primary:hover{background:rgba(30,107,255,0.7)}
+@media(max-width:900px){:root{--nav-w:0px}.sidebar{transform:translateX(-256px);width:256px;transition:transform 0.3s ease}.sidebar.open{transform:translateX(0)}.sb-overlay.show{display:block}.main{margin-left:0}.topbar-menu-btn{display:flex}.topbar-search{display:none}.content{padding:20px 18px}.grid-2{grid-template-columns:1fr}}
+@media(max-width:600px){.page-header{flex-direction:column;align-items:stretch;}.page-header-title{font-size:24px}.grid-2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<aside class="sidebar" id="sidebar">
+  <a href="dashboard" class="sb-logo"><div class="sb-logo-mark"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L16 6V12L9 16L2 12V6L9 2Z" stroke="white" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 6L12 8V12L9 14L6 12V8L9 6Z" fill="white" opacity="0.7"/></svg></div><span class="sb-logo-text">GLOBAL<span>EASYTRANSASSET</span></span></a>
+  <div class="sb-user"><div class="sb-avatar">JO</div><div><div class="sb-user-name">James leo</div><div class="sb-user-id">Acct: —</div></div><div class="sb-user-badge"><div class="sb-user-badge-dot"></div><span>Active</span></div></div>
+  <nav class="sb-nav"><div class="sb-section-label">Main</div><a href="dashboard" class="sb-link"><div class="sb-link-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div><span class="sb-link-label">Dashboard</span></a><div class="sb-section-label" style="margin-top:8px">Banking</div><a href="wire-transfer" class="sb-link"><div class="sb-link-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div><span class="sb-link-label">Wire Transfer</span></a><a href="virtual-card" class="sb-link"><div class="sb-link-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div><span class="sb-link-label">Virtual Card</span></a><a href="loan-mortgage" class="sb-link"><div class="sb-link-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><span class="sb-link-label">Loan & Mortgage</span></a><a href="transaction-history" class="sb-link"><div class="sb-link-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><span class="sb-link-label">Transaction History</span></a></nav>
+  <div class="sb-bottom"><a href="settings" class="sb-bottom-link active"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>Settings</a><a href="help-support" class="sb-bottom-link"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Help & Support</a></div>
+</aside>
+<div class="sb-overlay" id="sbOverlay" onclick="closeSidebar()"></div>
+<div class="main">
+  <header class="topbar"><button class="topbar-menu-btn" id="menuBtn" onclick="openSidebar()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button><div class="topbar-greeting"><div class="topbar-title">Settings</div><div class="topbar-sub" id="topbarDate">Loading…</div></div><div class="topbar-actions"><div class="topbar-search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" placeholder="Quick search…"/></div><button class="topbar-icon-btn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div class="topbar-notif-dot"></div></button><div class="topbar-user"><div class="topbar-user-avatar">JO</div><div class="topbar-user-name">James O.</div><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></div></div></header>
+  <div class="content">
+    <div class="page-header"><div><div class="page-header-title">Settings</div><div class="page-header-sub">Manage profile, security, and notification preferences from one secure control center.</div></div><a href="dashboard" class="card-action">Back to Dashboard</a></div>
+    <div class="grid-2"><div class="card page-card"><div class="card-header"><div><div class="card-title">Profile Settings</div><div class="card-sub">Update your personal details and account preferences.</div></div></div><div class="card-body"><div class="form-row"><label class="form-label">Full name</label><input class="form-input" type="text" id="profileName" value=""/></div><div class="form-row"><label class="form-label">Email address</label><input class="form-input" type="email" id="profileEmail" value="" disabled/></div><div class="form-row"><label class="form-label">Phone number</label><input class="form-input" type="text" id="profilePhone" value=""/></div><div class="form-row"><label class="form-label">Preferred currency</label><select class="form-select" id="profileCurrency"><option value="USD">USD</option><option value="EUR">EUR</option><option value="GBP">GBP</option></select></div><button class="balance-action-btn primary" style="width:100%;margin-top:16px;" onclick="saveProfile()">Save Changes</button><div class="form-footnote">Changes are saved instantly. If you need help updating information, contact support from the bottom of the sidebar.</div></div></div><div class="card page-card"><div class="card-header"><div><div class="card-title">Security & Access</div><div class="card-sub">Lock down your account with multi-factor checks and session control.</div></div></div><div class="card-body"><div class="toggle-row"><div><div class="toggle-label">Two-factor authentication</div><div class="toggle-status">Enabled</div></div><button class="card-action" onclick="showComingSoon('Security','Add or review your 2FA methods.')">Manage</button></div><div class="toggle-row"><div><div class="toggle-label">Active sessions</div><div class="toggle-status">3 devices signed in</div></div><button class="card-action" onclick="showComingSoon('Sessions','Review and revoke active sessions.')">Review</button></div><div class="toggle-row"><div><div class="toggle-label">Biometric login</div><div class="toggle-status">Available</div></div><button class="card-action" onclick="showComingSoon('Biometrics','Enable fingerprint or face login on supported devices.')">Enable</button></div><div class="toggle-row"><div><div class="toggle-label">Transaction PIN</div><div class="toggle-status" id="pinStatus">Not set</div></div><button class="card-action" onclick="showPinModal()">Set PIN</button></div></div></div></div>
+    <div class="card page-card"><div class="card-header"><div><div class="card-title">Notification Preferences</div><div class="card-sub">Control alerts for transfers, bills, and account updates.</div></div><button class="card-action" onclick="showComingSoon('Notifications','Customize how you hear from us.')">Edit preferences</button></div><div class="card-body"><div class="support-grid"><div class="support-item"><div class="card-title">Email alerts</div><div class="card-sub">Receive transaction summaries and security updates in your inbox.</div></div><div class="support-item"><div class="card-title">SMS notifications</div><div class="card-sub">Get instant verification and transfer confirmations on your phone.</div></div></div></div></div>
+  </div>
+</div>
+<div class="cs-overlay" id="csOverlay" onclick="closeCS(event)"><div class="cs-modal" onclick="event.stopPropagation()"><div class="cs-icon" id="csIcon" style="background:var(--blue-light)"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1E6BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><h2 class="cs-title" id="csTitle">Coming Soon</h2><p class="cs-text" id="csText">This feature is currently being built and will be available very soon.</p><button class="cs-close" onclick="closeCS()">Got it, I'll check back soon</button></div></div></div>
+
+<!-- PIN Modal -->
+<div class="cs-overlay" id="pinOverlay" onclick="closePinModal(event)">
+  <div class="cs-modal" onclick="event.stopPropagation()" style="max-width:380px">
+    <div class="cs-icon" style="background:var(--blue-light)">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1E6BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+    </div>
+    <h2 class="cs-title" id="pinTitle">Set Transaction PIN</h2>
+    <p class="cs-text" id="pinText">Create a 4-digit PIN to secure your transactions. You'll need this PIN to send money.</p>
+    <div style="display:flex;gap:10px;justify-content:center;margin:20px 0">
+      <input type="password" maxlength="1" class="form-input" id="pin1" style="width:50px;height:56px;text-align:center;font-size:22px;font-weight:800;text-align:center" inputmode="numeric"/>
+      <input type="password" maxlength="1" class="form-input" id="pin2" style="width:50px;height:56px;text-align:center;font-size:22px;font-weight:800" inputmode="numeric"/>
+      <input type="password" maxlength="1" class="form-input" id="pin3" style="width:50px;height:56px;text-align:center;font-size:22px;font-weight:800" inputmode="numeric"/>
+      <input type="password" maxlength="1" class="form-input" id="pin4" style="width:50px;height:56px;text-align:center;font-size:22px;font-weight:800" inputmode="numeric"/>
+    </div>
+    <button class="balance-action-btn primary" style="width:100%" onclick="savePin()">Save PIN</button>
+    <button class="cs-close" onclick="closePinModal()" style="margin-top:12px;background:none;border:none;color:var(--text-sec);cursor:pointer;font-size:13px;font-weight:600">Cancel</button>
+  </div>
+</div>
+<script>
+// Settings Page - Backend Wired
+(async function init() {
+  try {
+    // Auth check
+    const authRes = await fetch('/api/check-auth', { credentials: 'same-origin' });
+    if (!authRes.ok) { window.location.href = '/login'; return; }
+    const auth = await authRes.json();
+    if (!auth.success || !auth.user) { window.location.href = '/login'; return; }
+    
+    // Update sidebar user info
+    const user = auth.user;
+    const formattedAccountNumber = (user.accountNumber || user.id || '').toString().replace(/\D/g, '');
+    document.querySelector('.sb-user-name').textContent = `${user.firstName} ${user.lastName}`;
+    document.querySelector('.sb-user-id').textContent = `Acct: ${formattedAccountNumber}`;
+    document.querySelector('.sb-avatar').textContent = `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`;
+    document.querySelector('.topbar-user-name').textContent = `${user.firstName.charAt(0)}${user.lastName.charAt(0)}.`;
+    
+    // Load settings from backend
+    const res = await fetch('/api/settings', { credentials: 'same-origin' });
+    const data = await res.json();
+    
+    if (data.settings) {
+      const s = data.settings;
+      document.getElementById('profileName').value = s.first_name && s.last_name ? `${s.first_name} ${s.last_name}` : '';
+      document.getElementById('profileEmail').value = s.email || '';
+      document.getElementById('profilePhone').value = s.phone || '';
+      document.getElementById('profileCurrency').value = s.preferred_currency || 'USD';
+    }
+  } catch (e) {
+    console.error('Load error:', e);
+  }
+})();
+
+// Save profile settings
+async function saveProfile() {
+  const nameParts = document.getElementById('profileName').value.trim().split(' ');
+  const firstName = nameParts[0] || '';
+  const lastName = nameParts.slice(1).join(' ') || '';
+  const phone = document.getElementById('profilePhone').value;
+  const currency = document.getElementById('profileCurrency').value;
+  
+  try {
+    const res = await fetch('/api/settings', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        firstName: firstName,
+        lastName: lastName,
+        phone: phone,
+        preferredCurrency: currency
+      })
+    });
+    const data = await res.json();
+    alert(data.success ? 'Settings saved successfully!' : 'Error saving settings');
+  } catch (e) {
+    alert('Error saving settings. Please try again.');
+  }
+}
+
+(function(){const now=new Date();document.getElementById('topbarDate').textContent=now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})+' · All systems normal';})();
+function openSidebar(){document.getElementById('sidebar').classList.add('open');document.getElementById('sbOverlay').classList.add('show')}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sbOverlay').classList.remove('show')}
+function showComingSoon(title,text){document.getElementById('csTitle').textContent=title+' — Coming Soon';document.getElementById('csText').textContent=text+'\n\nOur team is actively building this feature. Stay tuned for the launch!';document.getElementById('csOverlay').classList.add('show')}
+function closeCS(e){if(!e||e.target===document.getElementById('csOverlay'))document.getElementById('csOverlay').classList.remove('show')}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeCS()});
+
+// PIN Modal Functions
+function showPinModal() {
+  document.getElementById('pinOverlay').classList.add('show');
+  // Clear inputs
+  [1,2,3,4].forEach(i => {
+    const inp = document.getElementById('pin' + i);
+    inp.value = '';
+    inp.classList.remove('on');
+  });
+  // Focus first input
+  setTimeout(() => document.getElementById('pin1').focus(), 100);
+  
+  // Setup input handlers
+  [1,2,3,4].forEach((i, idx) => {
+    const inp = document.getElementById('pin' + i);
+    inp.oninput = e => {
+      inp.value = e.target.value.replace(/\D/g, '').slice(-1);
+      if (inp.value) {
+        inp.classList.add('on');
+        if (idx < 3) document.getElementById('pin' + (i + 1)).focus();
+      } else {
+        inp.classList.remove('on');
+      }
+    };
+    inp.onkeydown = e => {
+      if (e.key === 'Backspace' && !inp.value && idx > 0) {
+        document.getElementById('pin' + i).focus();
+        document.getElementById('pin' + (i - 1)).value = '';
+        document.getElementById('pin' + (i - 1)).classList.remove('on');
+      }
+    };
+  });
+}
+
+function closePinModal(e) {
+  if (!e || e.target === document.getElementById('pinOverlay')) {
+    document.getElementById('pinOverlay').classList.remove('show');
+  }
+}
+
+async function savePin() {
+  const pin = [1,2,3,4].map(i => document.getElementById('pin' + i).value).join('');
+  if (pin.length < 4) {
+    alert('Please enter all 4 digits');
+    return;
+  }
+  
+  try {
+    const res = await fetch('/api/transaction-pin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ pin: pin })
+    });
+    
+    const data = await res.json();
+    if (data.success) {
+      document.getElementById('pinStatus').textContent = 'Set';
+      document.getElementById('pinStatus').style.color = 'var(--success)';
+      closePinModal();
+      alert('Transaction PIN set successfully!');
+    } else {
+      alert(data.error || 'Failed to set PIN');
+    }
+  } catch (e) {
+    alert('Error setting PIN');
+  }
+}
+
+// Load PIN status on init
+(async function loadPinStatus() {
+  try {
+    const res = await fetch('/api/transaction-pin', { credentials: 'same-origin' });
+    const data = await res.json();
+    if (data.hasPin) {
+      document.getElementById('pinStatus').textContent = 'Set';
+      document.getElementById('pinStatus').style.color = 'var(--success)';
+    }
+  } catch (e) {}
+})();
+</script>
+</body>
+</html>

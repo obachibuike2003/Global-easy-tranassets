@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>Admin Panel — GLOBALEASYTRANSASSET</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#F0F4FB;color:#0A0A0A;min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+:root{
+  --blue:#1E6BFF;--blue-deep:#0B3D91;--blue-accent:#4DA3FF;--blue-light:#EBF2FF;
+  --text:#0A0A0A;--sec:#6B7280;--border:#E5EAF2;--white:#fff;--bg:#F0F4FB;
+  --r:14px;--sh:0 2px 16px rgba(30,107,255,0.07);--sh2:0 8px 40px rgba(11,61,145,0.13);
+  --t:0.24s cubic-bezier(0.4,0,0.2,1);
+  --ok:#22C55E;--warn:#F59E0B;--danger:#EF4444;--purple:#8B5CF6;
+  --sidebar:264px;
+}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(30,107,255,.25);border-radius:99px}
+
+/* ═══════════════════════════
+   SIDEBAR
+═══════════════════════════ */
+.sidebar{
+  position:fixed;top:0;left:0;bottom:0;width:var(--sidebar);
+  background:linear-gradient(175deg,#040c1a 0%,#081840 45%,#0B3D91 100%);
+  display:flex;flex-direction:column;z-index:100;
+  transition:transform var(--t);
+  border-right:1px solid rgba(255,255,255,.06);
+}
+.sb-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);background-size:32px 32px;pointer-events:none}
+.sb-glow{position:absolute;bottom:-40px;right:-40px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(30,107,255,.20) 0%,transparent 65%);pointer-events:none}
+.sb-inner{position:relative;z-index:1;display:flex;flex-direction:column;height:100%;padding:0 0 16px}
+
+/* Logo */
+.sb-logo{display:flex;align-items:center;gap:10px;padding:20px 20px 18px;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.07)}
+.sb-logo-mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--blue),var(--blue-deep));display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 14px rgba(30,107,255,.40)}
+.sb-logo-txt{font-size:16px;font-weight:800;letter-spacing:-.4px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px}
+.sb-logo-txt span{color:var(--blue-accent)}
+.sb-admin-badge{font-size:9px;font-weight:800;letter-spacing:.8px;color:#fff;background:var(--danger);padding:2px 7px;border-radius:4px;text-transform:uppercase;margin-left:4px}
+
+/* Admin card */
+.sb-user{display:flex;align-items:center;gap:10px;padding:12px 14px;margin:10px 10px 4px;border-radius:11px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10)}
+.sb-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--danger),#c0392b);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;border:2px solid rgba(255,255,255,.2)}
+.sb-user-name{font-size:13px;font-weight:700;color:#fff;line-height:1.2}
+.sb-user-role{font-size:10px;color:rgba(255,255,255,.45);margin-top:1px;font-weight:600;letter-spacing:.3px}
+.sb-online{width:8px;height:8px;border-radius:50%;background:var(--ok);margin-left:auto;flex-shrink:0;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+
+/* Nav */
+.sb-nav{flex:1;padding:8px 0;overflow-y:auto}
+.sb-nav::-webkit-scrollbar{width:0}
+.sb-section-label{font-size:10px;font-weight:700;color:rgba(255,255,255,.25);letter-spacing:.8px;text-transform:uppercase;padding:12px 20px 5px}
+
+.sb-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 18px;margin:1px 8px;border-radius:9px;
+  text-decoration:none;cursor:pointer;
+  font-size:13px;font-weight:600;color:rgba(255,255,255,.48);
+  transition:all var(--t);border:none;background:none;font-family:inherit;
+  width:calc(100% - 16px);text-align:left;
+}
+.sb-item:hover{background:rgba(255,255,255,.08);color:rgba(255,255,255,.85)}
+.sb-item.active{background:rgba(30,107,255,.22);color:#fff;border:1px solid rgba(30,107,255,.35)}
+.sb-item-ico{width:30px;height:30px;border-radius:7px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all var(--t)}
+.sb-item.active .sb-item-ico{background:rgba(30,107,255,.35)}
+.sb-item:hover .sb-item-ico{background:rgba(255,255,255,.10)}
+.sb-item-lbl{flex:1}
+.sb-item-count{font-size:10px;font-weight:800;padding:2px 7px;border-radius:99px;background:var(--danger);color:#fff}
+.sb-item-count.warn{background:var(--warn)}
+.sb-item-count.ok{background:var(--ok)}
+
+/* Bottom */
+.sb-bottom{padding:8px 8px 0;border-top:1px solid rgba(255,255,255,.07)}
+.sb-logout{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:9px;color:rgba(255,255,255,.38);font-size:13px;font-weight:600;cursor:pointer;transition:all var(--t);border:none;background:none;font-family:inherit;width:100%}
+.sb-logout:hover{background:rgba(239,68,68,.12);color:#EF4444}
+
+/* Mobile */
+.sb-toggle{display:none;position:fixed;top:16px;left:16px;z-index:200;width:40px;height:40px;border-radius:9px;background:#fff;border:1.5px solid var(--border);box-shadow:var(--sh2);align-items:center;justify-content:center;cursor:pointer}
+
+
+/* ═══════════════════════════
+   TOPBAR
+═══════════════════════════ */
+.topbar{
+  position:fixed;top:0;left:var(--sidebar);right:0;height:62px;z-index:98;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding:0 32px;gap:16px;
+}
+.tb-title{font-size:17px;font-weight:800;letter-spacing:-.3px;color:var(--text);flex:1}
+.tb-right{display:flex;align-items:center;gap:10px}
+.tb-search{display:flex;align-items:center;gap:8px;background:var(--bg);border:1.5px solid var(--border);padding:8px 14px;border-radius:10px;cursor:text;transition:all var(--t)}
+.tb-search:focus-within{border-color:var(--blue)}
+.tb-search input{border:none;background:none;font-size:13px;font-weight:500;color:var(--text);outline:none;width:180px;font-family:inherit}
+.tb-search input::placeholder{color:var(--sec)}
+.tb-btn{width:36px;height:36px;border-radius:9px;border:1.5px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--sec);transition:all var(--t);position:relative}
+.tb-btn:hover{border-color:var(--blue);color:var(--blue)}
+.tb-notif-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--danger);border:2px solid #fff}
+.tb-admin-pill{display:flex;align-items:center;gap:6px;background:rgba(239,68,68,.08);border:1.5px solid rgba(239,68,68,.20);padding:6px 14px;border-radius:99px;font-size:12px;font-weight:700;color:var(--danger)}
+
+/* ═══════════════════════════
+   MAIN CONTENT
+═══════════════════════════ */
+.content{margin-left:var(--sidebar);padding-top:62px;min-height:100vh;-webkit-filter:none;filter:none}
+.page-inner{padding:28px 32px}
+
+/* PAGE SECTIONS */
+.page-section{display:none}
+.page-section.active{display:block;animation:fadeIn .28s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* Section header */
+.sec-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.sec-title{font-family:'DM Serif Display',serif;font-size:clamp(20px,2.5vw,28px);letter-spacing:-.4px;color:var(--text);margin-bottom:4px}
+.sec-sub{font-size:14px;color:var(--sec);line-height:1.6}
+.sec-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+
+/* ═══════════════════════════
+   STAT CARDS
+═══════════════════════════ */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.stat-card{background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:20px;transition:all var(--t);position:relative;overflow:hidden}
+.stat-card:hover{transform:translateY(-3px);box-shadow:var(--sh2)}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.stat-card.blue::before{background:linear-gradient(90deg,var(--blue),var(--blue-accent))}
+.stat-card.green::before{background:linear-gradient(90deg,var(--ok),#4ade80)}
+.stat-card.red::before{background:linear-gradient(90deg,var(--danger),#f87171)}
+.stat-card.purple::before{background:linear-gradient(90deg,var(--purple),#a78bfa)}
+.stat-card.warn::before{background:linear-gradient(90deg,var(--warn),#fbbf24)}
+.sc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.sc-ico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center}
+.sc-badge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:99px}
+.sc-badge.up{color:var(--ok);background:rgba(34,197,94,.10)}
+.sc-badge.down{color:var(--danger);background:rgba(239,68,68,.10)}
+.sc-badge.warn{color:var(--warn);background:rgba(245,158,11,.10)}
+.sc-label{font-size:12px;font-weight:500;color:var(--sec);margin-bottom:5px}
+.sc-val{font-size:24px;font-weight:800;color:var(--text);letter-spacing:-.5px}
+.sc-sub{font-size:12px;color:var(--sec);margin-top:4px}
+
+/* ═══════════════════════════
+   TABLES
+═══════════════════════════ */
+.table-card{background:#fff;border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
+.table-card-header{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:10px}
+.table-card-title{font-size:15px;font-weight:700;color:var(--text)}
+.table-card-sub{font-size:12px;color:var(--sec);margin-top:2px}
+.tbl-filters{display:flex;gap:8px;align-items:center}
+.tbl-filter-btn{padding:6px 14px;border-radius:8px;border:1.5px solid var(--border);background:#fff;font-size:12px;font-weight:600;color:var(--sec);cursor:pointer;font-family:inherit;transition:all var(--t)}
+.tbl-filter-btn:hover,.tbl-filter-btn.active{border-color:var(--blue);color:var(--blue);background:var(--blue-light)}
+.tbl-search{display:flex;align-items:center;gap:6px;background:var(--bg);border:1.5px solid var(--border);padding:7px 12px;border-radius:9px}
+.tbl-search input{border:none;background:none;font-size:12px;color:var(--text);outline:none;width:150px;font-family:inherit}
+
+table{width:100%;border-collapse:collapse}
+thead tr{background:#F8FAFF}
+th{padding:11px 16px;text-align:left;font-size:11px;font-weight:700;color:var(--sec);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;border-bottom:1px solid var(--border)}
+td{padding:13px 16px;font-size:13px;font-weight:500;color:var(--text);border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#F8FAFF}
+
+.user-cell{display:flex;align-items:center;gap:10px}
+.user-ava{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0}
+.user-name{font-size:13px;font-weight:700;color:var(--text)}
+.user-email{font-size:11px;color:var(--sec);margin-top:1px}
+.user-id{font-size:10px;color:var(--sec);font-family:monospace}
+
+.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:700}
+.pill.active{background:rgba(34,197,94,.10);color:var(--ok)}
+.pill.pending{background:rgba(245,158,11,.10);color:var(--warn)}
+.pill.suspended{background:rgba(239,68,68,.10);color:var(--danger)}
+.pill.approved{background:rgba(34,197,94,.10);color:var(--ok)}
+.pill.rejected{background:rgba(239,68,68,.10);color:var(--danger)}
+.pill.review{background:rgba(139,92,246,.10);color:var(--purple)}
+.pill.completed{background:rgba(34,197,94,.10);color:var(--ok)}
+.pill.processing{background:rgba(30,107,255,.10);color:var(--blue)}
+.pill.flagged{background:rgba(239,68,68,.10);color:var(--danger)}
+.pill-dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+
+/* Action buttons inside table */
+.tbl-actions{display:flex;gap:6px;align-items:center}
+.tbl-btn{padding:5px 11px;border-radius:7px;border:1.5px solid var(--border);background:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:all var(--t);white-space:nowrap}
+.tbl-btn:hover{transform:translateY(-1px)}
+.tbl-btn.approve{border-color:rgba(34,197,94,.3);color:var(--ok)}
+.tbl-btn.approve:hover{background:rgba(34,197,94,.08);border-color:var(--ok)}
+.tbl-btn.reject{border-color:rgba(239,68,68,.3);color:var(--danger)}
+.tbl-btn.reject:hover{background:rgba(239,68,68,.08);border-color:var(--danger)}
+.tbl-btn.credit{border-color:rgba(30,107,255,.3);color:var(--blue)}
+.tbl-btn.credit:hover{background:var(--blue-light);border-color:var(--blue)}
+.tbl-btn.view{border-color:rgba(139,92,246,.3);color:var(--purple)}
+.tbl-btn.view:hover{background:rgba(139,92,246,.08);border-color:var(--purple)}
+.tbl-btn.remove{border-color:rgba(239,68,68,.2);color:var(--danger)}
+.tbl-btn.remove:hover{background:rgba(239,68,68,.08);border-color:var(--danger)}
+.tbl-btn.suspend{border-color:rgba(245,158,11,.3);color:var(--warn)}
+.tbl-btn.suspend:hover{background:rgba(245,158,11,.08);border-color:var(--warn)}
+
+/* ═══════════════════════════
+   BUTTONS
+═══════════════════════════ */
+.btn-primary{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--blue),var(--blue-deep));color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:inherit;box-shadow:0 4px 16px rgba(30,107,255,.28);transition:all var(--t)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 7px 24px rgba(30,107,255,.38)}
+.btn-secondary{display:inline-flex;align-items:center;gap:7px;background:#fff;color:var(--text);padding:9px 18px;border-radius:10px;font-size:13px;font-weight:600;border:1.5px solid var(--border);cursor:pointer;font-family:inherit;transition:all var(--t)}
+.btn-secondary:hover{border-color:var(--blue);color:var(--blue)}
+.btn-danger{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--danger),#c0392b);color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:inherit;box-shadow:0 4px 16px rgba(239,68,68,.28);transition:all var(--t)}
+.btn-danger:hover{transform:translateY(-2px)}
+
+/* ═══════════════════════════
+   MODALS
+═══════════════════════════ */
+
+.modal-bg.show{display:flex;animation:mfadeIn .22s ease}
+@keyframes mfadeIn{from{opacity:0}to{opacity:1}}
+.modal{background:#fff;border-radius:18px;width:100%;box-shadow:0 24px 80px rgba(11,61,145,.20);animation:mPop .32s cubic-bezier(.34,1.56,.64,1)}
+@keyframes mPop{from{transform:scale(.88);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-sm{max-width:420px}
+.modal-md{max-width:540px}
+.modal-lg{max-width:680px}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--border)}
+.modal-header-ico{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.modal-title{font-size:17px;font-weight:800;color:var(--text)}
+.modal-sub{font-size:12px;color:var(--sec);margin-top:2px}
+.modal-close{width:32px;height:32px;border-radius:8px;background:var(--bg);border:none;color:var(--sec);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--t)}
+.modal-close:hover{background:rgba(239,68,68,.08);color:var(--danger)}
+.modal-body{padding:22px 24px}
+.modal-footer{display:flex;gap:10px;padding:16px 24px;border-top:1px solid var(--border);justify-content:flex-end}
+
+/* Form fields inside modal */
+.mf{margin-bottom:16px}
+.mf label{display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px}
+.mf input,.mf select,.mf textarea{width:100%;padding:10px 13px;border-radius:9px;border:1.5px solid var(--border);font-size:14px;font-weight:500;color:var(--text);font-family:inherit;background:#fff;outline:none;transition:all var(--t);appearance:none;-webkit-appearance:none}
+.mf input:focus,.mf select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(30,107,255,.09)}
+.mf .sel{position:relative}.mf .sel::after{content:'';position:absolute;right:12px;top:50%;transform:translateY(-50%);width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:5px solid var(--sec);pointer-events:none}
+.mf-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.mf-hint{font-size:12px;color:var(--sec);margin-top:4px}
+.mf-err{font-size:12px;color:var(--danger);margin-top:4px;display:none}
+
+/* Info/warning boxes in modal */
+.m-ibox{background:var(--blue-light);border:1px solid rgba(30,107,255,.18);border-radius:9px;padding:12px 14px;display:flex;gap:8px;margin-bottom:16px}
+.m-ibox p{font-size:13px;color:var(--blue-deep);line-height:1.6}
+.m-wbox{background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.22);border-radius:9px;padding:12px 14px;display:flex;gap:8px;margin-bottom:16px}
+.m-wbox p{font-size:13px;color:#92400e;line-height:1.6}
+.m-dbox{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.20);border-radius:9px;padding:12px 14px;display:flex;gap:8px;margin-bottom:16px}
+.m-dbox p{font-size:13px;color:#991b1b;line-height:1.6}
+
+/* User detail rows in modal */
+.m-detail-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px}
+.m-detail-row:last-child{border-bottom:none}
+.m-detail-label{color:var(--sec);font-weight:500}
+.m-detail-val{font-weight:700;color:var(--text)}
+.m-detail-val.blue{color:var(--blue)}.m-detail-val.ok{color:var(--ok)}.m-detail-val.danger{color:var(--danger)}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;right:24px;z-index:999;background:#1a2744;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:13px 18px;display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:#fff;box-shadow:0 8px 32px rgba(0,0,0,.25);transform:translateY(80px);opacity:0;transition:all .4s cubic-bezier(.34,1.56,.64,1)}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* Activity log */
+.activity-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.activity-item:last-child{border-bottom:none}
+.activity-ico{width:34px;height:34px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.activity-title{font-size:13px;font-weight:700;color:var(--text)}
+.activity-sub{font-size:12px;color:var(--sec);margin-top:2px}
+.activity-time{font-size:11px;color:var(--sec);white-space:nowrap;margin-left:auto;padding-top:2px}
+
+/* Progress bar */
+.prog-bar{height:6px;background:var(--border);border-radius:99px;overflow:hidden;margin-top:6px}
+.prog-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--blue),var(--blue-accent));transition:width .5s ease}
+
+/* Chart bars */
+.mini-chart{display:flex;align-items:flex-end;gap:5px;height:56px;padding:0 2px}
+.mc-bar{flex:1;border-radius:3px 3px 0 0;background:linear-gradient(180deg,rgba(30,107,255,.75),rgba(30,107,255,.25));transition:all .3s;cursor:pointer;min-height:3px}
+.mc-bar:hover{opacity:.75}
+.mc-bar.ok{background:linear-gradient(180deg,rgba(34,197,94,.75),rgba(34,197,94,.25))}
+
+/* ═══════════════════════════
+   RESPONSIVE
+═══════════════════════════ */
+@media(max-width:960px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .sb-overlay{display:none}
+  .sb-overlay.show{display:none}
+  .sb-toggle{display:flex}
+  .content{margin-left:0;padding-top:52px}
+  .topbar{left:0;padding:0 12px 0 56px;height:52px}
+  .stats-row{grid-template-columns:1fr 1fr !important}
+  .page-inner{padding:12px}
+  .tb-search{display:none}
+}
+
+@media(max-width:600px){
+  .stats-row{grid-template-columns:1fr !important}
+  .tbl-filters{flex-wrap:wrap}
+  td,th{padding:8px;font-size:11px}
+  .tbl-actions{flex-wrap:wrap;gap:4px}
+  .tbl-btn{font-size:10px;padding:4px 8px}
+  .page-inner{padding:10px}
+  .sec-title{font-size:18px}
+  .table-card-header{flex-direction:column;align-items:flex-start}
+  .tbl-filters{width:100%}
+  .modal{margin:8px}
+  .modal-body{padding:14px}
+  .modal-footer{padding:10px 14px;flex-wrap:wrap}
+  .mf-row{grid-template-columns:1fr}
+  .stat-card{padding:12px}
+  .sc-val{font-size:18px}
+  .sc-label{font-size:11px}
+  .topbar{height:52px}
+  .tb-title{font-size:13px}
+  .tb-admin-pill{display:none}
+  .tb-btn{width:30px;height:30px}
+  .sb-toggle{top:10px;left:10px;width:36px;height:36px}
+  .sec-header{flex-direction:column}
+  .btn-primary,.btn-secondary{font-size:12px;padding:8px 14px}
+  /* Overview grid stack on mobile */
+ 
+  div[style*="grid-template-columns:repeat(4"]{
+    grid-template-columns:1fr 1fr !important
+  }
+}
+
+@media(max-width:400px){
+  .stats-row{grid-template-columns:1fr !important}
+  .sc-val{font-size:16px}
+}
+</style>
+</head>
+<body>
+
+<!-- MOBILE TOGGLE -->
+<div class="sb-toggle" id="sbToggle">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+</div>
+<div class="sb-overlay" id="sbOverlay"></div>
+
+<!-- ═══════════════════════════
+     SIDEBAR
+═══════════════════════════ -->
+<div class="sidebar" id="sidebar">
+  <div class="sb-grid"></div>
+  <div class="sb-glow"></div>
+  <div class="sb-inner">
+
+    <!-- Logo -->
+    <a href="home" class="sb-logo">
+      <div class="sb-logo-mark">
+        <svg width="17" height="17" viewBox="0 0 18 18" fill="none">
+          <path d="M9 2L16 6V12L9 16L2 12V6L9 2Z" stroke="white" stroke-width="1.8" stroke-linejoin="round"/>
+          <path d="M9 6L12 8V12L9 14L6 12V8L9 6Z" fill="white" opacity="0.7"/>
+        </svg>
+      </div>
+      <span class="sb-logo-txt">GLOBAL<span>EASYTRANSASSET</span></span>
+      <span class="sb-admin-badge">Admin</span>
+    </a>
+
+    <!-- Admin identity -->
+    <div class="sb-user">
+      <div class="sb-avatar">SA</div>
+      <div>
+        <div class="sb-user-name" id="sbUserName">Super Admin</div>
+        <div class="sb-user-role">SYSTEM ADMINISTRATOR</div>
+      </div>
+      <div class="sb-online"></div>
+    </div>
+
+    <!-- Nav -->
+    <nav class="sb-nav">
+      <div class="sb-section-label">Overview</div>
+
+      <button class="sb-item active" onclick="showSection('overview',this)">
+        <div class="sb-item-ico">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        </div>
+        <span class="sb-item-lbl">Dashboard</span>
+      </button>
+
+      <div class="sb-section-label">User Management</div>
+
+      <button class="sb-item" onclick="showSection('users',this)">
+        <div class="sb-item-ico">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <span class="sb-item-lbl">All Users</span>
+        <span class="sb-item-count" id="cntUsers">24</span>
+      </button>
+
+      <button class="sb-item" onclick="showSection('credit',this)">
+        <div class="sb-item-ico">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <span class="sb-item-lbl">Credit Accounts</span>
+      </button>
+
+      <div class="sb-section-label">Approvals</div>
+
+      <button class="sb-item" onclick="showSection('cards',this)">
+        <div class="sb-item-ico">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        </div>
+        <span class="sb-item-lbl">Virtual Cards</span>
+        <span class="sb-item-count warn" id="cntCards">7</span>
+      </button>
+
+      <button class="sb-item" onclick="showSection('transfers',this)">
+        <div class="sb-item-ico">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </div>
+        <span class="sb-item-lbl">Wire Transfers</span>
+        <span class="sb-item-count warn" id="cntTransfers">12</span>
+      </button>
+
+      <div class="sb-section-label">System</div>
+
+      <button class="sb-item" onclick="showSection('activity',this)">
+        <div class="sb-item-ico">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <span class="sb-item-lbl">Activity Log</span>
+      </button>
+
+      <button class="sb-item" onclick="showSection('settings',this)">
+        <div class="sb-item-ico">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M12 2v2M12 20v2M20 12h2M2 12h2M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41"/></svg>
+        </div>
+        <span class="sb-item-lbl">Settings</span>
+      </button>
+    </nav>
+
+    <div class="sb-bottom">
+      <button class="sb-logout" onclick="if(confirm('Sign out of admin panel?')){fetch('/api/admin/logout',{method:'POST'});window.location.reload();}">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sign Out
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════
+     TOPBAR
+═══════════════════════════ -->
+<div class="topbar">
+  <div class="tb-title" id="tbTitle">Admin Dashboard</div>
+  <div class="tb-right">
+    <div class="tb-search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="globalSearch" placeholder="Search users, ID, email…" oninput="globalSearchFn(this.value)"/>
+    </div>
+    <div class="tb-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <div class="tb-notif-dot"></div>
+    </div>
+    <div class="tb-admin-pill">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Super Admin
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════
+     MAIN CONTENT
+═══════════════════════════ -->
+<div class="content">
+<div class="page-inner">
+
+<!-- ADMIN LOGIN FORM -->
+<div id="adminLoginSection" style="display:flex;align-items:center;justify-content:center;min-height:100vh;position:fixed;inset:0;background:#F0F4FB;z-index:999;padding:20px">
+  <div style="background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:40px;width:100%;max-width:400px;box-shadow:var(--sh2)">
+    <div style="text-align:center;margin-bottom:30px">
+      <div style="width:60px;height:60px;background:linear-gradient(135deg,var(--blue),var(--blue-deep));border-radius:14px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/></svg>
+      </div>
+      <h2 style="font-size:22px;font-weight:800;color:var(--text);margin-bottom:6px">Admin Login</h2>
+      <p style="font-size:14px;color:var(--sec)">Sign in to access the admin panel</p>
+    </div>
+    <form id="adminLoginForm" onsubmit="handleAdminLogin(event)">
+      <div style="margin-bottom:20px">
+        <label style="display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px">Username</label>
+        <input type="text" id="adminLoginUsername" value="globaleasytransassets" style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;background:#F6F8FC" readonly>
+      </div>
+      <div style="margin-bottom:24px">
+        <label style="display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px">Password</label>
+        <input type="password" id="adminLoginPassword" placeholder="Enter password" style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px" required>
+      </div>
+      <button type="submit" id="adminLoginBtn" style="width:100%;padding:14px;border:none;border-radius:10px;background:linear-gradient(135deg,var(--blue),var(--blue-deep));color:#fff;font-size:15px;font-weight:700;cursor:pointer">Login</button>
+      <p id="loginError" style="color:var(--danger);font-size:13px;text-align:center;margin-top:16px;display:none"></p>
+    </form>
+  </div>
+</div>
+
+<!-- ADMIN DASHBOARD (hidden until logged in) -->
+<div id="adminDashboard" style="display:none">
+
+  <!-- ══════════════════════════════
+       OVERVIEW / DASHBOARD
+  ══════════════════════════════ -->
+  <div class="page-section active" id="sec-overview">
+    <div class="sec-header">
+      <div>
+        <h1 class="sec-title">Admin Overview</h1>
+        <p class="sec-sub">Real-time platform metrics and pending action items requiring your attention.</p>
+      </div>
+      <div class="sec-actions">
+        <button class="btn-secondary" onclick="showSection('activity',document.querySelector('[onclick*=activity]'))">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          View Activity Log
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card blue">
+        <div class="sc-top">
+          <div class="sc-ico" style="background:rgba(30,107,255,.10)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1E6BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="sc-badge up">▲ 8.3%</div>
+        </div>
+        <div class="sc-label">Total Users</div>
+        <div class="sc-val">24,891</div>
+        <div class="sc-sub">+342 this week</div>
+      </div>
+      <div class="stat-card green">
+        <div class="sc-top">
+          <div class="sc-ico" style="background:rgba(34,197,94,.10)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div class="sc-badge up">▲ 4.1%</div>
+        </div>
+        <div class="sc-label">Total Balance (All Accounts)</div>
+        <div class="sc-val">$284.5M</div>
+        <div class="sc-sub">Across all currencies</div>
+      </div>
+      <div class="stat-card warn">
+        <div class="sc-top">
+          <div class="sc-ico" style="background:rgba(245,158,11,.10)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="sc-badge warn">19 pending</div>
+        </div>
+        <div class="sc-label">Pending Approvals</div>
+        <div class="sc-val">19</div>
+        <div class="sc-sub">7 cards · 12 transfers</div>
+      </div>
+      <div class="stat-card red">
+        <div class="sc-top">
+          <div class="sc-ico" style="background:rgba(239,68,68,.10)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <div class="sc-badge down">3 flagged</div>
+        </div>
+        <div class="sc-label">Suspicious Activity</div>
+        <div class="sc-val">3</div>
+        <div class="sc-sub">Requires immediate review</div>
+      </div>
+    </div>
+
+    <!-- Second row -->
+    <div class="stats-row" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px">
+      <div class="stat-card purple">
+        <div class="sc-top"><div class="sc-ico" style="background:rgba(139,92,246,.10)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="sc-badge up">▲ 12%</div></div>
+        <div class="sc-label">Virtual Cards Issued</div><div class="sc-val">8,432</div><div class="sc-sub">This month</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="sc-top"><div class="sc-ico" style="background:rgba(30,107,255,.10)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1E6BFF" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div><div class="sc-badge up">▲ 6.8%</div></div>
+        <div class="sc-label">Wire Transfers</div><div class="sc-val">$42.1M</div><div class="sc-sub">This month volume</div>
+      </div>
+      <div class="stat-card green">
+        <div class="sc-top"><div class="sc-ico" style="background:rgba(34,197,94,.10)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div><div class="sc-badge ok">99.9%</div></div>
+        <div class="sc-label">KYC Verified Users</div><div class="sc-val">24,102</div><div class="sc-sub">789 pending verification</div>
+      </div>
+      <div class="stat-card red">
+        <div class="sc-top"><div class="sc-ico" style="background:rgba(239,68,68,.10)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div><div class="sc-badge down">12</div></div>
+        <div class="sc-label">Suspended Accounts</div><div class="sc-val">12</div><div class="sc-sub">Active restrictions</div>
+      </div>
+    </div>
+
+    <!-- Overview grid -->
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px">
+      <!-- Transaction Chart -->
+      <div class="table-card">
+        <div class="table-card-header">
+          <div><div class="table-card-title">Platform Transaction Volume</div><div class="table-card-sub">Last 12 months · All currencies</div></div>
+        </div>
+        <div style="padding:20px 22px">
+          <div id="overviewChart" class="mini-chart" style="height:100px"></div>
+          <div id="overviewLabels" style="display:flex;justify-content:space-between;font-size:10px;color:var(--sec);margin-top:8px;padding:0 2px"></div>
+        </div>
+      </div>
+      <!-- Recent Activity -->
+      <div class="table-card">
+        <div class="table-card-header">
+          <div><div class="table-card-title">Recent Actions</div><div class="table-card-sub">Last admin activities</div></div>
+        </div>
+        <div style="padding:8px 18px" id="recentActivity"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       ALL USERS
+  ══════════════════════════════ -->
+  <div class="page-section" id="sec-users">
+    <div class="sec-header">
+      <div>
+        <h1 class="sec-title">All Users</h1>
+        <p class="sec-sub">Manage, view, suspend, or remove registered accounts across the platform.</p>
+      </div>
+      <div class="sec-actions">
+        <button class="btn-primary" onclick="openModal('addUserModal')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add User
+        </button>
+      </div>
+    </div>
+    <div class="table-card">
+      <div class="table-card-header">
+        <div><div class="table-card-title">Registered Users</div><div class="table-card-sub">24,891 total accounts</div></div>
+        <div class="tbl-filters">
+          <button class="tbl-filter-btn active" onclick="filterUsers('all',this)">All</button>
+          <button class="tbl-filter-btn" onclick="filterUsers('active',this)">Active</button>
+          <button class="tbl-filter-btn" onclick="filterUsers('pending',this)">Pending KYC</button>
+          <button class="tbl-filter-btn" onclick="filterUsers('suspended',this)">Suspended</button>
+          <div class="tbl-search">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" placeholder="Search users…" oninput="searchUsers(this.value)"/>
+          </div>
+        </div>
+      </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>User</th><th>Account Number</th><th>Balance (USD)</th><th>KYC</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
+          <tbody id="usersTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       CREDIT ACCOUNTS
+  ══════════════════════════════ -->
+  <div class="page-section" id="sec-credit">
+    <div class="sec-header">
+      <div>
+        <h1 class="sec-title">Credit Accounts</h1>
+        <p class="sec-sub">Manually credit user balances. All credits are logged with reason and timestamp.</p>
+      </div>
+      <div class="sec-actions">
+        <button class="btn-primary" onclick="openModal('creditModal')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Credit Account
+        </button>
+      </div>
+    </div>
+    <div class="table-card" style="margin-bottom:20px">
+      <div class="table-card-header">
+        <div><div class="table-card-title">Credit History</div><div class="table-card-sub">All manual credits issued by admin</div></div>
+      </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>User</th><th>Amount</th><th>Currency</th><th>Reason</th><th>Credited By</th><th>Date & Time</th><th>Status</th></tr></thead>
+          <tbody id="creditTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       VIRTUAL CARDS APPROVAL
+  ══════════════════════════════ -->
+  <div class="page-section" id="sec-cards">
+    <div class="sec-header">
+      <div>
+        <h1 class="sec-title">Virtual Card Approvals</h1>
+        <p class="sec-sub">Review and approve or reject pending virtual card requests from users.</p>
+      </div>
+      <div class="sec-actions">
+        <button class="btn-primary" onclick="bulkApproveCards()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Approve All Pending
+        </button>
+      </div>
+    </div>
+    <div class="table-card">
+      <div class="table-card-header">
+        <div><div class="table-card-title">Card Requests</div><div class="table-card-sub" id="cardSubTitle">7 pending review</div></div>
+        <div class="tbl-filters">
+          <button class="tbl-filter-btn active" onclick="filterCards('all',this)">All</button>
+          <button class="tbl-filter-btn" onclick="filterCards('pending',this)">Pending</button>
+          <button class="tbl-filter-btn" onclick="filterCards('approved',this)">Approved</button>
+          <button class="tbl-filter-btn" onclick="filterCards('rejected',this)">Rejected</button>
+        </div>
+      </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>User</th><th>Card Type</th><th>Plan</th><th>Network</th><th>Requested</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="cardsTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       WIRE TRANSFERS APPROVAL
+  ══════════════════════════════ -->
+  <div class="page-section" id="sec-transfers">
+    <div class="sec-header">
+      <div>
+        <h1 class="sec-title">Wire Transfer Approvals</h1>
+        <p class="sec-sub">Review, approve or flag international wire transfer requests for compliance and AML screening.</p>
+      </div>
+    </div>
+    <div class="table-card">
+      <div class="table-card-header">
+        <div><div class="table-card-title">Transfer Queue</div><div class="table-card-sub" id="transferSubTitle">12 awaiting approval</div></div>
+        <div class="tbl-filters">
+          <button class="tbl-filter-btn active" onclick="filterTransfers('all',this)">All</button>
+          <button class="tbl-filter-btn" onclick="filterTransfers('pending',this)">Pending</button>
+          <button class="tbl-filter-btn" onclick="filterTransfers('approved',this)">Approved</button>
+          <button class="tbl-filter-btn" onclick="filterTransfers('flagged',this)">Flagged</button>
+        </div>
+      </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>Sender</th><th>Recipient</th><th>Amount</th><th>Destination</th><th>Method</th><th>Requested</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="transfersTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       ACTIVITY LOG
+  ══════════════════════════════ -->
+  <div class="page-section" id="sec-activity">
+    <div class="sec-header">
+      <div>
+        <h1 class="sec-title">Activity Log</h1>
+        <p class="sec-sub">Complete audit trail of all admin actions on the platform.</p>
+      </div>
+    </div>
+    <div class="table-card">
+      <div class="table-card-header">
+        <div><div class="table-card-title">Admin Audit Trail</div><div class="table-card-sub">All actions are permanently logged</div></div>
+      </div>
+      <div style="padding:0 18px" id="activityLog"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SETTINGS
+  ══════════════════════════════ -->
+  <div class="page-section" id="sec-settings">
+    <div class="sec-header">
+      <div>
+        <h1 class="sec-title">Admin Settings</h1>
+        <p class="sec-sub">Configure platform-wide settings and admin access controls.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div class="table-card">
+        <div class="table-card-header"><div class="table-card-title">Platform Configuration</div></div>
+        <div style="padding:20px 22px">
+          <div class="mf"><label>Platform Name</label><input type="text" value="GLOBALEASYTRANSASSET Financial Technologies Ltd"/></div>
+          <div class="mf"><label>Support Email</label><input type="email" value="support@globaleasytransasset.com"/></div>
+          <div class="mf"><label>Max Transfer Limit (USD)</label><input type="number" value="25000"/></div>
+          <div class="mf"><label>KYC Provider</label><div class="sel"><select><option>Jumio</option><option>Onfido</option><option>Sumsub</option></select></div></div>
+          <button class="btn-primary" onclick="showToast('Settings saved successfully.')">Save Changes</button>
+        </div>
+      </div>
+      <div class="table-card">
+        <div class="table-card-header"><div class="table-card-title">Security & Access</div></div>
+        <div style="padding:20px 22px">
+          <div class="mf"><label>Admin Session Timeout (minutes)</label><input type="number" value="30"/></div>
+          <div class="mf"><label>Require 2FA for Admin Login</label><div class="sel"><select><option>Enabled</option><option>Disabled</option></select></div></div>
+          <div class="mf"><label>IP Whitelist (comma-separated)</label><textarea style="width:100%;border:1.5px solid var(--border);border-radius:9px;padding:10px 13px;font-size:13px;font-family:inherit;outline:none;height:72px;resize:none">192.168.0.1, 10.0.0.1</textarea></div>
+          <button class="btn-primary" onclick="showToast('Security settings updated.')">Update Security</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ════════════════════════════════════════
+     MODALS
+════════════════════════════════════════ -->
+
+<!-- VIEW USER MODAL -->
+<div class="modal-bg" id="viewUserModal">
+  <div class="modal modal-md">
+    <div class="modal-header">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="modal-header-ico" style="background:var(--blue-light)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E6BFF" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <div><div class="modal-title" id="vuTitle">User Details</div><div class="modal-sub" id="vuSub">Account overview</div></div>
+      </div>
+      <button class="modal-close" onclick="closeModal('viewUserModal')">✕</button>
+    </div>
+    <div class="modal-body" id="vuBody"></div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('viewUserModal')">Close</button>
+      <button class="btn-primary" onclick="openCreditFromView()">Credit Account</button>
+    </div>
+  </div>
+</div>
+
+<!-- CREDIT MODAL -->
+<div class="modal-bg" id="creditModal">
+  <div class="modal modal-md">
+    <div class="modal-header">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="modal-header-ico" style="background:rgba(34,197,94,.10)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <div><div class="modal-title">Credit User Account</div><div class="modal-sub">Add funds directly to a user's balance</div></div>
+      </div>
+      <button class="modal-close" onclick="closeModal('creditModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="m-ibox"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1E6BFF" stroke-width="2" style="flex-shrink:0;margin-top:2px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><p>Credits are <strong>immediately reflected</strong> in the user's balance. This action is permanently logged with your admin ID and timestamp.</p></div>
+      <div class="mf-row">
+        <div class="mf"><label>Select User <span style="color:red">*</span></label><div class="sel"><select id="creditUser"><option value="">Select a user</option></select></div></div>
+        <div class="mf"><label>Currency <span style="color:red">*</span></label><div class="sel"><select id="creditCurrency"><option value="USD">USD — US Dollar</option><option value="EUR">EUR — Euro</option><option value="GBP">GBP — British Pound</option><option value="NGN">NGN — Nigerian Naira</option></select></div></div>
+      </div>
+      <div class="mf"><label>Current balance</label><input type="text" id="creditCurrentBalance" readonly value="$0.00" style="background:#F8FAFF;cursor:not-allowed;border:1.5px solid var(--border);border-radius:9px;padding:10px 13px;font-size:13px;font-family:inherit;outline:none;"/></div>
+      <div class="mf"><label>Amount <span style="color:red">*</span></label><input type="number" id="creditAmount" placeholder="e.g. 5000.00" min="1"/></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('creditModal')">Cancel</button>
+      <button class="btn-primary" onclick="executeCreditAccount()" id="creditExecBtn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        Confirm Credit
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- REMOVE USER CONFIRM MODAL -->
+<div class="modal-bg" id="removeUserModal">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="modal-header-ico" style="background:rgba(239,68,68,.08)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></div>
+        <div><div class="modal-title" style="color:var(--danger)">Remove User</div><div class="modal-sub">This action is permanent</div></div>
+      </div>
+      <button class="modal-close" onclick="closeModal('removeUserModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="m-dbox"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" style="flex-shrink:0;margin-top:2px"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><p>You are about to <strong>permanently delete</strong> this user and all associated data. This cannot be undone.</p></div>
+      <div style="background:#F8FAFF;border-radius:10px;padding:14px 16px;border:1px solid var(--border)">
+        <div class="m-detail-row"><span class="m-detail-label">User</span><span class="m-detail-val" id="rmUserName">—</span></div>
+        <div class="m-detail-row"><span class="m-detail-label">Account ID</span><span class="m-detail-val blue" id="rmUserId">—</span></div>
+        <div class="m-detail-row"><span class="m-detail-label">Balance</span><span class="m-detail-val danger" id="rmUserBal">—</span></div>
+      </div>
+      <div class="mf" style="margin-top:14px"><label>Type <strong>REMOVE</strong> to confirm</label><input type="text" id="removeConfirmInput" placeholder="Type REMOVE here"/></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('removeUserModal')">Cancel</button>
+      <button class="btn-danger" onclick="executeRemoveUser()" id="removeExecBtn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>
+        Delete Account
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- SUSPEND USER MODAL -->
+<div class="modal-bg" id="suspendUserModal">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="modal-header-ico" style="background:rgba(245,158,11,.08)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div>
+        <div><div class="modal-title">Suspend Account</div><div class="modal-sub" id="suspendSub">Restrict user access</div></div>
+      </div>
+      <button class="modal-close" onclick="closeModal('suspendUserModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="m-wbox"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" style="flex-shrink:0;margin-top:2px"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg><p>User will immediately lose access to their account. They will see a suspension notice on login.</p></div>
+      <div class="mf"><label>Suspension Reason <span style="color:red">*</span></label><div class="sel"><select id="suspendReason"><option value="">Select reason</option><option>Suspicious transaction activity</option><option>Failed KYC verification</option><option>Policy violation</option><option>User request</option><option>Compliance hold</option><option>Other</option></select></div></div>
+      <div class="mf"><label>Duration</label><div class="sel"><select id="suspendDuration"><option>Indefinite</option><option>24 hours</option><option>7 days</option><option>30 days</option><option>90 days</option></select></div></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('suspendUserModal')">Cancel</button>
+      <button style="background:linear-gradient(135deg,var(--warn),#d97706);color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:inherit" onclick="executeSuspend()">Suspend Account</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD USER MODAL -->
+<div class="modal-bg" id="addUserModal">
+  <div class="modal modal-md">
+    <div class="modal-header">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="modal-header-ico" style="background:var(--blue-light)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E6BFF" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg></div>
+        <div><div class="modal-title">Add New User</div><div class="modal-sub">Create a new platform account</div></div>
+      </div>
+      <button class="modal-close" onclick="closeModal('addUserModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="mf-row">
+        <div class="mf"><label>First name <span style="color:red">*</span></label><input type="text" id="auFirst" placeholder="James"/></div>
+        <div class="mf"><label>Last name <span style="color:red">*</span></label><input type="text" id="auLast" placeholder="Okafor"/></div>
+      </div>
+      <div class="mf"><label>Email address <span style="color:red">*</span></label><input type="email" id="auEmail" placeholder="james.okafor@email.com"/></div>
+      <div class="mf-row">
+        <div class="mf"><label>Country</label><div class="sel"><select id="auCountry"><option>Nigeria</option><option>United States</option><option>United Kingdom</option><option>Ghana</option><option>Kenya</option><option>Germany</option><option>Other</option></select></div></div>
+        <div class="mf"><label>KYC Status</label><div class="sel"><select id="auKyc"><option>Pending</option><option>Verified</option><option>Manual Review</option></select></div></div>
+      </div>
+      <div class="mf"><label>Initial Balance (USD)</label><input type="number" id="auBalance" placeholder="0.00" min="0"/></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('addUserModal')">Cancel</button>
+      <button class="btn-primary" onclick="executeAddUser()">Create Account</button>
+    </div>
+  </div>
+</div>
+
+<!-- CARD REVIEW MODAL -->
+<div class="modal-bg" id="cardReviewModal">
+  <div class="modal modal-md">
+    <div class="modal-header">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="modal-header-ico" style="background:rgba(139,92,246,.10)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+        <div><div class="modal-title">Virtual Card Request</div><div class="modal-sub" id="crSub">Review details before decision</div></div>
+      </div>
+      <button class="modal-close" onclick="closeModal('cardReviewModal')">✕</button>
+    </div>
+    <div class="modal-body" id="crBody"></div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('cardReviewModal')">Cancel</button>
+      <button class="tbl-btn reject" style="padding:10px 18px;font-size:13px" onclick="cardDecision('reject')">Reject</button>
+      <button class="btn-primary" onclick="cardDecision('approve')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        Approve Card
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- TRANSFER REVIEW MODAL -->
+<div class="modal-bg" id="transferReviewModal">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="modal-header-ico" style="background:var(--blue-light)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E6BFF" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>
+        <div><div class="modal-title">Wire Transfer Review</div><div class="modal-sub" id="trSub">Compliance &amp; AML check</div></div>
+      </div>
+      <button class="modal-close" onclick="closeModal('transferReviewModal')">✕</button>
+    </div>
+    <div class="modal-body" id="trBody"></div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('transferReviewModal')">Cancel</button>
+      <button class="tbl-btn" style="padding:10px 18px;font-size:13px;border-color:rgba(239,68,68,.3);color:var(--danger)" onclick="transferDecision('flag')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+        Flag
+      </button>
+      <button class="tbl-btn reject" style="padding:10px 18px;font-size:13px" onclick="transferDecision('reject')">Reject</button>
+      <button class="btn-primary" onclick="transferDecision('approve')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        Approve Transfer
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5" id="toastIco"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toastMsg">Done!</span>
+</div>
+
+<script>
+/* ════════════════════════════════
+   DATA
+════════════════════════════════ */
+const COLORS=['#1E6BFF','#22C55E','#8B5CF6','#F59E0B','#EF4444','#4DA3FF','#0B3D91','#16a34a'];
+const GRAD=['#1a2a6a','#1a3a5a','#1a4a4a','#1a5a3a','#2a4a2a','#3a4a1a','#4a3a1a','#5a2a1a'];
+
+let USERS = [];
+let CREDITS = [];
+let CARDS = [];
+let TRANSFERS = [];
+let ACTIVITY_LOG = [];
+
+
+
+/* ════════════════════════════════
+   DATA LOADING
+════════════════════════════════ */
+async function loadAdminData() {
+// No auth check needed - admin session handled separately
+  document.getElementById('sbUserName').textContent = 'Super Admin';
+  try {
+    // Load all data in parallel
+    const [usersRes, creditsRes, cardsRes, transfersRes, activityRes, overviewRes] = await Promise.all([
+      fetch('/api/admin/users'),
+      fetch('/api/admin/credits'),
+      fetch('/api/admin/cards'),
+      fetch('/api/admin/transfers'),
+      fetch('/api/admin/activity'),
+      fetch('/api/admin/overview')
+    ]);
+    
+    const usersData = await usersRes.json();
+    const creditsData = await creditsRes.json();
+    const cardsData = await cardsRes.json();
+    const transfersData = await transfersRes.json();
+    const activityData = await activityRes.json();
+    const overviewData = await overviewRes.json();
+    
+    if (usersData.success) USERS = usersData.users;
+    if (creditsData.success) CREDITS = creditsData.credits;
+    if (cardsData.success) CARDS = cardsData.cards;
+    if (transfersData.success) TRANSFERS = transfersData.transfers;
+    if (activityData.success) ACTIVITY_LOG = activityData.activity;
+    
+    // Update overview stats if available
+    // Update real stats from database
+    if (overviewData.success) {
+    const ov = overviewData.overview;
+  // Update all stat card values
+  document.querySelectorAll('.sc-val')[0].textContent = ov.totalUsers.toLocaleString();
+  document.querySelectorAll('.sc-val')[1].textContent = '$' + (ov.totalBalance/1000000).toFixed(1) + 'M';
+  document.querySelectorAll('.sc-val')[2].textContent = ov.pendingCards + ov.pendingTransfers;
+  document.querySelectorAll('.sc-val')[4].textContent = ov.totalCards.toLocaleString();
+  document.querySelectorAll('.sc-val')[6].textContent = ov.totalUsers.toLocaleString();
+  // Update sidebar counts
+  document.getElementById('cntUsers').textContent = ov.totalUsers;
+  document.getElementById('cntCards').textContent = ov.pendingCards;
+  document.getElementById('cntTransfers').textContent = ov.pendingTransfers;
+}
+    
+    // Render all sections
+    renderOverview();
+    renderUsers(USERS);
+    renderCredits();
+    renderCards(CARDS);
+    renderTransfers(TRANSFERS);
+    renderActivityLog();
+    
+  } catch (e) {
+    console.error('Failed to load admin data:', e);
+    showToast('Failed to load data', 'danger');
+  }
+}
+
+let activeCardId = null;
+let activeTransferId = null;
+let activeRemoveId = null;
+let activeSuspendId = null;
+let creditFromViewId = null;
+
+/* ════════════════════════════════
+   SECTION NAVIGATION
+════════════════════════════════ */
+function showSection(id, btn) {
+  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  const titles = {overview:'Admin Dashboard',users:'All Users',credit:'Credit Accounts',cards:'Virtual Card Approvals',transfers:'Wire Transfer Approvals',activity:'Activity Log',settings:'Settings'};
+  document.getElementById('tbTitle').textContent = titles[id] || id;
+  // Close mobile sidebar
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sbOverlay').classList.remove('show');
+}
+
+/* ════════════════════════════════
+   RENDER OVERVIEW
+════════════════════════════════ */
+function renderOverview() {
+  const data = [38,52,44,68,55,80,63,74,48,88,70,95];
+  const months = ['May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr'];
+  const chart = document.getElementById('overviewChart');
+  const labels = document.getElementById('overviewLabels');
+  if(chart) {
+    chart.innerHTML = data.map((v,i)=>`<div class="mc-bar${i===data.length-1?' ok':''}" style="height:${v}%" title="${months[i]}"></div>`).join('');
+    labels.innerHTML = months.map(m=>`<span>${m}</span>`).join('');
+  }
+  const ra = document.getElementById('recentActivity');
+  if(ra) ra.innerHTML = ACTIVITY_LOG.slice(0,5).map(a=>`
+    <div class="activity-item">
+      <div class="activity-ico" style="background:${a.ico}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="${a.color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${a.icon}</svg></div>
+      <div style="flex:1"><div class="activity-title">${a.title}</div><div class="activity-sub">${a.sub}</div></div>
+      <div class="activity-time">${a.time}</div>
+    </div>`).join('') || '<p style="padding:12px;color:var(--sec);font-size:13px">No activity yet</p>';
+}
+
+/* ════════════════════════════════
+   USERS TABLE
+════════════════════════════════ */
+function renderUsers(data) {
+  const tbody = document.getElementById('usersTableBody');
+  if(!tbody) return;
+  tbody.innerHTML = data.map(u => {
+    const numericAccount = (u.accountNumber || u.id || '').toString().replace(/\D/g, '');
+    return `
+    <tr>
+      <td>
+        <div class="user-cell">
+          <div class="user-ava" style="background:${u.col}">${u.initials}</div>
+          <div><div class="user-name">${u.name}</div><div class="user-email">${u.email}</div></div>
+        </div>
+      </td>
+      <td><span class="user-id">${numericAccount}</span></td>
+      <td><strong>$${u.balance.toLocaleString()}</strong></td>
+      <td><span class="pill ${u.kyc==='verified'?'approved':u.kyc==='pending'?'pending':'rejected'}"><span class="pill-dot"></span>${u.kyc.charAt(0).toUpperCase()+u.kyc.slice(1)}</span></td>
+      <td><span class="pill ${u.status}"><span class="pill-dot"></span>${u.status.charAt(0).toUpperCase()+u.status.slice(1)}</span></td>
+      <td style="color:var(--sec);font-size:12px">${u.joined}</td>
+      <td>
+        <div class="tbl-actions">
+          <button class="tbl-btn view" onclick="viewUser('${u.id}')">View</button>
+          <button class="tbl-btn credit" onclick="openCreditFor('${u.id}')">Credit</button>
+          <button class="tbl-btn suspend" onclick="openSuspend('${u.id}')">${u.status==='suspended'?'Unsuspend':'Suspend'}</button>
+          <button class="tbl-btn remove" onclick="openRemove('${u.id}')">Remove</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function filterUsers(f, btn) {
+  document.querySelectorAll('.tbl-filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const filtered = f==='all' ? USERS : USERS.filter(u=>u.status===f||(f==='pending'&&u.kyc==='pending'));
+  renderUsers(filtered);
+}
+function searchUsers(q) {
+  const s = q.toLowerCase();
+  renderUsers(USERS.filter(u=>u.name.toLowerCase().includes(s)||u.email.toLowerCase().includes(s)||u.id.toLowerCase().includes(s)));
+}
+
+/* ════════════════════════════════
+   CREDIT TABLE
+════════════════════════════════ */
+function renderCredits() {
+  const tbody = document.getElementById('creditTableBody');
+  if(!tbody) return;
+  tbody.innerHTML = CREDITS.map(c=>`
+    <tr>
+      <td><div class="user-name">${c.user}</div><div class="user-id">${c.id}</div></td>
+      <td><strong>$${c.amount.toLocaleString()}</strong></td>
+      <td>${c.currency}</td>
+      <td style="max-width:200px;font-size:12px;color:var(--sec)">${c.reason}</td>
+      <td style="font-size:12px;color:var(--sec)">${c.by}</td>
+      <td style="font-size:12px;color:var(--sec)">${c.date}</td>
+      <td><span class="pill completed"><span class="pill-dot"></span>Completed</span></td>
+    </tr>`).join('');
+  // Populate credit user dropdown
+  const sel = document.getElementById('creditUser');
+  if(sel) { sel.innerHTML = '<option value="">Select a user</option>'+USERS.map(u=>`<option value="${u.id}">${u.name} (${u.id})</option>`).join(''); }
+}
+
+/* ════════════════════════════════
+   CARDS TABLE
+════════════════════════════════ */
+function renderCards(data) {
+  const tbody = document.getElementById('cardsTableBody');
+  if(!tbody) return;
+  const pend = data.filter(c=>c.status==='pending').length;
+  const sub = document.getElementById('cardSubTitle');
+  if(sub) sub.textContent = `${pend} pending review`;
+  tbody.innerHTML = data.map(c=>`
+    <tr>
+      <td><div class="user-cell"><div class="user-ava" style="background:${c.col}">${c.initials}</div><div><div class="user-name">${c.user}</div><div class="user-id">${c.uid}</div></div></div></td>
+      <td style="font-size:12px">${c.type}</td>
+      <td><span class="pill ${c.plan==='Elite'?'review':c.plan==='Premium'?'processing':'active'}">${c.plan}</span></td>
+      <td style="font-size:12px;color:var(--sec)">${c.network}</td>
+      <td style="font-size:12px;color:var(--sec)">${c.requested}</td>
+      <td><span class="pill ${c.status}"><span class="pill-dot"></span>${c.status.charAt(0).toUpperCase()+c.status.slice(1)}</span></td>
+      <td>
+        <div class="tbl-actions">
+          <button class="tbl-btn view" onclick="reviewCard('${c.id}')">Review</button>
+          ${c.status==='pending'?`<button class="tbl-btn approve" onclick="quickCardApprove('${c.id}')">Approve</button><button class="tbl-btn reject" onclick="quickCardReject('${c.id}')">Reject</button>`:''}
+        </div>
+      </td>
+    </tr>`).join('');
+}
+function filterCards(f,btn) {
+  document.querySelectorAll('#sec-cards .tbl-filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCards(f==='all'?CARDS:CARDS.filter(c=>c.status===f));
+}
+
+/* ════════════════════════════════
+   TRANSFERS TABLE
+════════════════════════════════ */
+function renderTransfers(data) {
+  const tbody = document.getElementById('transfersTableBody');
+  if(!tbody) return;
+  const pend = data.filter(t=>t.status==='pending').length;
+  const sub = document.getElementById('transferSubTitle');
+  if(sub) sub.textContent = `${pend} awaiting approval`;
+  tbody.innerHTML = data.map(t=>`
+    <tr>
+      <td><div class="user-cell"><div class="user-ava" style="background:${t.col}">${t.initials}</div><div><div class="user-name">${t.sender}</div><div class="user-id">${t.uid}</div></div></div></td>
+      <td><div class="user-name" style="font-size:12px">${t.recipient}</div></td>
+      <td><strong>${t.amount}</strong></td>
+      <td style="font-size:12px;color:var(--sec)">${t.dest}</td>
+      <td><span class="pill ${t.method==='SWIFT'?'processing':'active'}" style="font-size:10px">${t.method}</span></td>
+      <td style="font-size:12px;color:var(--sec)">${t.requested}</td>
+      <td><span class="pill ${t.status}"><span class="pill-dot"></span>${t.status.charAt(0).toUpperCase()+t.status.slice(1)}</span></td>
+      <td>
+        <div class="tbl-actions">
+          <button class="tbl-btn view" onclick="reviewTransfer('${t.id}')">Review</button>
+          ${t.status==='pending'?`<button class="tbl-btn approve" onclick="quickTransferApprove('${t.id}')">Approve</button><button class="tbl-btn reject" onclick="quickTransferReject('${t.id}')">Reject</button>`:''}
+        </div>
+      </td>
+    </tr>`).join('');
+}
+function filterTransfers(f,btn) {
+  document.querySelectorAll('#sec-transfers .tbl-filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTransfers(f==='all'?TRANSFERS:TRANSFERS.filter(t=>t.status===f));
+}
+
+/* ════════════════════════════════
+   ACTIVITY LOG
+════════════════════════════════ */
+function renderActivityLog() {
+  const el = document.getElementById('activityLog');
+  if(!el) return;
+  el.innerHTML = ACTIVITY_LOG.map(a=>`
+    <div class="activity-item">
+      <div class="activity-ico" style="background:${a.ico}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="${a.color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${a.icon}</svg></div>
+      <div style="flex:1"><div class="activity-title">${a.title}</div><div class="activity-sub">${a.sub}</div></div>
+      <div class="activity-time">${a.time}</div>
+    </div>`).join('');
+}
+
+/* ════════════════════════════════
+   VIEW USER
+════════════════════════════════ */
+function viewUser(uid) {
+  const u = USERS.find(x=>x.id===uid);
+  if(!u) return;
+  document.getElementById('vuTitle').textContent = u.name;
+  document.getElementById('vuSub').textContent = u.id + ' · ' + u.country;
+  creditFromViewId = uid;
+  document.getElementById('vuBody').innerHTML = `
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px">
+      <div style="width:56px;height:56px;border-radius:50%;background:${u.col};display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff">${u.initials}</div>
+      <div><div style="font-size:17px;font-weight:800;color:var(--text)">${u.name}</div><div style="font-size:13px;color:var(--sec)">${u.email}</div></div>
+      <span class="pill ${u.status}" style="margin-left:auto"><span class="pill-dot"></span>${u.status}</span>
+    </div>
+    <div style="background:#F8FAFF;border-radius:10px;padding:14px 16px;border:1px solid var(--border)">
+      <div class="m-detail-row"><span class="m-detail-label">Account Number</span><span class="m-detail-val blue">${(u.accountNumber || u.id || '').toString().replace(/\D/g, '')}</span></div>
+      <div class="m-detail-row"><span class="m-detail-label">Country</span><span class="m-detail-val">${u.country}</span></div>
+      <div class="m-detail-row"><span class="m-detail-label">Balance (USD)</span><span class="m-detail-val ok">$${u.balance.toLocaleString()}</span></div>
+      <div class="m-detail-row"><span class="m-detail-label">KYC Status</span><span class="m-detail-val ${u.kyc==='verified'?'ok':'danger'}">${u.kyc.charAt(0).toUpperCase()+u.kyc.slice(1)}</span></div>
+      <div class="m-detail-row"><span class="m-detail-label">Virtual Cards</span><span class="m-detail-val">${u.cards} active</span></div>
+      <div class="m-detail-row"><span class="m-detail-label">Member Since</span><span class="m-detail-val">${u.joined}</span></div>
+    </div>`;
+  openModal('viewUserModal');
+}
+
+function openCreditFromView() {
+  closeModal('viewUserModal');
+  openCreditFor(creditFromViewId);
+}
+
+/* ════════════════════════════════
+   CREDIT ACCOUNT
+════════════════════════════════ */
+function openCreditFor(uid) {
+  const sel = document.getElementById('creditUser');
+  if(sel) sel.value = uid;
+  updateCreditBalance();
+  openModal('creditModal');
+}
+
+function updateCreditBalance() {
+  const sel = document.getElementById('creditUser');
+  const balanceField = document.getElementById('creditCurrentBalance');
+  if (!sel || !balanceField) return;
+  const u = USERS.find(x => x.id === sel.value);
+  balanceField.value = u ? `$${u.balance.toLocaleString()}` : '$0.00';
+}
+
+document.getElementById('creditUser').addEventListener('change', updateCreditBalance);
+
+async function executeCreditAccount() {
+  const uid = document.getElementById('creditUser').value;
+  const amt = parseFloat(document.getElementById('creditAmount').value);
+  const currency = document.getElementById('creditCurrency').value;
+  if(!uid) { showToast('Please select a user.','warn'); return; }
+  if(!amt||amt<1) { showToast('Enter a valid amount.','warn'); return; }
+
+  const numericId = parseInt(uid.replace('GA-',''));
+  try {
+    const res = await fetch(`/api/admin/user/${numericId}/credit`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      credentials: 'same-origin',
+      body: JSON.stringify({ amount: amt, currency })
+    });
+    const data = await res.json();
+    if (!data.success) { showToast(data.error || 'Credit failed','danger'); return; }
+
+    const u = USERS.find(x=>x.id===uid);
+    if(u) u.balance += amt;
+    const now = new Date();
+    CREDITS.unshift({
+      user: u ? u.name : uid, id: uid, amount: amt, currency,
+      reason:'Admin credit',
+      by:'Super Admin',
+      date: now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) + ' · ' + now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}),
+      status:'completed'
+    });
+    ACTIVITY_LOG.unshift({
+      ico:'rgba(30,107,255,.12)',color:'#1E6BFF',
+      icon:'<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
+      title:`Account credited — ${uid} ${u?u.name:''}`,
+      sub:`$${amt.toLocaleString()} ${currency}`,
+      time:'Just now'
+    });
+    closeModal('creditModal');
+    renderUsers(USERS); renderCredits();
+    showToast(`$${amt.toLocaleString()} credited to ${u?u.name:uid} successfully.`,'ok');
+    document.getElementById('creditAmount').value='';
+    document.getElementById('creditCurrentBalance').value='$0.00';
+  } catch(e) {
+    showToast('Network error. Please try again.','danger');
+  }
+}
+
+/* ════════════════════════════════
+   REMOVE USER
+════════════════════════════════ */
+function openRemove(uid) {
+  const u = USERS.find(x=>x.id===uid);
+  if(!u) return;
+  activeRemoveId = uid;
+  document.getElementById('rmUserName').textContent = u.name;
+  document.getElementById('rmUserId').textContent = u.id;
+  document.getElementById('rmUserBal').textContent = `$${u.balance.toLocaleString()} (will be refunded)`;
+  document.getElementById('removeConfirmInput').value='';
+  openModal('removeUserModal');
+}
+
+function executeRemoveUser() {
+  const input = document.getElementById('removeConfirmInput').value;
+  if(input !== 'REMOVE') { showToast('Type REMOVE exactly to confirm.','warn'); return; }
+  const u = USERS.find(x=>x.id===activeRemoveId);
+  USERS = USERS.filter(x=>x.id!==activeRemoveId);
+  ACTIVITY_LOG.unshift({ico:'rgba(239,68,68,.12)',color:'#EF4444',icon:'<polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/>',title:`Account removed — ${activeRemoveId} ${u?u.name:''}`,sub:'User permanently deleted from platform',time:'Just now'});
+  closeModal('removeUserModal');
+  renderUsers(USERS);
+  document.getElementById('cntUsers').textContent = USERS.length;
+  showToast(`${u?u.name:'User'} has been permanently removed.`,'danger');
+}
+
+/* ════════════════════════════════
+   SUSPEND
+════════════════════════════════ */
+function openSuspend(uid) {
+  const u = USERS.find(x=>x.id===uid);
+  if(!u) return;
+  activeSuspendId = uid;
+  document.getElementById('suspendSub').textContent = `${u.name} (${u.id})`;
+  openModal('suspendUserModal');
+}
+function executeSuspend() {
+  const u = USERS.find(x=>x.id===activeSuspendId);
+  const reason = document.getElementById('suspendReason').value;
+  if(!reason) { showToast('Select a suspension reason.','warn'); return; }
+  if(u) { u.status = u.status==='suspended'?'active':'suspended'; }
+  ACTIVITY_LOG.unshift({ico:'rgba(245,158,11,.12)',color:'#F59E0B',icon:'<circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>',title:`Account ${u&&u.status==='suspended'?'suspended':'unsuspended'} — ${activeSuspendId} ${u?u.name:''}`,sub:`Reason: ${reason}`,time:'Just now'});
+  closeModal('suspendUserModal');
+  renderUsers(USERS);
+  showToast(`${u?u.name:'User'} account ${u&&u.status==='suspended'?'suspended':'restored'}.`,'warn');
+}
+
+/* ════════════════════════════════
+   CARD DECISIONS
+════════════════════════════════ */
+function reviewCard(cid) {
+  const c = CARDS.find(x=>x.id===cid);
+  if(!c) return;
+  activeCardId = cid;
+  document.getElementById('crSub').textContent = `${c.user} · ${c.id}`;
+  document.getElementById('crBody').innerHTML = `
+    <div style="background:linear-gradient(135deg,#0d1f3c,#0B3D91);border-radius:14px;padding:22px;margin-bottom:16px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.08)"></div>
+      <div style="width:36px;height:26px;border-radius:4px;background:linear-gradient(135deg,#F59E0B,#D97706);margin-bottom:14px;position:relative;z-index:1"></div>
+      <div style="font-size:14px;font-weight:700;color:rgba(255,255,255,.75);letter-spacing:3px;margin-bottom:12px;font-family:monospace;position:relative;z-index:1">•••• •••• •••• ????</div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;position:relative;z-index:1">
+        <div><div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.8);text-transform:uppercase">${c.user}</div><div style="font-size:9px;color:rgba(255,255,255,.45);margin-top:2px">Pending Activation</div></div>
+        <div style="font-size:11px;font-weight:800;color:rgba(255,255,255,.6);letter-spacing:1px">${c.network.toUpperCase()}</div>
+      </div>
+    </div>
+    <div style="background:#F8FAFF;border-radius:10px;padding:14px 16px;border:1px solid var(--border)">
+      <div class="m-detail-row"><span class="m-detail-label">Request ID</span><span class="m-detail-val blue">${c.id}</span></div>
+      <div class="m-detail-row"><span class="m-detail-label">Card Type</span><span class="m-detail-val">${c.type}</span></div>
+      <div class="m-detail-row"><span class="m-detail-label">Plan</span><span class="m-detail-val">${c.plan}</span></div>
+      <div class="m-detail-row"><span class="m-detail-label">Network</span><span class="m-detail-val">${c.network}</span></div>
+      <div class="m-detail-row"><span class="m-detail-label">Requested</span><span class="m-detail-val">${c.requested}</span></div>
+      <div class="m-detail-row"><span class="m-detail-label">Status</span><span class="m-detail-val ${c.status==='pending'?'':'ok'}">${c.status.charAt(0).toUpperCase()+c.status.slice(1)}</span></div>
+    </div>`;
+  openModal('cardReviewModal');
+}
+
+function quickCardApprove(cid) { changeCardStatus(cid,'approved'); }
+function quickCardReject(cid) { changeCardStatus(cid,'rejected'); }
+function cardDecision(action) {
+  changeCardStatus(activeCardId, action==='approve'?'approved':'rejected');
+  closeModal('cardReviewModal');
+}
+function changeCardStatus(cid, newStatus) {
+  const c = CARDS.find(x=>x.id===cid);
+  if(!c) return;
+  // Extract numeric card id from 'CR-001' format
+  const cardId = parseInt(cid.replace('CR-', ''));
+  let backendStatus = newStatus === 'approved' ? 'approve' : (newStatus === 'rejected' ? 'reject' : newStatus);
+  fetch(`/api/admin/card/${cardId}/${backendStatus}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        c.status = newStatus;
+        const isApprove = newStatus==='approved';
+        ACTIVITY_LOG.unshift({ico:`rgba(${isApprove?'34,197,94':'239,68,68'},.12)`,color:isApprove?'#22C55E':'#EF4444',icon:'<polyline points="20 6 9 17 4 12"/>',title:`Card ${newStatus} — ${c.uid} ${c.user}`,sub:`${c.type} · ${c.plan} Plan`,time:'Just now'});
+        renderCards(CARDS);
+        document.getElementById('cntCards').textContent = CARDS.filter(x=>x.status==='pending').length;
+        showToast(`Card request ${newStatus} for ${c.user}.`, isApprove?'ok':'danger');
+      } else {
+        showToast('Failed to update card status','danger');
+      }
+    })
+    .catch(()=>showToast('Failed to update card status','danger'));
+}
+function bulkApproveCards() {
+  const pending = CARDS.filter(c=>c.status==='pending');
+  pending.forEach(c=>c.status='approved');
+  ACTIVITY_LOG.unshift({ico:'rgba(34,197,94,.12)',color:'#22C55E',icon:'<polyline points="20 6 9 17 4 12"/>',title:`Bulk approved ${pending.length} card requests`,sub:'All pending virtual card requests approved',time:'Just now'});
+  renderCards(CARDS);
+  document.getElementById('cntCards').textContent='0';
+  showToast(`${pending.length} card requests approved.`,'ok');
+}
+
+/* ════════════════════════════════
+   TRANSFER DECISIONS
+════════════════════════════════ */
+function reviewTransfer(tid) {
+  const t = TRANSFERS.find(x=>x.id===tid);
+  if(!t) return;
+  activeTransferId = tid;
+  document.getElementById('trSub').textContent = `${t.id} · ${t.sender}`;
+  document.getElementById('trBody').innerHTML = `
+    ${t.status==='flagged'?`<div class="m-dbox"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" style="flex-shrink:0;margin-top:2px"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg><p>This transfer has been <strong>flagged for review</strong>. The amount or destination may require additional compliance checks before approval.</p></div>`:''}
+    <div style="background:#F8FAFF;border-radius:10px;padding:14px 16px;border:1px solid var(--border);margin-bottom:14px">
+      <div class="m-detail-row"><span class="m-detail-label">Transfer ID</span><span class="m-detail-val blue">${t.id}</span></div>
+      <div class="m-detail-row"><span class="m-detail-label">Sender</span><span class="m-detail-val">${t.sender} (${t.uid})</span></div>
+      <div class="m-detail-row"><span class="m-detail-label">Recipient</span><span class="m-detail-val">${t.recipient}</span></div>
+      <div class="m-detail-row"><span class="m-detail-label">Amount</span><span class="m-detail-val ok" style="font-size:16px">${t.amount}</span></div>
+      <div class="m-detail-row"><span class="m-detail-label">Destination</span><span class="m-detail-val">${t.dest}</span></div>
+      <div class="m-detail-row"><span class="m-detail-label">Method</span><span class="m-detail-val">${t.method}</span></div>
+      <div class="m-detail-row"><span class="m-detail-label">Requested</span><span class="m-detail-val">${t.requested}</span></div>
+      <div class="m-detail-row"><span class="m-detail-label">Status</span><span class="m-detail-val ${t.status==='flagged'?'danger':t.status==='approved'?'ok':''}">${t.status.charAt(0).toUpperCase()+t.status.slice(1)}</span></div>
+    </div>
+    <div class="mf"><label>Compliance Note (optional)</label><textarea style="width:100%;border:1.5px solid var(--border);border-radius:9px;padding:10px 13px;font-size:13px;font-family:inherit;outline:none;height:60px;resize:none" placeholder="Add compliance note…"></textarea></div>`;
+  openModal('transferReviewModal');
+}
+
+function quickTransferApprove(tid) { changeTransferStatus(tid,'approved'); }
+function quickTransferReject(tid) { changeTransferStatus(tid,'rejected'); }
+function transferDecision(action) {
+  const statusMap = {approve:'approved',reject:'rejected',flag:'flagged'};
+  changeTransferStatus(activeTransferId, statusMap[action]);
+  closeModal('transferReviewModal');
+}
+function changeTransferStatus(tid, newStatus) {
+  const t = TRANSFERS.find(x=>x.id===tid);
+  if(!t) return;
+  // Extract numeric transfer id from 'TXN-001' format
+  const transferId = parseInt(tid.replace('TXN-', ''));
+  let backendStatus = newStatus === 'approved' ? 'approve' : (newStatus === 'rejected' ? 'reject' : newStatus);
+  fetch(`/api/admin/transfer/${transferId}/${backendStatus}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        t.status = newStatus;
+        const colorMap = {approved:'#22C55E',rejected:'#EF4444',flagged:'#F59E0B'};
+        ACTIVITY_LOG.unshift({ico:`rgba(${newStatus==='approved'?'34,197,94':newStatus==='rejected'?'239,68,68':'245,158,11'},.12)`,color:colorMap[newStatus],icon:'<line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>',title:`Transfer ${newStatus} — ${tid} ${t.sender}`,sub:`${t.amount} to ${t.dest}`,time:'Just now'});
+        renderTransfers(TRANSFERS);
+        document.getElementById('cntTransfers').textContent = TRANSFERS.filter(x=>x.status==='pending').length;
+        showToast(`Transfer ${newStatus} — ${t.id}.`,newStatus==='approved'?'ok':newStatus==='flagged'?'warn':'danger');
+      } else {
+        showToast('Failed to update transfer status','danger');
+      }
+    })
+    .catch(()=>showToast('Failed to update transfer status','danger'));
+}
+
+/* ════════════════════════════════
+   ADD USER
+════════════════════════════════ */
+function executeAddUser() {
+  const fn = document.getElementById('auFirst').value.trim();
+  const ln = document.getElementById('auLast').value.trim();
+  const email = document.getElementById('auEmail').value.trim();
+  const bal = parseFloat(document.getElementById('auBalance').value)||0;
+  const kyc = document.getElementById('auKyc').value;
+  const country = document.getElementById('auCountry').value;
+  if(!fn||!ln||!email) { showToast('Fill in all required fields.','warn'); return; }
+  const id = 'GA-'+String(Math.floor(900+Math.random()*9000)).padStart(3,'0');
+  const initials = fn[0]+ln[0];
+  const col = COLORS[USERS.length%COLORS.length];
+  USERS.push({id,name:`${fn} ${ln}`,email,country,balance:bal,kyc:kyc.toLowerCase().replace(' ',''),status:'active',joined:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}),cards:0,initials,col});
+  ACTIVITY_LOG.unshift({ico:'rgba(30,107,255,.12)',color:'#1E6BFF',icon:'<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',title:`New user created — ${id} ${fn} ${ln}`,sub:`${email} · ${country}`,time:'Just now'});
+  closeModal('addUserModal');
+  renderUsers(USERS);
+  document.getElementById('cntUsers').textContent = USERS.length;
+  showToast(`Account created for ${fn} ${ln} (${id}).`,'ok');
+  document.getElementById('auFirst').value='';document.getElementById('auLast').value='';document.getElementById('auEmail').value='';document.getElementById('auBalance').value='';
+}
+
+/* ════════════════════════════════
+   GLOBAL SEARCH
+════════════════════════════════ */
+function globalSearchFn(q) {
+  if(!q) return;
+  const s = q.toLowerCase();
+  const matched = USERS.filter(u=>u.name.toLowerCase().includes(s)||u.email.toLowerCase().includes(s)||u.id.toLowerCase().includes(s));
+  if(matched.length) {
+    showSection('users', document.querySelector('[onclick*="users"]'));
+    renderUsers(matched);
+  }
+}
+
+/* ════════════════════════════════
+   MODAL HELPERS
+════════════════════════════════ */
+function openModal(id) { document.getElementById(id).classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+document.querySelectorAll('.modal-bg').forEach(m => {
+  m.addEventListener('click', e => { if(e.target===m) m.classList.remove('show'); });
+});
+document.addEventListener('keydown', e => { if(e.key==='Escape') document.querySelectorAll('.modal-bg.show').forEach(m=>m.classList.remove('show')); });
+
+/* ════════════════════════════════
+   TOAST
+════════════════════════════════ */
+function showToast(msg, type='ok') {
+  const t=document.getElementById('toast');
+  const ico=document.getElementById('toastIco');
+  document.getElementById('toastMsg').textContent=msg;
+  const cfg={ok:{c:'#22C55E',p:'<polyline points="20 6 9 17 4 12"/>'},warn:{c:'#F59E0B',p:'<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>'},danger:{c:'#EF4444',p:'<circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>'}};
+  const c=cfg[type]||cfg.ok;
+  ico.setAttribute('stroke',c.c);ico.innerHTML=c.p;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+/* ════════════════════════════════
+   MOBILE SIDEBAR
+════════════════════════════════ */
+document.getElementById('sbToggle').addEventListener('click',()=>{
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sbOverlay').classList.toggle('show');
+});
+document.getElementById('sbOverlay').addEventListener('click',()=>{
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sbOverlay').classList.remove('show');
+});
+
+/* ════════════════════════════════
+   INIT
+════════════════════════════════ */
+// Admin login modal logic
+
+
+async function handleAdminLogin(event) {
+  event.preventDefault();
+  const username = document.getElementById('adminLoginUsername').value.trim();
+  const password = document.getElementById('adminLoginPassword').value;
+  const btn = document.getElementById('adminLoginBtn');
+  const errorMsg = document.getElementById('loginError');
+
+  btn.disabled = true;
+  btn.textContent = 'Logging in...';
+  errorMsg.style.display = 'none';
+
+  try {
+    const res = await fetch('/api/admin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+      credentials: 'same-origin'
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      document.getElementById('adminLoginSection').style.display = 'none';
+      document.getElementById('adminDashboard').style.display = 'block';
+      loadAdminData();
+    } else {
+      errorMsg.textContent = 'Invalid username or password';
+      errorMsg.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Login';
+    }
+  } catch (e) {
+    errorMsg.textContent = 'Login failed. Try again.';
+    errorMsg.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Login';
+  }
+}
+
+
+
+loadAdminData();
+
+// Check if admin is already logged in
+(async () => {
+  try {
+    const res = await fetch('/api/admin/check', { credentials: 'same-origin' });
+    const data = await res.json();
+    if (data.success) {
+      document.getElementById('adminLoginSection').style.display = 'none';
+      document.getElementById('adminDashboard').style.display = 'block';
+      document.getElementById('sidebar').style.display = 'flex';
+      document.getElementById('sbToggle').style.display = 'flex';
+      loadAdminData();
+    } else {
+      document.getElementById('adminLoginSection').style.display = 'flex';
+      document.getElementById('adminDashboard').style.display = 'none';
+      document.getElementById('sidebar').style.display = 'none';
+      document.getElementById('sbToggle').style.display = 'none';
+    }
+  } catch (e) {
+    document.getElementById('adminLoginSection').style.display = 'flex';
+    document.getElementById('adminDashboard').style.display = 'none';
+    document.getElementById('sidebar').style.display = 'none';
+    document.getElementById('sbToggle').style.display = 'none';
+  }
+  })();
+
+
+</script>
+</body>
+</html>

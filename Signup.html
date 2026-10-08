@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Open Account — GLOBALEASYTRANSASSET</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;height:100%}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#fff;color:#0A0A0A;min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+:root{
+  --bg:#FFFFFF;
+  --bg-soft:#F6F8FC;
+  --blue:#1E6BFF;
+  --blue-deep:#0B3D91;
+  --blue-accent:#4DA3FF;
+  --blue-light:#EBF2FF;
+  --text:#0A0A0A;
+  --text-sec:#6B7280;
+  --border:#E5EAF2;
+  --border-focus:#1E6BFF;
+  --radius:14px;
+  --shadow:0 4px 24px rgba(30,107,255,0.10);
+  --shadow-lg:0 16px 56px rgba(11,61,145,0.14);
+  --transition:0.28s cubic-bezier(0.4,0,0.2,1);
+  --error:#EF4444;
+  --success:#22C55E;
+}
+
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#f1f5f9}
+::-webkit-scrollbar-thumb{background:var(--blue-accent);border-radius:99px}
+
+/* ── NAVBAR ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 48px;height:70px;
+  background:rgba(255,255,255,0.95);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo-mark{
+  width:34px;height:34px;
+  background:linear-gradient(135deg,var(--blue) 0%,var(--blue-deep) 100%);
+  border-radius:9px;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 14px rgba(30,107,255,0.35);
+}
+.nav-logo-text{font-size:17px;font-weight:800;letter-spacing:-0.5px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px}
+.nav-logo-text span{color:var(--blue)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-back{
+  display:flex;align-items:center;gap:7px;
+  font-size:14px;font-weight:600;color:var(--text-sec);
+  text-decoration:none;padding:7px 14px;border-radius:8px;
+  transition:all var(--transition);
+}
+.nav-back:hover{color:var(--blue);background:var(--blue-light)}
+.nav-login-link{
+  font-size:14px;font-weight:600;color:var(--text);
+  text-decoration:none;padding:8px 18px;border-radius:9px;
+  border:1.5px solid var(--border);transition:all var(--transition);
+}
+.nav-login-link:hover{border-color:var(--blue);color:var(--blue)}
+
+/* ── LAYOUT ── */
+.page-wrap{
+  min-height:100vh;padding-top:70px;
+  display:grid;grid-template-columns:1fr 1fr;
+}
+
+/* ── LEFT PANEL ── */
+.left-panel{
+  background:linear-gradient(160deg,#0B3D91 0%,#1E6BFF 60%,#0d52c2 100%);
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:64px 56px;min-height:calc(100vh - 70px);
+  position:sticky;top:70px;height:calc(100vh - 70px);
+}
+.left-panel::before{
+  content:'';position:absolute;top:-120px;right:-120px;
+  width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,0.08) 0%,transparent 65%);
+  pointer-events:none;
+}
+.left-panel::after{
+  content:'';position:absolute;bottom:-80px;left:-80px;
+  width:380px;height:380px;border-radius:50%;
+  background:radial-gradient(circle,rgba(77,163,255,0.18) 0%,transparent 65%);
+  pointer-events:none;
+}
+.left-grid-pattern{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,0.04) 1px,transparent 1px);
+  background-size:48px 48px;
+  pointer-events:none;
+}
+.left-content{position:relative;z-index:1}
+.left-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);
+  padding:6px 14px;border-radius:99px;margin-bottom:28px;
+}
+.left-badge-dot{width:7px;height:7px;border-radius:50%;background:#22C55E;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.3)}}
+.left-badge span{font-size:12px;font-weight:700;color:rgba(255,255,255,0.9);letter-spacing:0.4px}
+.left-headline{
+  font-family:'DM Serif Display',Georgia,serif;
+  font-size:clamp(28px,2.8vw,40px);
+  line-height:1.15;letter-spacing:-0.8px;
+  color:#fff;margin-bottom:18px;
+}
+.left-sub{
+  font-size:15px;color:rgba(255,255,255,0.7);
+  line-height:1.75;margin-bottom:40px;
+  max-width:340px;
+}
+.left-perks{display:flex;flex-direction:column;gap:16px;margin-bottom:40px}
+.left-perk{display:flex;align-items:flex-start;gap:14px}
+.left-perk-icon{
+  width:38px;height:38px;border-radius:9px;flex-shrink:0;
+  background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.15);
+  display:flex;align-items:center;justify-content:center;
+}
+.left-perk-title{font-size:14px;font-weight:700;color:#fff;margin-bottom:2px}
+.left-perk-text{font-size:13px;color:rgba(255,255,255,0.6);line-height:1.5}
+.left-stats{
+  display:grid;grid-template-columns:1fr 1fr;gap:16px;
+  padding-top:32px;border-top:1px solid rgba(255,255,255,0.12);
+}
+.left-stat-num{font-size:24px;font-weight:800;color:#fff;letter-spacing:-0.5px}
+.left-stat-num span{color:var(--blue-accent)}
+.left-stat-label{font-size:12px;color:rgba(255,255,255,0.5);font-weight:500;margin-top:3px}
+.left-trust{
+  display:flex;align-items:center;gap:10px;margin-top:28px;
+}
+.left-trust-avatars{display:flex}
+.left-trust-avatar{
+  width:32px;height:32px;border-radius:50%;
+  border:2px solid rgba(255,255,255,0.3);margin-left:-8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:#fff;
+  background:linear-gradient(135deg,rgba(30,107,255,0.7),rgba(11,61,145,0.9));
+}
+.left-trust-avatar:first-child{margin-left:0}
+.left-trust-text{font-size:13px;color:rgba(255,255,255,0.65);font-weight:500}
+.left-trust-text strong{color:#fff}
+
+/* ── RIGHT PANEL (FORM) ── */
+.right-panel{
+  display:flex;flex-direction:column;justify-content:center;
+  padding:64px 56px;background:#fff;overflow-y:auto;
+}
+.form-wrap{max-width:440px;width:100%;margin:0 auto}
+
+/* Step indicator */
+.step-indicator{display:flex;align-items:center;gap:0;margin-bottom:36px}
+.step-item{display:flex;align-items:center;gap:8px;flex:1}
+.step-dot{
+  width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;flex-shrink:0;
+  transition:all var(--transition);border:2px solid var(--border);
+  background:#fff;color:var(--text-sec);
+}
+.step-dot.active{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 4px 14px rgba(30,107,255,0.35)}
+.step-dot.done{background:var(--success);border-color:var(--success);color:#fff}
+.step-label{font-size:12px;font-weight:600;color:var(--text-sec)}
+.step-label.active{color:var(--blue)}
+.step-label.done{color:var(--success)}
+.step-line{flex:1;height:2px;background:var(--border);margin:0 8px;border-radius:99px;transition:background var(--transition)}
+.step-line.done{background:var(--success)}
+
+.form-title{
+  font-family:'DM Serif Display',Georgia,serif;
+  font-size:28px;letter-spacing:-0.5px;color:var(--text);
+  margin-bottom:6px;
+}
+.form-sub{font-size:14px;color:var(--text-sec);margin-bottom:28px;line-height:1.6}
+
+/* Form step panels */
+.form-step{display:none}
+.form-step.active{display:block;animation:slideIn 0.35s cubic-bezier(0.4,0,0.2,1)}
+@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+
+/* Fields */
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{margin-bottom:18px;position:relative}
+.field label{
+  display:block;font-size:13px;font-weight:600;
+  color:var(--text);margin-bottom:7px;
+}
+.field label span{color:var(--error)}
+.field-input-wrap{position:relative}
+.field input,.field select{
+  width:100%;padding:12px 16px;border-radius:10px;
+  border:1.5px solid var(--border);
+  font-size:14px;font-weight:500;color:var(--text);
+  font-family:inherit;background:#fff;
+  transition:all var(--transition);outline:none;
+  appearance:none;-webkit-appearance:none;
+}
+.field input:focus,.field select:focus{
+  border-color:var(--border-focus);
+  box-shadow:0 0 0 3px rgba(30,107,255,0.12);
+}
+.field input.has-icon{padding-left:44px}
+.field input.error{border-color:var(--error);box-shadow:0 0 0 3px rgba(239,68,68,0.10)}
+.field input.valid{border-color:var(--success);box-shadow:0 0 0 3px rgba(34,197,94,0.08)}
+.field-icon{
+  position:absolute;left:14px;top:50%;transform:translateY(-50%);
+  color:var(--text-sec);pointer-events:none;
+}
+.field-icon-right{
+  position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  cursor:pointer;color:var(--text-sec);transition:color var(--transition);
+}
+.field-icon-right:hover{color:var(--blue)}
+.field-hint{font-size:12px;color:var(--text-sec);margin-top:5px}
+.field-error{font-size:12px;color:var(--error);margin-top:5px;display:none}
+.field-error.show{display:block}
+.field-valid{font-size:12px;color:var(--success);margin-top:5px;display:none;align-items:center;gap:4px}
+.field-valid.show{display:flex}
+
+/* Password strength */
+.pw-strength{margin-top:8px}
+.pw-strength-bars{display:flex;gap:4px;margin-bottom:5px}
+.pw-bar{height:4px;flex:1;border-radius:99px;background:var(--border);transition:background 0.3s}
+.pw-bar.weak{background:#EF4444}
+.pw-bar.fair{background:#F59E0B}
+.pw-bar.good{background:#3B82F6}
+.pw-bar.strong{background:#22C55E}
+.pw-label{font-size:12px;font-weight:600;color:var(--text-sec)}
+
+/* Phone flag */
+.phone-wrap{display:flex;gap:10px}
+.phone-code-select{
+  width:110px;flex-shrink:0;padding:12px 10px;border-radius:10px;
+  border:1.5px solid var(--border);font-size:13px;font-weight:600;
+  color:var(--text);font-family:inherit;background:#fff;
+  cursor:pointer;outline:none;appearance:none;-webkit-appearance:none;
+  transition:all var(--transition);
+}
+.phone-code-select:focus{border-color:var(--border-focus);box-shadow:0 0 0 3px rgba(30,107,255,0.12)}
+.phone-input{flex:1;position:relative;z-index:10}
+.phone-input input{
+  width:100%;padding:12px 16px;border-radius:10px;
+  border:1.5px solid var(--border);
+  font-size:14px;font-weight:500;color:var(--text);
+  font-family:inherit;background:#fff;
+  transition:all var(--transition);outline:none;
+  pointer-events:auto;cursor:text;
+}
+.phone-input input:focus{
+  border-color:var(--border-focus);
+  box-shadow:0 0 0 3px rgba(30,107,255,0.12);
+}
+
+/* Terms */
+.terms-wrap{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:14px;background:var(--bg-soft);border-radius:10px;
+  border:1.5px solid var(--border);margin-bottom:20px;cursor:pointer;
+  transition:border-color var(--transition);
+}
+.terms-wrap:hover{border-color:var(--blue)}
+.terms-checkbox{
+  width:18px;height:18px;border-radius:5px;border:1.5px solid var(--border);
+  flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;
+  transition:all var(--transition);background:#fff;
+}
+.terms-checkbox.checked{background:var(--blue);border-color:var(--blue)}
+.terms-text{font-size:13px;color:var(--text-sec);line-height:1.6}
+.terms-text a{color:var(--blue);text-decoration:none;font-weight:600}
+.terms-text a:hover{text-decoration:underline}
+
+/* Submit button */
+.btn-submit{
+  width:100%;padding:14px;border-radius:11px;
+  background:linear-gradient(135deg,var(--blue) 0%,var(--blue-deep) 100%);
+  border:none;color:#fff;font-size:15px;font-weight:700;
+  font-family:inherit;cursor:pointer;
+  box-shadow:0 6px 24px rgba(30,107,255,0.38);
+  transition:all var(--transition);display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn-submit:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(30,107,255,0.48)}
+.btn-submit:disabled{opacity:0.65;cursor:not-allowed;transform:none}
+.btn-submit.loading .btn-text{display:none}
+.btn-submit.loading .btn-spinner{display:block}
+.btn-spinner{display:none;width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.btn-back{
+  width:100%;padding:12px;border-radius:11px;
+  background:none;border:1.5px solid var(--border);
+  color:var(--text);font-size:14px;font-weight:600;
+  font-family:inherit;cursor:pointer;margin-bottom:12px;
+  transition:all var(--transition);
+}
+.btn-back:hover{border-color:var(--blue);color:var(--blue)}
+
+.divider{display:flex;align-items:center;gap:12px;margin:20px 0}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.divider span{font-size:12px;font-weight:600;color:var(--text-sec)}
+
+.oauth-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.oauth-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:11px;border-radius:10px;border:1.5px solid var(--border);
+  background:#fff;font-size:13px;font-weight:600;color:var(--text);
+  cursor:pointer;font-family:inherit;transition:all var(--transition);
+}
+.oauth-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-light)}
+
+.form-footer{text-align:center;font-size:13px;color:var(--text-sec);margin-top:20px}
+.form-footer a{color:var(--blue);font-weight:700;text-decoration:none}
+.form-footer a:hover{text-decoration:underline}
+
+/* OTP inputs */
+.otp-row{display:flex;gap:12px;justify-content:center;margin:24px 0}
+.otp-input{
+  width:52px;height:60px;border-radius:12px;border:1.5px solid var(--border);
+  font-size:22px;font-weight:700;color:var(--text);text-align:center;
+  font-family:inherit;transition:all var(--transition);outline:none;background:#fff;
+}
+.otp-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(30,107,255,0.12)}
+.otp-input.filled{border-color:var(--blue);background:var(--blue-light)}
+
+.verify-icon{
+  width:72px;height:72px;border-radius:50%;
+  background:var(--blue-light);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 20px;
+}
+.resend-link{
+  font-size:13px;color:var(--text-sec);text-align:center;margin-top:12px;
+}
+.resend-link a{color:var(--blue);font-weight:600;text-decoration:none;cursor:pointer}
+.resend-link a:hover{text-decoration:underline}
+#resendTimer{font-weight:700;color:var(--blue)}
+
+/* Success state */
+.success-screen{text-align:center;padding:20px 0;display:none}
+.success-screen.show{display:block;animation:slideIn 0.4s ease}
+.success-icon{
+  width:80px;height:80px;border-radius:50%;
+  background:linear-gradient(135deg,#22C55E,#16a34a);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 24px;
+  box-shadow:0 8px 32px rgba(34,197,94,0.30);
+  animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes popIn{from{transform:scale(0)}to{transform:scale(1)}}
+.success-title{
+  font-family:'DM Serif Display',serif;
+  font-size:26px;color:var(--text);letter-spacing:-0.5px;margin-bottom:10px;
+}
+.success-text{font-size:14px;color:var(--text-sec);line-height:1.7;margin-bottom:28px}
+.btn-go{
+  display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,var(--blue),var(--blue-deep));
+  color:#fff;padding:13px 28px;border-radius:11px;
+  font-size:15px;font-weight:700;border:none;cursor:pointer;
+  font-family:inherit;box-shadow:0 6px 24px rgba(30,107,255,0.35);
+  transition:all var(--transition);text-decoration:none;
+}
+.btn-go:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(30,107,255,0.45)}
+
+/* Security badges */
+.security-row{
+  display:flex;align-items:center;justify-content:center;gap:20px;
+  margin-top:28px;padding-top:20px;border-top:1px solid var(--border);flex-wrap:wrap;
+}
+.security-badge{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--text-sec)}
+
+/* Select arrow */
+.select-wrap{position:relative}
+.select-wrap::after{
+  content:'';position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;
+  border-top:5px solid var(--text-sec);pointer-events:none;
+}
+.custom-dropdown::after{display:none;}
+.dropdown-toggle{
+  width:100%;padding:14px 16px;border-radius:10px;border:1.5px solid var(--border);
+  background:#fff;display:flex;align-items:center;justify-content:space-between;
+  gap:10px;cursor:pointer;font-size:14px;font-weight:500;color:var(--text);
+}
+.dropdown-toggle::after{
+  content:'';width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;
+  border-top:5px solid var(--text-sec);transition:transform .2s ease;
+}
+.dropdown-toggle.open::after{transform:rotate(180deg);}
+.dropdown-toggle.open{border-color:var(--border-focus);box-shadow:0 0 0 3px rgba(30,107,255,0.12);}
+.dropdown-list{
+  display:none;position:absolute;top:100%;left:0;right:0;max-height:320px;overflow-y:auto;
+  margin-top:8px;background:#fff;border:1.5px solid var(--border);border-radius:12px;
+  box-shadow:0 16px 40px rgba(0,0,0,0.12);z-index:1000;
+}
+.dropdown-item{
+  padding:12px 16px;font-size:14px;font-weight:500;color:var(--text);cursor:pointer;
+  border-bottom:1px solid rgba(229,234,242,0.9);transition:background .2s;
+}
+.dropdown-item:last-child{border-bottom:none;}
+.dropdown-item:hover{background:var(--blue-light);}
+
+@media(max-width:480px){.dropdown-list{max-height:260px;}}
+
+@media(max-width:900px){
+  .page-wrap{grid-template-columns:1fr}
+  .left-panel{display:none}
+  nav{padding:0 20px}
+  .right-panel{padding:40px 20px}
+}
+@media(max-width:480px){
+  .field-row{grid-template-columns:1fr}
+  .oauth-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="home" class="nav-logo">
+    <div class="nav-logo-mark">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <path d="M9 2L16 6V12L9 16L2 12V6L9 2Z" stroke="white" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M9 6L12 8V12L9 14L6 12V8L9 6Z" fill="white" opacity="0.7"/>
+      </svg>
+    </div>
+    <span class="nav-logo-text">GLOBAL<span>EASYTRANSASSET</span></span>
+  </a>
+  <div class="nav-right">
+    <a href="home" class="nav-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Back to Home
+    </a>
+    <a href="login" class="nav-login-link">Login</a>
+  </div>
+</nav>
+
+<!-- PAGE -->
+<div class="page-wrap">
+
+  <!-- LEFT PANEL -->
+  <div class="left-panel">
+    <div class="left-grid-pattern"></div>
+    <div class="left-content">
+      <div class="left-badge">
+        <span class="left-badge-dot"></span>
+        <span>Accounts open in under 2 minutes</span>
+      </div>
+      <h2 class="left-headline">The world's most trusted global bank account</h2>
+      <p class="left-sub">Join over 1 million individuals and businesses already banking without borders.</p>
+
+      <div class="left-perks">
+        <div class="left-perk">
+          <div class="left-perk-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </div>
+          <div>
+            <div class="left-perk-title">Instant Global Transfers</div>
+            <div class="left-perk-text">Send to 180+ countries in seconds at real exchange rates</div>
+          </div>
+        </div>
+        <div class="left-perk">
+          <div class="left-perk-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          </div>
+          <div>
+            <div class="left-perk-title">Free Virtual Cards</div>
+            <div class="left-perk-text">Generate unlimited virtual debit cards on any plan</div>
+          </div>
+        </div>
+        <div class="left-perk">
+          <div class="left-perk-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
+          <div>
+            <div class="left-perk-title">50+ Currencies</div>
+            <div class="left-perk-text">Hold and exchange at institutional mid-market rates</div>
+          </div>
+        </div>
+        <div class="left-perk">
+          <div class="left-perk-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div>
+            <div class="left-perk-title">Military-Grade Security</div>
+            <div class="left-perk-text">AES-256 encryption + 2FA on every login</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="left-stats">
+        <div>
+          <div class="left-stat-num">1M<span>+</span></div>
+          <div class="left-stat-label">Active Users</div>
+        </div>
+        <div>
+          <div class="left-stat-num">180<span>+</span></div>
+          <div class="left-stat-label">Countries</div>
+        </div>
+        <div>
+          <div class="left-stat-num">$42B<span>+</span></div>
+          <div class="left-stat-label">Processed</div>
+        </div>
+        <div>
+          <div class="left-stat-num">99.9<span>%</span></div>
+          <div class="left-stat-label">Uptime SLA</div>
+        </div>
+      </div>
+
+      <div class="left-trust">
+        <div class="left-trust-avatars">
+          <div class="left-trust-avatar">JO</div>
+          <div class="left-trust-avatar">AM</div>
+          <div class="left-trust-avatar">SR</div>
+          <div class="left-trust-avatar">KL</div>
+          <div class="left-trust-avatar">FT</div>
+        </div>
+        <div class="left-trust-text"><strong>1,000+</strong> people joined this week</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right-panel">
+    <div class="form-wrap">
+
+      <!-- Step Indicator -->
+      <div class="step-indicator" id="stepIndicator">
+        <div class="step-item">
+          <div class="step-dot active" id="dot1">1</div>
+          <div class="step-label active" id="lbl1">Account</div>
+        </div>
+        <div class="step-line" id="line1"></div>
+        <div class="step-item">
+          <div class="step-dot" id="dot2">2</div>
+          <div class="step-label" id="lbl2">Personal</div>
+        </div>
+        <div class="step-line" id="line2"></div>
+        <div class="step-item">
+          <div class="step-dot" id="dot3">3</div>
+          <div class="step-label" id="lbl3">Verify</div>
+        </div>
+      </div>
+
+      <!-- STEP 1: Account Details -->
+      <div class="form-step active" id="step1">
+        <h1 class="form-title">Create your account</h1>
+        <p class="form-sub">Start with your email and a secure password. It only takes a moment.</p>
+
+        <div class="divider"><span>or use email</span></div>
+
+        <div class="field">
+          <label>Email address <span>*</span></label>
+          <div class="field-input-wrap">
+            <span class="field-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </span>
+            <input type="email" id="email" class="has-icon" placeholder="you@example.com" autocomplete="email"/>
+          </div>
+          <div class="field-error" id="emailError">Please enter a valid email address.</div>
+        </div>
+
+        <div class="field">
+          <label>Password <span>*</span></label>
+          <div class="field-input-wrap">
+            <span class="field-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </span>
+            <input type="password" id="password" class="has-icon" placeholder="Create a strong password" autocomplete="new-password"/>
+            <span class="field-icon-right" id="togglePw">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </span>
+          </div>
+          <div class="pw-strength" id="pwStrength" style="display:none">
+            <div class="pw-strength-bars">
+              <div class="pw-bar" id="bar1"></div><div class="pw-bar" id="bar2"></div>
+              <div class="pw-bar" id="bar3"></div><div class="pw-bar" id="bar4"></div>
+            </div>
+            <div class="pw-label" id="pwLabel">Weak</div>
+          </div>
+          <div class="field-hint">Min. 8 characters with uppercase, number & symbol.</div>
+          <div class="field-error" id="pwError">Password must be at least 8 characters.</div>
+        </div>
+
+        <div class="field">
+          <label>Confirm password <span>*</span></label>
+          <div class="field-input-wrap">
+            <span class="field-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </span>
+            <input type="password" id="confirmPw" class="has-icon" placeholder="Re-enter your password" autocomplete="new-password"/>
+          </div>
+          <div class="field-error" id="confirmPwError">Passwords do not match.</div>
+        </div>
+
+        <div class="terms-wrap" id="termsWrap">
+          <div class="terms-checkbox" id="termsCheck">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" style="display:none" id="termsCheckIcon"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="terms-text">
+            I agree to the <a href="#">Terms of Service</a>, <a href="#">Privacy Policy</a>, and <a href="#">AML/KYC Policy</a> of GLOBALEASYTRANSASSET Financial Technologies Ltd.
+          </div>
+        </div>
+
+        <button class="btn-submit" id="step1Btn" type="button">
+          <span class="btn-text">Continue to Personal Details</span>
+          <svg class="btn-text" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <div class="btn-spinner"></div>
+        </button>
+
+        <div class="form-footer">Already have an account? <a href="login">Sign in</a></div>
+
+        <div class="security-row">
+          <div class="security-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            256-bit SSL
+          </div>
+          <div class="security-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            FCA Regulated
+          </div>
+          <div class="security-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            GDPR Compliant
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2: Personal Details -->
+      <div class="form-step" id="step2">
+        <h1 class="form-title">Tell us about yourself</h1>
+        <p class="form-sub">We need a few personal details to set up your account and verify your identity.</p>
+
+        <div class="field-row">
+          <div class="field">
+            <label>First name <span>*</span></label>
+            <input type="text" id="firstName" placeholder="James" autocomplete="given-name"/>
+            <div class="field-error" id="firstNameError">Required.</div>
+          </div>
+          <div class="field">
+            <label>Last name <span>*</span></label>
+            <input type="text" id="lastName" placeholder="Leo" autocomplete="family-name"/>
+            <div class="field-error" id="lastNameError">Required.</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Date of birth <span>*</span></label>
+          <input type="date" id="dob" autocomplete="bday"/>
+          <div class="field-hint">You must be 18 or older to open an account.</div>
+          <div class="field-error" id="dobError">Please enter a valid date of birth.</div>
+        </div>
+
+        <div class="field">
+          <label>Phone number <span>*</span></label>
+          <input type="tel" id="phone" style="width:100%;padding:12px 16px;border-radius:10px;border:1.5px solid var(--border);font-size:14px;font-weight:500;color:var(--text);font-family:inherit;background:#fff;transition:all var(--transition);outline:none;box-sizing:border-box" placeholder="Enter your phone number"/>
+          <div class="field-error" id="phoneError">Please enter a valid phone number.</div>
+        </div>
+
+        <div class="field">
+          <label>Country <span>*</span></label>
+          <select id="country">
+            <option value="">Select your country</option>
+            <option value="Afghanistan">Afghanistan</option>
+            <option value="Albania">Albania</option>
+            <option value="Algeria">Algeria</option>
+            <option value="Andorra">Andorra</option>
+            <option value="Angola">Angola</option>
+            <option value="Antigua and Barbuda">Antigua and Barbuda</option>
+            <option value="Argentina">Argentina</option>
+            <option value="Armenia">Armenia</option>
+            <option value="Australia">Australia</option>
+            <option value="Austria">Austria</option>
+            <option value="Azerbaijan">Azerbaijan</option>
+            <option value="Bahamas">Bahamas</option>
+            <option value="Bahrain">Bahrain</option>
+            <option value="Bangladesh">Bangladesh</option>
+            <option value="Barbados">Barbados</option>
+            <option value="Belarus">Belarus</option>
+            <option value="Belgium">Belgium</option>
+            <option value="Belize">Belize</option>
+            <option value="Benin">Benin</option>
+            <option value="Bhutan">Bhutan</option>
+            <option value="Bolivia">Bolivia</option>
+            <option value="Bosnia and Herzegovina">Bosnia and Herzegovina</option>
+            <option value="Botswana">Botswana</option>
+            <option value="Brazil">Brazil</option>
+            <option value="Brunei">Brunei</option>
+            <option value="Bulgaria">Bulgaria</option>
+            <option value="Burkina Faso">Burkina Faso</option>
+            <option value="Burundi">Burundi</option>
+            <option value="Cabo Verde">Cabo Verde</option>
+            <option value="Cambodia">Cambodia</option>
+            <option value="Cameroon">Cameroon</option>
+            <option value="Canada">Canada</option>
+            <option value="Central African Republic">Central African Republic</option>
+            <option value="Chad">Chad</option>
+            <option value="Chile">Chile</option>
+            <option value="China">China</option>
+            <option value="Colombia">Colombia</option>
+            <option value="Comoros">Comoros</option>
+            <option value="Congo (Brazzaville)">Congo (Brazzaville)</option>
+            <option value="Congo (Kinshasa)">Congo (Kinshasa)</option>
+            <option value="Costa Rica">Costa Rica</option>
+            <option value="Côte d'Ivoire">Côte d'Ivoire</option>
+            <option value="Croatia">Croatia</option>
+            <option value="Cuba">Cuba</option>
+            <option value="Cyprus">Cyprus</option>
+            <option value="Czech Republic">Czech Republic</option>
+            <option value="Denmark">Denmark</option>
+            <option value="Djibouti">Djibouti</option>
+            <option value="Dominica">Dominica</option>
+            <option value="Dominican Republic">Dominican Republic</option>
+            <option value="Ecuador">Ecuador</option>
+            <option value="Egypt">Egypt</option>
+            <option value="El Salvador">El Salvador</option>
+            <option value="Equatorial Guinea">Equatorial Guinea</option>
+            <option value="Eritrea">Eritrea</option>
+            <option value="Estonia">Estonia</option>
+            <option value="Eswatini">Eswatini</option>
+            <option value="Ethiopia">Ethiopia</option>
+            <option value="Fiji">Fiji</option>
+            <option value="Finland">Finland</option>
+            <option value="France">France</option>
+            <option value="Gabon">Gabon</option>
+            <option value="Gambia">Gambia</option>
+            <option value="Georgia">Georgia</option>
+            <option value="Germany">Germany</option>
+            <option value="Ghana">Ghana</option>
+            <option value="Greece">Greece</option>
+            <option value="Grenada">Grenada</option>
+            <option value="Guatemala">Guatemala</option>
+            <option value="Guinea">Guinea</option>
+            <option value="Guinea-Bissau">Guinea-Bissau</option>
+            <option value="Guyana">Guyana</option>
+            <option value="Haiti">Haiti</option>
+            <option value="Honduras">Honduras</option>
+            <option value="Hungary">Hungary</option>
+            <option value="Iceland">Iceland</option>
+            <option value="India">India</option>
+            <option value="Indonesia">Indonesia</option>
+            <option value="Iran">Iran</option>
+            <option value="Iraq">Iraq</option>
+            <option value="Ireland">Ireland</option>
+            <option value="Israel">Israel</option>
+            <option value="Italy">Italy</option>
+            <option value="Jamaica">Jamaica</option>
+            <option value="Japan">Japan</option>
+            <option value="Jordan">Jordan</option>
+            <option value="Kazakhstan">Kazakhstan</option>
+            <option value="Kenya">Kenya</option>
+            <option value="Kiribati">Kiribati</option>
+            <option value="North Korea">North Korea</option>
+            <option value="South Korea">South Korea</option>
+            <option value="Kosovo">Kosovo</option>
+            <option value="Kuwait">Kuwait</option>
+            <option value="Kyrgyzstan">Kyrgyzstan</option>
+            <option value="Laos">Laos</option>
+            <option value="Latvia">Latvia</option>
+            <option value="Lebanon">Lebanon</option>
+            <option value="Lesotho">Lesotho</option>
+            <option value="Liberia">Liberia</option>
+            <option value="Libya">Libya</option>
+            <option value="Liechtenstein">Liechtenstein</option>
+            <option value="Lithuania">Lithuania</option>
+            <option value="Luxembourg">Luxembourg</option>
+            <option value="Madagascar">Madagascar</option>
+            <option value="Malawi">Malawi</option>
+            <option value="Malaysia">Malaysia</option>
+            <option value="Maldives">Maldives</option>
+            <option value="Mali">Mali</option>
+            <option value="Malta">Malta</option>
+            <option value="Marshall Islands">Marshall Islands</option>
+            <option value="Mauritania">Mauritania</option>
+            <option value="Mauritius">Mauritius</option>
+            <option value="Mexico">Mexico</option>
+            <option value="Micronesia">Micronesia</option>
+            <option value="Moldova">Moldova</option>
+            <option value="Monaco">Monaco</option>
+            <option value="Mongolia">Mongolia</option>
+            <option value="Montenegro">Montenegro</option>
+            <option value="Morocco">Morocco</option>
+            <option value="Mozambique">Mozambique</option>
+            <option value="Myanmar">Myanmar</option>
+            <option value="Namibia">Namibia</option>
+            <option value="Nauru">Nauru</option>
+            <option value="Nepal">Nepal</option>
+            <option value="Netherlands">Netherlands</option>
+            <option value="New Zealand">New Zealand</option>
+            <option value="Nicaragua">Nicaragua</option>
+            <option value="Niger">Niger</option>
+            <option value="Nigeria">Nigeria</option>
+            <option value="North Macedonia">North Macedonia</option>
+            <option value="Norway">Norway</option>
+            <option value="Oman">Oman</option>
+            <option value="Pakistan">Pakistan</option>
+            <option value="Palau">Palau</option>
+            <option value="Panama">Panama</option>
+            <option value="Papua New Guinea">Papua New Guinea</option>
+            <option value="Paraguay">Paraguay</option>
+            <option value="Peru">Peru</option>
+            <option value="Philippines">Philippines</option>
+            <option value="Poland">Poland</option>
+            <option value="Portugal">Portugal</option>
+            <option value="Qatar">Qatar</option>
+            <option value="Romania">Romania</option>
+            <option value="Russia">Russia</option>
+            <option value="Rwanda">Rwanda</option>
+            <option value="Saint Kitts and Nevis">Saint Kitts and Nevis</option>
+            <option value="Saint Lucia">Saint Lucia</option>
+            <option value="Saint Vincent and the Grenadines">Saint Vincent and the Grenadines</option>
+            <option value="Samoa">Samoa</option>
+            <option value="San Marino">San Marino</option>
+            <option value="Sao Tome and Principe">Sao Tome and Principe</option>
+            <option value="Saudi Arabia">Saudi Arabia</option>
+            <option value="Senegal">Senegal</option>
+            <option value="Serbia">Serbia</option>
+            <option value="Seychelles">Seychelles</option>
+            <option value="Sierra Leone">Sierra Leone</option>
+            <option value="Singapore">Singapore</option>
+            <option value="Slovakia">Slovakia</option>
+            <option value="Slovenia">Slovenia</option>
+            <option value="Solomon Islands">Solomon Islands</option>
+            <option value="Somalia">Somalia</option>
+            <option value="South Africa">South Africa</option>
+            <option value="South Korea">South Korea</option>
+            <option value="South Sudan">South Sudan</option>
+            <option value="Spain">Spain</option>
+            <option value="Sri Lanka">Sri Lanka</option>
+            <option value="Sudan">Sudan</option>
+            <option value="Suriname">Suriname</option>
+            <option value="Sweden">Sweden</option>
+            <option value="Switzerland">Switzerland</option>
+            <option value="Syria">Syria</option>
+            <option value="Taiwan">Taiwan</option>
+            <option value="Tajikistan">Tajikistan</option>
+            <option value="Tanzania">Tanzania</option>
+            <option value="Thailand">Thailand</option>
+            <option value="Timor-Leste">Timor-Leste</option>
+            <option value="Togo">Togo</option>
+            <option value="Tonga">Tonga</option>
+            <option value="Trinidad and Tobago">Trinidad and Tobago</option>
+            <option value="Tunisia">Tunisia</option>
+            <option value="Turkey">Turkey</option>
+            <option value="Turkmenistan">Turkmenistan</option>
+            <option value="Tuvalu">Tuvalu</option>
+            <option value="Uganda">Uganda</option>
+            <option value="Ukraine">Ukraine</option>
+            <option value="United Arab Emirates">United Arab Emirates</option>
+            <option value="United Kingdom">United Kingdom</option>
+            <option value="United States">United States</option>
+            <option value="Uruguay">Uruguay</option>
+            <option value="Uzbekistan">Uzbekistan</option>
+            <option value="Vanuatu">Vanuatu</option>
+            <option value="Vatican City">Vatican City</option>
+            <option value="Venezuela">Venezuela</option>
+            <option value="Vietnam">Vietnam</option>
+            <option value="Yemen">Yemen</option>
+            <option value="Zambia">Zambia</option>
+            <option value="Zimbabwe">Zimbabwe</option>
+          </select>
+          <div class="field-error" id="countryError">Required.</div>
+        </div>
+
+        <div class="field">
+          <label>Account purpose <span>*</span></label>
+          <select id="accountPurpose">
+            <option value="">Select account purpose</option>
+            <option value="Current Account">Current Account</option>
+            <option value="Savings Account">Savings Account</option>
+            <option value="Business Account">Business Account</option>
+            <option value="Investment Account">Investment Account</option>
+            <option value="Travel Account">Travel Account</option>
+            <option value="Salary Account">Salary Account</option>
+            <option value="Other Purposes">Other Purposes</option>
+          </select>
+          <div class="field-error" id="accountPurposeError">Required.</div>
+        </div>
+
+        <button class="btn-back" id="back1Btn" type="button">← Back</button>
+        <button class="btn-submit" id="step2Btn" type="button">
+          <span class="btn-text">Continue to Verification</span>
+          <svg class="btn-text" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <div class="btn-spinner"></div>
+        </button>
+
+        <div class="security-row">
+          <div class="security-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Data Encrypted
+          </div>
+          <div class="security-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            KYC Compliant
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3: Email Verification -->
+      <div class="form-step" id="step3">
+        <div style="text-align:center">
+          <div class="verify-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1E6BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </div>
+        </div>
+        <h1 class="form-title" style="text-align:center">Check your inbox</h1>
+        <p class="form-sub" style="text-align:center">We sent a 6-digit verification code to <strong id="emailDisplay" style="color:var(--text)"></strong>. Enter it below to confirm your account.</p>
+
+        <div class="otp-row">
+          <input type="text" class="otp-input" maxlength="1" id="otp1"/>
+          <input type="text" class="otp-input" maxlength="1" id="otp2"/>
+          <input type="text" class="otp-input" maxlength="1" id="otp3"/>
+          <input type="text" class="otp-input" maxlength="1" id="otp4"/>
+          <input type="text" class="otp-input" maxlength="1" id="otp5"/>
+          <input type="text" class="otp-input" maxlength="1" id="otp6"/>
+        </div>
+
+        <button class="btn-back" id="back2Btn" type="button">← Back</button>
+        <button class="btn-submit" id="step3Btn" type="button">
+          <span class="btn-text">Verify & Create Account</span>
+          <svg class="btn-text" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <div class="btn-spinner"></div>
+        </button>
+
+        <div class="resend-link">
+          Didn't receive it? <a id="resendBtn">Resend in <span id="resendTimer">30s</span></a>
+        </div>
+
+        <div class="security-row" style="margin-top:20px">
+          <div class="security-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Secure OTP
+          </div>
+          <div class="security-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Expires in 10 min
+          </div>
+        </div>
+      </div>
+
+      <!-- SUCCESS -->
+      <div class="success-screen" id="successScreen">
+        <div class="success-icon">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h2 class="success-title">Account Created!</h2>
+        <p class="success-text">Welcome to GLOBALEASYTRANSASSET. Your account is active and ready. You can now log in and start banking globally.</p>
+        <a href="login" class="btn-go">
+          Go to Dashboard
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+let currentStep = 1;
+let termsAccepted = false;
+let resendInterval;
+
+/* ── STEP NAVIGATION ── */
+function goToStep(n) {
+  document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('step' + n);
+  if (el) el.classList.add('active');
+  currentStep = n;
+  updateStepUI(n);
+  if (n === 3) startResendTimer();
+}
+
+function updateStepUI(n) {
+  for (let i = 1; i <= 3; i++) {
+    const dot = document.getElementById('dot' + i);
+    const lbl = document.getElementById('lbl' + i);
+    const line = document.getElementById('line' + i);
+    dot.classList.remove('active','done');
+    lbl.classList.remove('active','done');
+    if (line) line.classList.remove('done');
+    if (i < n) { dot.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>`; dot.classList.add('done'); lbl.classList.add('done'); if (line) line.classList.add('done'); }
+    else if (i === n) { dot.textContent = i; dot.classList.add('active'); lbl.classList.add('active'); }
+    else { dot.textContent = i; }
+  }
+}
+
+/* ── TERMS ── */
+const termsWrap = document.getElementById('termsWrap');
+const termsCheck = document.getElementById('termsCheck');
+const termsIcon = document.getElementById('termsCheckIcon');
+termsWrap.addEventListener('click', () => {
+  termsAccepted = !termsAccepted;
+  termsCheck.classList.toggle('checked', termsAccepted);
+  termsIcon.style.display = termsAccepted ? 'block' : 'none';
+});
+
+/* ── PASSWORD VISIBILITY ── */
+const pwInput = document.getElementById('password');
+document.getElementById('togglePw').addEventListener('click', () => {
+  pwInput.type = pwInput.type === 'password' ? 'text' : 'password';
+});
+
+/* ── PHONE INPUT ── */
+const phoneInput = document.getElementById('phone');
+phoneInput.addEventListener('click', (e) => {
+  e.stopPropagation();
+});
+phoneInput.addEventListener('focus', (e) => {
+  e.stopPropagation();
+});
+
+/* ── PASSWORD STRENGTH ── */
+pwInput.addEventListener('input', () => {
+  const v = pwInput.value;
+  const strength = document.getElementById('pwStrength');
+  strength.style.display = v ? 'block' : 'none';
+  let score = 0;
+  if (v.length >= 8) score++;
+  if (/[A-Z]/.test(v)) score++;
+  if (/[0-9]/.test(v)) score++;
+  if (/[^A-Za-z0-9]/.test(v)) score++;
+  const labels = ['','Weak','Fair','Good','Strong'];
+  const cls = ['','weak','fair','good','strong'];
+  document.getElementById('pwLabel').textContent = labels[score];
+  document.getElementById('pwLabel').style.color = score <= 1 ? '#EF4444' : score === 2 ? '#F59E0B' : score === 3 ? '#3B82F6' : '#22C55E';
+  for (let i = 1; i <= 4; i++) {
+    const bar = document.getElementById('bar' + i);
+    bar.className = 'pw-bar';
+    if (i <= score) bar.classList.add(cls[score]);
+  }
+});
+
+// Store form data across steps
+let signupData = {};
+
+/* ── STEP 1 SUBMIT ── */
+document.getElementById('step1Btn').addEventListener('click', () => {
+  const email = document.getElementById('email').value.trim();
+  const pw = document.getElementById('password').value;
+  const cpw = document.getElementById('confirmPw').value;
+  let valid = true;
+  const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  showError('emailError', !emailRx.test(email));
+  if (!emailRx.test(email)) valid = false;
+  showError('pwError', pw.length < 8);
+  if (pw.length < 8) valid = false;
+  showError('confirmPwError', pw !== cpw);
+  if (pw !== cpw) valid = false;
+  if (!termsAccepted) { alert('Please accept the Terms of Service to continue.'); valid = false; }
+  if (!valid) return;
+  
+  // Store step 1 data
+  signupData.email = email;
+  signupData.password = pw;
+  
+  simulateLoad('step1Btn', () => { document.getElementById('emailDisplay').textContent = email; goToStep(2); });
+});
+
+/* ── STEP 2 SUBMIT ── */
+document.getElementById('step2Btn').addEventListener('click', async () => {
+  const fn = document.getElementById('firstName').value.trim();
+  const ln = document.getElementById('lastName').value.trim();
+  const dob = document.getElementById('dob').value;
+  const phone = document.getElementById('phone').value.trim();
+  const country = document.getElementById('country').value;
+  const accountPurpose = document.getElementById('accountPurpose').value;
+  let valid = true;
+  showError('firstNameError', !fn); if (!fn) valid = false;
+  showError('lastNameError', !ln); if (!ln) valid = false;
+  if (dob) {
+    const age = (Date.now() - new Date(dob)) / (1000*60*60*24*365.25);
+    showError('dobError', age < 18); if (age < 18) valid = false;
+  } else { showError('dobError', true); valid = false; }
+  showError('phoneError', phone.length < 5); if (phone.length < 5) valid = false;
+  showError('countryError', !country); if (!country) valid = false;
+  showError('accountPurposeError', !accountPurpose); if (!accountPurpose) valid = false;
+  if (!valid) return;
+  
+  // Store step 2 data
+  signupData.firstName = fn;
+  signupData.lastName = ln;
+  signupData.phone = phone;
+  signupData.country = country;
+  signupData.accountPurpose = accountPurpose;
+  
+  // Call register API to send OTP email
+  simulateLoad('step2Btn', async () => {
+    try {
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(signupData),
+        credentials: 'same-origin'
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        // OTP sent successfully, go to step 3
+        goToStep(3);
+      } else {
+        alert(result.error || 'Failed to send verification code. Please try again.');
+      }
+    } catch (err) {
+      alert('Network error. Please try again.');
+    }
+  });
+});
+
+document.getElementById('back1Btn').addEventListener('click', () => goToStep(1));
+document.getElementById('back2Btn').addEventListener('click', () => goToStep(2));
+
+/* ── STEP 3: OTP ── */
+const otpInputs = Array.from({length:6}, (_,i) => document.getElementById('otp'+(i+1)));
+otpInputs.forEach((inp, idx) => {
+  inp.addEventListener('input', (e) => {
+    inp.value = e.target.value.replace(/\D/g,'').slice(-1);
+    if (inp.value) { inp.classList.add('filled'); if (idx < 5) otpInputs[idx+1].focus(); }
+    else inp.classList.remove('filled');
+  });
+  inp.addEventListener('keydown', (e) => {
+    if (e.key === 'Backspace' && !inp.value && idx > 0) { otpInputs[idx-1].focus(); otpInputs[idx-1].value = ''; otpInputs[idx-1].classList.remove('filled'); }
+  });
+  inp.addEventListener('paste', (e) => {
+    const paste = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g,'');
+    paste.split('').forEach((c,i) => { if (otpInputs[i]) { otpInputs[i].value = c; otpInputs[i].classList.add('filled'); } });
+    e.preventDefault();
+  });
+});
+
+document.getElementById('step3Btn').addEventListener('click', async () => {
+  const otp = otpInputs.map(i => i.value).join('');
+  if (otp.length < 6) { alert('Please enter the full 6-digit code.'); return; }
+  
+  // Call the verify OTP API which will complete registration
+  simulateLoad('step3Btn', async () => {
+    try {
+      const response = await fetch('/api/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: signupData.email,
+          otp: otp,
+          password: signupData.password,
+          firstName: signupData.firstName,
+          lastName: signupData.lastName,
+          phone: signupData.phone,
+          country: signupData.country,
+          accountPurpose: signupData.accountPurpose
+        }),
+        credentials: 'same-origin'
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        // Backend session handles auth - just redirect to dashboard
+        document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+        document.getElementById('stepIndicator').style.display = 'none';
+        document.getElementById('successScreen').classList.add('show');
+        clearInterval(resendInterval);
+        
+        // Redirect to dashboard after a brief delay
+        setTimeout(() => { window.location.href = 'dashboard'; }, 1500);
+      } else {
+        alert(result.error || 'Verification failed. Please try again.');
+      }
+    } catch (err) {
+      alert('Network error. Please try again.');
+    }
+  });
+});
+
+/* ── RESEND TIMER ── */
+function startResendTimer() {
+  clearInterval(resendInterval);
+  let secs = 30;
+  const timerEl = document.getElementById('resendTimer');
+  const resendBtn = document.getElementById('resendBtn');
+  resendBtn.style.pointerEvents = 'none';
+  resendBtn.style.opacity = '0.5';
+  timerEl.textContent = secs + 's';
+  resendInterval = setInterval(() => {
+    secs--;
+    timerEl.textContent = secs + 's';
+    if (secs <= 0) {
+      clearInterval(resendInterval);
+      timerEl.textContent = '';
+      resendBtn.textContent = 'Resend code';
+      resendBtn.style.pointerEvents = '';
+      resendBtn.style.opacity = '';
+      resendBtn.addEventListener('click', () => startResendTimer(), {once:true});
+    }
+  }, 1000);
+}
+
+/* ── HELPERS ── */
+function showError(id, show) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('show', show);
+}
+function simulateLoad(btnId, cb) {
+  const btn = document.getElementById(btnId);
+  btn.classList.add('loading');
+  btn.disabled = true;
+  setTimeout(() => { btn.classList.remove('loading'); btn.disabled = false; cb(); }, 1000 + Math.random()*500);
+}
+
+</script>
+</body>
+</html>

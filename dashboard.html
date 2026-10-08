@@ -1,0 +1,1669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dashboard — GLOBALEASYTRANSASSET</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;height:100%}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#F0F4FA;color:#0A0A0A;min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+:root{
+  --bg:#F0F4FA;
+  --card:#FFFFFF;
+  --blue:#1E6BFF;
+  --blue-deep:#0B3D91;
+  --blue-accent:#4DA3FF;
+  --blue-light:#EBF2FF;
+  --text:#0A0A0A;
+  --text-sec:#6B7280;
+  --border:#E5EAF2;
+  --radius:14px;
+  --shadow:0 4px 24px rgba(30,107,255,0.09);
+  --shadow-lg:0 16px 56px rgba(11,61,145,0.13);
+  --transition:0.28s cubic-bezier(0.4,0,0.2,1);
+  --success:#22C55E;
+  --error:#EF4444;
+  --warning:#F59E0B;
+  --nav-w:256px;
+  --topbar-h:70px;
+}
+
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--blue-accent);border-radius:99px}
+
+/* ──────── SIDEBAR ──────── */
+.sidebar{
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: var(--nav-w);
+  background: linear-gradient(180deg, #060f22 0%, #0B3D91 60%, #0d52c2 100%);
+  display: flex;
+  flex-direction: column;
+  z-index: 200;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  transform: translateX(0); /* Ensure sidebar is visible */
+  transition: transform 0.3s ease;
+}
+
+/* Sidebar grid pattern */
+.sidebar::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);
+  background-size:36px 36px;pointer-events:none;
+}
+
+.sb-logo{
+  display:flex;align-items:center;gap:10px;
+  padding:22px 22px 20px;
+  text-decoration:none;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+  position:relative;z-index:1;
+}
+.sb-logo-mark{
+  width:36px;height:36px;
+  background:linear-gradient(135deg,var(--blue) 0%,rgba(255,255,255,0.15) 100%);
+  border-radius:9px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 14px rgba(30,107,255,0.40);
+  border:1px solid rgba(255,255,255,0.15);
+}
+.sb-logo-text{font-size:15px;font-weight:800;letter-spacing:-0.3px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px}
+.sb-logo-text span{color:var(--blue-accent)}
+
+/* User card */
+.sb-user{
+  display:flex;align-items:center;gap:12px;
+  padding:18px 22px;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+  position:relative;z-index:1;
+}
+.sb-avatar{
+  width:40px;height:40px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--blue),rgba(255,255,255,0.2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:800;color:#fff;
+  border:2px solid rgba(255,255,255,0.2);
+}
+.sb-user-name{font-size:14px;font-weight:700;color:#fff}
+.sb-user-id{font-size:11px;color:rgba(255,255,255,0.45);margin-top:2px}
+.sb-user-badge{
+  margin-left:auto;
+  display:flex;align-items:center;gap:4px;
+  background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.25);
+  padding:3px 8px;border-radius:99px;
+}
+.sb-user-badge-dot{width:5px;height:5px;border-radius:50%;background:#22C55E;animation:pulse 2s infinite}
+.sb-user-badge span{font-size:10px;font-weight:700;color:#22C55E}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+
+/* Nav links */
+.sb-nav{
+  flex:1;overflow-y:auto;padding:16px 12px;
+  display:flex;flex-direction:column;gap:2px;
+  position:relative;z-index:1;
+  /* Ensure sidebar options are displayed vertically */
+  display: flex;
+  flex-direction: column; /* Force vertical layout */
+  gap: 8px; /* Add spacing between options */
+}
+.sb-nav::-webkit-scrollbar{width:3px}
+.sb-nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15)}
+
+.sb-section-label{
+  font-size:10px;font-weight:700;color:rgba(255,255,255,0.3);
+  letter-spacing:1px;text-transform:uppercase;
+  padding:12px 10px 6px;
+}
+.sb-link{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 10px 7px 18px;
+  border-radius:5px;
+  font-size:14px;font-weight:600;color:rgba(255,255,255,0.7);
+  cursor:pointer;text-decoration:none;
+  transition:background 0.18s, color 0.18s;
+  border:none;
+  background:none;width:100%;font-family:inherit;text-align:left;
+  position:relative;
+  /* Align items to the left */
+  justify-content: flex-start;
+  width: 100%; /* Ensure full width */
+  text-align: left; /* Align text to the left */
+}
+.sb-link:hover{
+  color:#fff;
+  background:rgba(255,255,255,0.08);
+  border:none;
+}
+.sb-link.active{
+  color:#fff;
+  background:rgba(30,107,255,0.13);
+  border:none;
+  box-shadow:none;
+}
+.sb-link.active .sb-link-icon{color:var(--blue-accent)}
+.sb-link-icon{
+  width:24px;height:24px;border-radius:5px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  background:none;
+  color:rgba(255,255,255,0.6);
+  transition:color 0.18s;
+}
+.sb-link:hover .sb-link-icon{background:rgba(255,255,255,0.10);color:rgba(255,255,255,0.8)}
+.sb-link.active .sb-link-icon{background:rgba(30,107,255,0.30)}
+.sb-link-label{flex:1}
+.sb-link-badge{
+  font-size:10px;font-weight:700;
+  background:var(--blue);color:#fff;
+  padding:2px 7px;border-radius:99px;
+}
+.sb-link-badge.new{background:#22C55E}
+.sb-link-arrow{
+  opacity:0;transform:translateX(-4px);
+  transition:all var(--transition);
+}
+.sb-link:hover .sb-link-arrow,.sb-link.active .sb-link-arrow{opacity:1;transform:translateX(0)}
+
+/* Sidebar bottom */
+.sb-bottom{
+  padding:14px 12px 18px;
+  border-top:1px solid rgba(255,255,255,0.07);
+  position:relative;z-index:1;
+  display:flex;flex-direction:column;gap:2px;
+}
+.sb-bottom-link{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 12px;border-radius:10px;
+  font-size:13px;font-weight:600;color:rgba(255,255,255,0.45);
+  cursor:pointer;transition:all var(--transition);
+  text-decoration:none;background:none;border:none;font-family:inherit;width:100%;text-align:left;
+}
+.sb-bottom-link:hover{color:rgba(255,255,255,0.8);background:rgba(255,255,255,0.06)}
+.sb-bottom-link.logout:hover{color:#EF4444;background:rgba(239,68,68,0.08)}
+
+/* Mobile sidebar overlay */
+.sb-overlay{
+  display:none;position:fixed;inset:0;z-index:190;
+  background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);
+}
+
+/* ──────── MAIN ──────── */
+.main{
+  margin-left:var(--nav-w);
+  min-height:100vh;
+  display:flex;flex-direction:column;
+}
+
+/* ──────── TOPBAR ──────── */
+.topbar{
+  position:sticky;top:0;z-index:100;
+  height:var(--topbar-h);
+  background:rgba(255,255,255,0.96);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;
+  padding:0 36px 0 28px;
+  gap:16px;
+}
+.topbar-menu-btn{
+  display:none;
+  width:38px;height:38px;border-radius:9px;
+  border:1.5px solid var(--border);
+  background:#fff;cursor:pointer;
+  align-items:center;justify-content:center;
+  transition:all var(--transition);
+}
+.topbar-menu-btn:hover{border-color:var(--blue);color:var(--blue)}
+.topbar-greeting{flex:1}
+.topbar-title{font-size:18px;font-weight:800;color:var(--text);letter-spacing:-0.3px}
+.topbar-sub{font-size:13px;color:var(--text-sec);margin-top:1px}
+.topbar-actions{display:flex;align-items:center;gap:10px}
+.topbar-search{
+  display:flex;align-items:center;gap:8px;
+  background:var(--bg);border:1.5px solid var(--border);
+  padding:9px 14px;border-radius:10px;cursor:text;
+  transition:all var(--transition);
+}
+.topbar-search:hover,.topbar-search:focus-within{border-color:var(--blue)}
+.topbar-search input{
+  border:none;background:none;font-size:13px;font-weight:500;
+  color:var(--text);outline:none;width:160px;font-family:inherit;
+}
+.topbar-search input::placeholder{color:var(--text-sec)}
+.topbar-icon-btn{
+  width:38px;height:38px;border-radius:9px;
+  border:1.5px solid var(--border);
+  background:#fff;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text-sec);transition:all var(--transition);position:relative;
+}
+.topbar-icon-btn:hover{border-color:var(--blue);color:var(--blue)}
+.topbar-notif-dot{
+  position:absolute;top:7px;right:7px;
+  width:8px;height:8px;border-radius:50%;
+  background:#EF4444;border:2px solid #fff;
+}
+.topbar-user{
+  display:flex;align-items:center;gap:10px;
+  padding:7px 12px;border-radius:10px;
+  border:1.5px solid var(--border);
+  cursor:pointer;transition:all var(--transition);
+  background:#fff;
+}
+.topbar-user:hover{border-color:var(--blue)}
+.topbar-user-avatar{
+  width:30px;height:30px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),var(--blue-deep));
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:800;color:#fff;flex-shrink:0;
+}
+.topbar-user-name{font-size:13px;font-weight:700;color:var(--text)}
+
+/* ──────── CONTENT AREA ──────── */
+.content{padding:32px 36px;flex:1}
+
+/* ──────── BALANCE HERO CARD ──────── */
+.balance-hero{
+  background:linear-gradient(135deg,#060f22 0%,#0B3D91 55%,#1a5cd4 100%);
+  border-radius:20px;padding:32px 36px;
+  display:grid;grid-template-columns:1fr auto;align-items:center;gap:32px;
+  position:relative;overflow:hidden;
+  box-shadow:0 20px 60px rgba(11,61,145,0.25);
+  margin-bottom:28px;
+}
+.balance-hero::before{
+  content:'';position:absolute;top:-80px;right:-80px;
+  width:340px;height:340px;border-radius:50%;
+  background:radial-gradient(circle,rgba(77,163,255,0.15) 0%,transparent 70%);
+  pointer-events:none;
+}
+.balance-hero::after{
+  content:'';position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);
+  background-size:32px 32px;pointer-events:none;
+}
+.balance-hero-left{position:relative;z-index:1}
+.balance-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.18);
+  padding:4px 12px;border-radius:99px;
+  font-size:11px;font-weight:700;color:rgba(255,255,255,0.8);
+  letter-spacing:0.5px;text-transform:uppercase;
+  margin-bottom:16px;
+}
+.balance-tag-dot{width:6px;height:6px;border-radius:50%;background:#22C55E;animation:pulse 2s infinite}
+.balance-label{font-size:13px;color:rgba(255,255,255,0.55);font-weight:500;margin-bottom:8px}
+.balance-amount{font-size:clamp(32px,3vw,46px);font-weight:800;color:#fff;letter-spacing:-1.5px;margin-bottom:8px}
+.balance-account-number{font-size:13px;color:rgba(255,255,255,0.65);margin-bottom:12px;letter-spacing:0.2px}
+.balance-change{display:flex;align-items:center;gap:8px;font-size:14px;color:rgba(255,255,255,0.6)}
+.balance-change-pill{
+  display:flex;align-items:center;gap:4px;
+  background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.25);
+  padding:3px 10px;border-radius:99px;
+  font-size:12px;font-weight:700;color:#22C55E;
+}
+.balance-hero-right{
+  position:relative;z-index:1;
+  display:flex;flex-direction:column;gap:10px;align-items:flex-end;
+}
+.balance-action-btn{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.18);
+  padding:10px 18px;border-radius:10px;
+  font-size:13px;font-weight:700;color:#fff;
+  cursor:pointer;transition:all var(--transition);font-family:inherit;
+  white-space:nowrap;
+}
+.balance-action-btn:hover{background:rgba(255,255,255,0.20);border-color:rgba(255,255,255,0.30)}
+.balance-action-btn.primary{background:rgba(30,107,255,0.5);border-color:rgba(30,107,255,0.6)}
+.balance-action-btn.primary:hover{background:rgba(30,107,255,0.7)}
+
+/* ──────── STATS GRID ──────── */
+.stats-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:16px;
+  margin-bottom:28px;
+}
+.stat-card{
+  background:var(--card);border-radius:var(--radius);padding:22px;
+  border:1.5px solid var(--border);
+  transition:all var(--transition);
+}
+.stat-card:hover{
+  box-shadow:var(--shadow);
+  transform:translateY(-3px);
+  border-color:rgba(30,107,255,0.2);
+}
+.stat-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.stat-card-icon{
+  width:40px;height:40px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+}
+.stat-card-change{
+  font-size:11px;font-weight:700;
+  padding:3px 8px;border-radius:99px;
+  display:flex;align-items:center;gap:3px;
+}
+.stat-card-change.up{color:#22C55E;background:rgba(34,197,94,0.10)}
+.stat-card-change.down{color:#EF4444;background:rgba(239,68,68,0.10)}
+.stat-card-change.neutral{color:var(--text-sec);background:var(--bg)}
+.stat-card-label{font-size:12px;font-weight:500;color:var(--text-sec);margin-bottom:5px}
+.stat-card-value{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-0.5px}
+.stat-card-sub{font-size:12px;color:var(--text-sec);margin-top:4px}
+
+/* ──────── GRID 2-COL ──────── */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px}
+.grid-3-1{display:grid;grid-template-columns:2fr 1fr;gap:20px;margin-bottom:28px}
+
+/* ──────── CARD ──────── */
+.card{
+  background:var(--card);border-radius:var(--radius);
+  border:1.5px solid var(--border);overflow:hidden;
+}
+.card-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 24px 16px;border-bottom:1px solid var(--border);
+}
+.card-title{font-size:15px;font-weight:800;color:var(--text)}
+.card-sub{font-size:12px;color:var(--text-sec);margin-top:2px}
+.card-action{
+  font-size:13px;font-weight:600;color:var(--blue);
+  text-decoration:none;cursor:pointer;
+  transition:color var(--transition);background:none;border:none;font-family:inherit;
+}
+.card-action:hover{color:var(--blue-deep)}
+.card-body{padding:20px 24px}
+
+.page-view{display:none}
+.page-view.active{display:block}
+.page-view .page-header{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:24px}
+.page-view .page-header-title{font-size:24px;font-weight:800;color:var(--text);margin-bottom:6px}
+.page-view .page-header-sub{font-size:14px;color:var(--text-sec);max-width:640px;line-height:1.6}
+.page-view .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.page-view .form-row{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.page-view .form-label{font-size:13px;font-weight:700;color:var(--text)}
+.page-view .form-input,
+.page-view .form-select,
+.page-view .form-textarea{width:100%;border:1.5px solid var(--border);border-radius:12px;padding:14px 16px;font-size:14px;color:var(--text);background:#fff;outline:none;transition:border-color var(--transition)}
+.page-view .form-input:focus,
+.page-view .form-select:focus,
+.page-view .form-textarea:focus{border-color:var(--blue)}
+.page-view .form-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;background-size:16px 16px}
+.page-view .page-card{margin-bottom:24px}
+.page-view .pill-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:var(--blue-light);color:var(--blue);font-size:12px;font-weight:700}
+.page-view .support-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}
+.page-view .support-item{background:var(--card);border:1.5px solid var(--border);border-radius:16px;padding:22px;transition:all var(--transition)}
+.page-view .support-item:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+.page-view .help-article{border:1.5px solid var(--border);border-radius:16px;padding:20px;margin-bottom:16px}
+.page-view .help-article-title{font-size:15px;font-weight:800;color:var(--text);margin-bottom:8px}
+.page-view .help-article-text{font-size:14px;color:var(--text-sec);line-height:1.7}
+.page-view .vc-real-card{background:linear-gradient(135deg,#0B3D91 0%,#1E6BFF 100%);border-radius:24px;padding:28px;position:relative;overflow:hidden;box-shadow:var(--shadow-lg);min-height:220px}
+.page-view .vc-real-card::before{content:'';position:absolute;top:-30px;right:-30px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,0.15);}
+.page-view .vc-real-chip{width:42px;height:30px;border-radius:6px;background:linear-gradient(135deg,#FBBF24,#F97316);margin-bottom:18px}
+.page-view .vc-real-number{font-size:20px;font-weight:800;letter-spacing:2px;color:#fff;line-height:1.4;margin-bottom:18px;font-family:monospace}
+.page-view .vc-holder{font-size:14px;font-weight:700;color:#fff;letter-spacing:0.3px}
+.page-view .brand-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.12);font-size:12px;font-weight:700;color:#fff}
+.page-view .card-table{width:100%;border-collapse:collapse}
+.page-view .card-table th,.page-view .card-table td{padding:14px 16px;text-align:left;border-bottom:1px solid var(--border)}
+.page-view .card-table th{font-size:12px;font-weight:700;color:var(--text-sec);text-transform:uppercase;letter-spacing:0.5px}
+.page-view .card-table tr:hover{background:var(--blue-light)}
+
+/* ──────── CHART / SPARKLINE ───────── */
+.chart-wrap{height:120px;display:flex;align-items:flex-end;gap:5px;padding:0 4px}
+.chart-bar{
+  flex:1;border-radius:4px 4px 0 0;
+  background:linear-gradient(180deg,var(--blue) 0%,rgba(30,107,255,0.3) 100%);
+  transition:all 0.4s ease;cursor:pointer;
+  position:relative;
+}
+.chart-bar:hover{opacity:0.85;transform:scaleY(1.04);transform-origin:bottom}
+.chart-bar.highlight{background:linear-gradient(180deg,#22C55E 0%,rgba(34,197,94,0.4) 100%)}
+.chart-labels{display:flex;justify-content:space-between;padding:6px 4px 0;font-size:10px;font-weight:500;color:var(--text-sec)}
+
+/* ──────── CURRENCY GRID ──────── */
+.currency-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.currency-card{
+  background:var(--bg);border-radius:11px;padding:16px;
+  border:1.5px solid var(--border);
+  transition:all var(--transition);
+}
+.currency-card:hover{border-color:var(--blue);background:var(--blue-light)}
+.currency-flag{font-size:22px;margin-bottom:8px}
+.currency-code{font-size:12px;font-weight:700;color:var(--text-sec);margin-bottom:3px}
+.currency-amount{font-size:18px;font-weight:800;color:var(--text);letter-spacing:-0.3px}
+.currency-trend{font-size:11px;font-weight:700;margin-top:4px;display:flex;align-items:center;gap:3px}
+.currency-trend.up{color:#22C55E}
+.currency-trend.down{color:#EF4444}
+
+/* ──────── TRANSACTION LIST ──────── */
+.txn-list{display:flex;flex-direction:column}
+.txn-item{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 24px;border-bottom:1px solid var(--border);
+  transition:background var(--transition);cursor:pointer;
+}
+.txn-item:last-child{border-bottom:none}
+.txn-item:hover{background:var(--bg)}
+.txn-icon{
+  width:42px;height:42px;border-radius:11px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.txn-info{flex:1}
+.txn-name{font-size:14px;font-weight:700;color:var(--text)}
+.txn-date{font-size:12px;color:var(--text-sec);margin-top:2px}
+.txn-right{text-align:right}
+.txn-amount{font-size:14px;font-weight:800;color:var(--text);letter-spacing:-0.3px}
+.txn-amount.pos{color:#22C55E}
+.txn-amount.neg{color:var(--text)}
+.txn-status{
+  font-size:10px;font-weight:700;margin-top:3px;
+  display:inline-flex;align-items:center;gap:3px;
+  padding:2px 7px;border-radius:99px;
+}
+.txn-status.completed{color:#22C55E;background:rgba(34,197,94,0.10)}
+.txn-status.pending{color:#F59E0B;background:rgba(245,158,11,0.10)}
+.txn-status.failed{color:#EF4444;background:rgba(239,68,68,0.10)}
+
+/* ──────── QUICK ACTIONS ──────── */
+.quick-actions{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:12px;
+  margin-bottom:28px;
+}
+.qa-btn{
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  padding:20px 16px;border-radius:var(--radius);
+  background:var(--card);border:1.5px solid var(--border);
+  cursor:pointer;transition:all var(--transition);
+  font-family:inherit;text-align:center;
+}
+.qa-btn:hover{
+  border-color:var(--blue);
+  transform:translateY(-4px);
+  box-shadow:var(--shadow);
+}
+.qa-icon{
+  width:48px;height:48px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+}
+.qa-label{font-size:13px;font-weight:700;color:var(--text)}
+.qa-sub{font-size:11px;color:var(--text-sec);margin-top:2px}
+
+/* ──────── ACCOUNT CARDS CAROUSEL ──────── */
+.account-cards{display:flex;gap:16px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.account-cards::-webkit-scrollbar{display:none}
+.account-card{
+  min-width:260px;border-radius:16px;padding:22px;
+  position:relative;overflow:hidden;flex-shrink:0;cursor:pointer;
+  transition:transform var(--transition);
+}
+.account-card:hover{transform:translateY(-4px)}
+.account-card.usd{background:linear-gradient(135deg,#1E6BFF 0%,#0B3D91 100%)}
+.account-card.eur{background:linear-gradient(135deg,#0B3D91 0%,#060f22 100%)}
+.account-card.gbp{background:linear-gradient(135deg,#4DA3FF 0%,#1E6BFF 100%)}
+.account-card.save{background:linear-gradient(135deg,#22C55E 0%,#16a34a 100%)}
+.account-card::before{
+  content:'';position:absolute;top:-40px;right:-40px;
+  width:160px;height:160px;border-radius:50%;
+  background:rgba(255,255,255,0.07);pointer-events:none;
+}
+.ac-flag{font-size:22px;margin-bottom:12px}
+.ac-currency{font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+.ac-amount{font-size:24px;font-weight:800;color:#fff;letter-spacing:-0.5px;margin-bottom:4px}
+.ac-change{font-size:11px;font-weight:600;color:rgba(255,255,255,0.6)}
+.ac-change.up{color:rgba(134,239,172,0.9)}
+.ac-change.down{color:rgba(252,165,165,0.9)}
+.ac-acct-num{
+  font-size:11px;color:rgba(255,255,255,0.4);margin-top:12px;
+  font-family:'DM Mono',monospace;letter-spacing:1px;
+}
+
+/* ──────── LOAN WIDGET ──────── */
+.loan-widget{padding:0}
+.loan-header{padding:20px 24px 16px;border-bottom:1px solid var(--border)}
+.loan-body{padding:20px 24px}
+.loan-progress-wrap{margin-bottom:16px}
+.loan-progress-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.loan-progress-label{font-size:13px;font-weight:700;color:var(--text)}
+.loan-progress-pct{font-size:13px;font-weight:700;color:var(--blue)}
+.loan-bar{height:8px;background:var(--bg);border-radius:99px;overflow:hidden}
+.loan-bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--blue),var(--blue-accent))}
+.loan-stat-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.loan-stat{background:var(--bg);border-radius:10px;padding:14px}
+.loan-stat-label{font-size:11px;color:var(--text-sec);font-weight:500;margin-bottom:4px}
+.loan-stat-value{font-size:16px;font-weight:800;color:var(--text);letter-spacing:-0.3px}
+.loan-apply-btn{
+  width:100%;margin-top:16px;padding:12px;border-radius:10px;
+  background:linear-gradient(135deg,var(--blue),var(--blue-deep));
+  border:none;color:#fff;font-size:14px;font-weight:700;
+  font-family:inherit;cursor:pointer;
+  box-shadow:0 4px 18px rgba(30,107,255,0.30);
+  transition:all var(--transition);display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.loan-apply-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(30,107,255,0.40)}
+
+/* ──────── VIRTUAL CARD MINI ──────── */
+.virtual-card-mini{
+  background:linear-gradient(135deg,#1a2a4a 0%,#0B3D91 100%);
+  border-radius:16px;padding:24px;
+  position:relative;overflow:hidden;
+}
+.virtual-card-mini::before{
+  content:'';position:absolute;top:-40px;right:-40px;
+  width:180px;height:180px;border-radius:50%;
+  background:rgba(77,163,255,0.12);pointer-events:none;
+}
+.vc-chip{
+  width:32px;height:24px;border-radius:4px;
+  background:linear-gradient(135deg,#F59E0B,#D97706);
+  margin-bottom:18px;
+}
+.vc-number{
+  font-size:14px;font-weight:700;color:rgba(255,255,255,0.7);
+  letter-spacing:2px;margin-bottom:16px;font-family:monospace;
+}
+.vc-bottom{display:flex;justify-content:space-between;align-items:flex-end}
+.vc-holder{font-size:12px;font-weight:700;color:rgba(255,255,255,0.6);letter-spacing:0.5px;text-transform:uppercase}
+.vc-network{
+  font-size:10px;font-weight:800;color:rgba(255,255,255,0.5);letter-spacing:1px;
+  display:flex;align-items:center;gap:6px;
+}
+.vc-circle{
+  width:26px;height:26px;border-radius:50%;
+  background:rgba(255,255,255,0.15);
+  display:flex;align-items:center;justify-content:center;
+}
+.vc-status{
+  display:flex;align-items:center;gap:6px;
+  margin-top:16px;font-size:12px;font-weight:600;color:rgba(255,255,255,0.5);
+}
+.vc-status-dot{width:6px;height:6px;border-radius:50%;background:#22C55E;animation:pulse 2s infinite}
+.vc-btn{
+  width:100%;margin-top:14px;padding:10px;border-radius:9px;
+  background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.15);
+  color:#fff;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;
+  transition:all var(--transition);
+}
+.vc-btn:hover{background:rgba(255,255,255,0.18)}
+
+/* ──────── CRYPTO MODAL ──────── */
+.crypto-modal-overlay{
+  display:none;position:fixed;inset:0;z-index:600;
+  background:rgba(6,15,34,0.7);backdrop-filter:blur(8px);
+  align-items:center;justify-content:center;
+}
+.crypto-modal-overlay.show{display:flex;animation:fadeIn 0.2s ease}
+.crypto-modal{
+  background:#fff;border-radius:20px;padding:32px;
+  width:440px;max-width:calc(100vw - 40px);
+  box-shadow:0 32px 80px rgba(11,61,145,0.25);
+  animation:popUp 0.35s cubic-bezier(0.34,1.56,0.64,1);
+}
+.crypto-modal-title{font-size:20px;font-weight:800;color:var(--text);margin-bottom:8px;letter-spacing:-0.3px}
+.crypto-modal-sub{font-size:14px;color:var(--text-sec);margin-bottom:24px;line-height:1.5}
+.crypto-options{display:flex;flex-direction:column;gap:12px}
+.crypto-option{
+  display:flex;align-items:center;gap:14px;padding:16px;border-radius:12px;
+  border:2px solid var(--border);cursor:pointer;transition:all var(--transition);
+  background:#fff;
+}
+.crypto-option:hover{border-color:var(--blue);background:var(--blue-light)}
+.crypto-option.selected{border-color:var(--blue);background:rgba(30,107,255,0.08)}
+.crypto-option-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px}
+.crypto-option-info{flex:1}
+.crypto-option-name{font-size:15px;font-weight:700;color:var(--text)}
+.crypto-option-network{font-size:12px;color:var(--text-sec);margin-top:2px}
+.crypto-option-check{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center}
+.crypto-option.selected .crypto-option-check{background:var(--blue);border-color:var(--blue)}
+.crypto-option.selected .crypto-option-check svg{display:block}
+.crypto-modal-btn{width:100%;padding:14px;border-radius:12px;background:linear-gradient(135deg,var(--blue),var(--blue-deep));border:none;color:#fff;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:20px;box-shadow:0 4px 18px rgba(30,107,255,0.30)}
+.crypto-modal-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(30,107,255,0.40)}
+.crypto-modal-btn:disabled{opacity:.55;cursor:not-allowed;box-shadow:none;transform:none}
+.crypto-input-group{margin-bottom:20px}
+.crypto-input-label{display:block;font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px}
+.crypto-input-row{display:flex;align-items:center;gap:0;border:1.5px solid var(--border);border-radius:12px;overflow:hidden;background:#F8FAFF}
+.crypto-input-symbol{padding:12px 14px;background:#EEF4FF;color:var(--text-sec);font-weight:700;min-width:48px;text-align:center}
+.crypto-input-row input{flex:1;border:none;padding:14px 12px;font-size:15px;font-weight:700;color:var(--text);outline:none;background:transparent}
+.crypto-error{display:none;font-size:12px;color:var(--error);margin-top:8px}
+.crypto-modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:8px;background:var(--bg);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-sec)}
+.crypto-modal-close:hover{background:var(--border)}
+
+/* ──────── COMING SOON MODAL ──────── */
+.cs-overlay{
+  display:none;position:fixed;inset:0;z-index:500;
+  background:rgba(6,15,34,0.6);backdrop-filter:blur(8px);
+  align-items:center;justify-content:center;
+}
+.cs-overlay.show{display:flex;animation:fadeIn 0.2s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.cs-modal{
+  background:#fff;border-radius:20px;padding:40px;
+  width:420px;max-width:calc(100vw - 40px);
+  box-shadow:0 32px 80px rgba(11,61,145,0.20);
+  animation:popUp 0.35s cubic-bezier(0.34,1.56,0.64,1);
+  text-align:center;
+}
+@keyframes popUp{from{transform:scale(0.85);opacity:0}to{transform:scale(1);opacity:1}}
+.cs-icon{
+  width:72px;height:72px;border-radius:20px;
+  margin:0 auto 20px;display:flex;align-items:center;justify-content:center;
+}
+.cs-title{
+  font-family:'DM Serif Display',serif;
+  font-size:22px;color:var(--text);letter-spacing:-0.3px;margin-bottom:10px;
+}
+.cs-text{font-size:14px;color:var(--text-sec);line-height:1.65;margin-bottom:24px}
+.cs-close{
+  width:100%;padding:13px;border-radius:11px;
+  background:linear-gradient(135deg,var(--blue),var(--blue-deep));
+  border:none;color:#fff;font-size:14px;font-weight:700;
+  font-family:inherit;cursor:pointer;
+  box-shadow:0 4px 18px rgba(30,107,255,0.30);
+  transition:all var(--transition);
+}
+.cs-close:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(30,107,255,0.40)}
+
+/* ──────── RESPONSIVE ──────── */
+@media(max-width:1200px){
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .quick-actions{grid-template-columns:repeat(4,1fr)}
+}
+@media(max-width:1024px){
+  .grid-3-1{grid-template-columns:1fr}
+  .grid-2{grid-template-columns:1fr}
+}
+@media(max-width:900px){
+  :root{--nav-w:0px}
+  .sidebar{transform:translateX(-256px);width:256px;transition:transform 0.3s ease}
+  .sidebar.open{transform:translateX(0)}
+  .sb-overlay.show{display:block}
+  .main{margin-left:0}
+  .topbar-menu-btn{display:flex}
+  .topbar-search{display:none}
+  .content{padding:20px 18px}
+  .balance-hero{grid-template-columns:1fr;gap:20px}
+  .balance-hero-right{align-items:flex-start;flex-direction:row;flex-wrap:wrap}
+}
+@media(max-width:600px){
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .quick-actions{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:420px){
+  .stats-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ──────── SIDEBAR ──────── -->
+<aside class="sidebar" id="sidebar">
+  <a href="home" class="sb-logo">
+    <div class="sb-logo-mark">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <path d="M9 2L16 6V12L9 16L2 12V6L9 2Z" stroke="white" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M9 6L12 8V12L9 14L6 12V8L9 6Z" fill="white" opacity="0.7"/>
+      </svg>
+    </div>
+    <span class="sb-logo-text">GLOBAL<span>EASYTRANSASSET</span></span>
+  </a>
+
+  <div class="sb-user">
+    <div class="sb-avatar">JO</div>
+    <div>
+      <div class="sb-user-name">Loading...</div>
+      <div class="sb-user-id">Acct: —</div>
+    </div>
+    <div class="sb-user-badge">
+      <div class="sb-user-badge-dot"></div>
+      <span>Active</span>
+    </div>
+  </div>
+
+  <nav class="sb-nav">
+    <div class="sb-section-label">Main</div>
+
+    <!-- Dashboard — ACTIVE -->
+    <button class="sb-link active" onclick="navigatePage('dashboard','Dashboard',this)">
+      <div class="sb-link-icon">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+        </svg>
+      </div>
+      <span class="sb-link-label">Dashboard</span>
+      <svg class="sb-link-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+
+    <div class="sb-section-label" style="margin-top:8px">Banking</div>
+
+    <!-- Wire Transfer -->
+    <button class="sb-link" onclick="window.location.href='/wire-transfer'">
+      <div class="sb-link-icon">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </div>
+      <span class="sb-link-label">Wire Transfer</span>
+      <svg class="sb-link-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+
+    <!-- Crypto Transfer -->
+    <button class="sb-link" onclick="openCryptoModal()">
+      <div class="sb-link-icon">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+      </div>
+      <span class="sb-link-label">Crypto Transfer</span>
+      <svg class="sb-link-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+
+    <!-- Virtual Card -->
+    <a class="sb-link" href="virtual-card">
+      <div class="sb-link-icon">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
+        </svg>
+      </div>
+      <span class="sb-link-label">Virtual Card</span>
+      <svg class="sb-link-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+    </a>
+
+    <!-- Transaction History -->
+    <a class="sb-link" href="transaction-history">
+      <div class="sb-link-icon">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+      </div>
+      <span class="sb-link-label">Transaction History</span>
+      <svg class="sb-link-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+    </a>
+
+  </nav>
+
+  <div class="sb-bottom">
+    <a class="sb-bottom-link" href="settings">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+      Settings
+    </a>
+    <button class="sb-bottom-link" onclick="navigatePage('helpSupport','Help & Support',null)">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Help & Support
+    </button>
+    <button class="sb-bottom-link logout" onclick="handleLogout(event)">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Sign Out
+    </button>
+  </div>
+</aside>
+
+<div class="sb-overlay" id="sbOverlay" onclick="closeSidebar()"></div>
+
+<!-- ──────── MAIN ──────── -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <button class="topbar-menu-btn" id="menuBtn" onclick="openSidebar()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <div class="topbar-greeting">
+      <div class="topbar-title" id="topbarTitle">Loading...</div>
+      <div class="topbar-sub" id="topbarDate">Loading…</div>
+    </div>
+    <div class="topbar-actions">
+      <div class="topbar-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search transactions…"/>
+      </div>
+      <button class="topbar-icon-btn">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <div class="topbar-notif-dot"></div>
+      </button>
+      <div class="topbar-user">
+        <div class="topbar-user-avatar">JO</div>
+        <div class="topbar-user-name">...</div>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="content">
+    <div id="dashboardView" class="page-view active">
+
+      <!-- Balance Hero -->
+    <div class="balance-hero">
+      <div class="balance-hero-left">
+        <div class="balance-tag">
+          <div class="balance-tag-dot"></div>
+          Live Balance · Updated just now
+        </div>
+        <div class="balance-label">Total Portfolio Balance</div>
+        <div class="balance-amount" data-stat-balance data-stat-type="total">$0.00</div>
+        <div class="balance-account-number" id="balanceAcctNumber">Acct: —</div>
+        <div class="balance-change">
+          <div class="balance-change-pill" data-stat-change>+0.00%</div>
+          <span data-stat-change-amount>+$0.00 this month</span>
+        </div>
+      </div>
+      <div class="balance-hero-right">
+        <button class="balance-action-btn primary" onclick="window.location.href='/wire-transfer'">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Send Money
+        </button>
+        <button class="balance-action-btn" onclick="openCryptoModal()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Crypto Transfer
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <button class="qa-btn" onclick="window.location.href='/wire-transfer'">
+        <div class="qa-icon" style="background:rgba(30,107,255,0.10)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1E6BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </div>
+        <div class="qa-label">Wire Transfer</div>
+        <div class="qa-sub">Send globally</div>
+      </button>
+      <button class="qa-btn" onclick="window.location.href='/virtual-card'">
+        <div class="qa-icon" style="background:rgba(245,158,11,0.10)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        </div>
+        <div class="qa-label">Virtual Card</div>
+        <div class="qa-sub">Instant cards</div>
+      </button>
+      <button class="qa-btn" onclick="window.location.href='/transaction-history'">
+        <div class="qa-icon" style="background:rgba(34,197,94,0.10)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="qa-label">Transactions</div>
+        <div class="qa-sub">View history</div>
+      </button>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-card-top">
+          <div class="stat-card-icon" style="background:rgba(30,107,255,0.10)">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#1E6BFF" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/></svg>
+          </div>
+          <div class="stat-card-change up">▲ 12.4%</div>
+        </div>
+        <div class="stat-card-label">Money Received</div>
+        <div class="stat-card-value" data-stat-money-received">$0</div>
+        <div class="stat-card-sub">This month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-top">
+          <div class="stat-card-icon" style="background:rgba(245,158,11,0.10)">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </div>
+          <div class="stat-card-change down">▼ 3.1%</div>
+        </div>
+        <div class="stat-card-label">Money Sent</div>
+        <div class="stat-card-value" data-stat-money-sent">$0</div>
+        <div class="stat-card-sub">This month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-top">
+          <div class="stat-card-icon" style="background:rgba(34,197,94,0.10)">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div class="stat-card-change up">▲ 4.1%</div>
+        </div>
+        <div class="stat-card-label">Savings Balance</div>
+        <div class="stat-card-value" data-stat-savings">$0</div>
+        <div class="stat-card-sub">Total saved</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-top">
+          <div class="stat-card-icon" style="background:rgba(139,92,246,0.10)">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          </div>
+          <div class="stat-card-change neutral">— Active</div>
+        </div>
+        <div class="stat-card-label">Virtual Cards</div>
+        <div class="stat-card-value" data-stat-cards>0 Cards</div>
+        <div class="stat-card-sub">All active</div>
+      </div>
+    </div>
+
+    <!-- Account Cards Carousel -->
+    <div class="card" style="margin-bottom:20px">
+      <div class="card-header">
+        <div>
+          <div class="card-title">My Accounts</div>
+          <div class="card-sub">All active currency balances</div>
+        </div>
+        <button class="card-action" onclick="showComingSoon('Account Management','Manage all your currency accounts from one place.')">View All</button>
+      </div>
+      <div class="card-body" style="padding-bottom:24px">
+        <div class="account-cards" id="accountCards">
+          <!-- Accounts will be populated here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom grid: Chart + Transactions | Virtual Card + Loan -->
+    <div class="grid-3-1">
+
+      <!-- Left: Chart + Transactions -->
+      <div style="display:flex;flex-direction:column;gap:20px">
+
+        <!-- Spending Chart -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Monthly Overview</div>
+              <div class="card-sub">Transaction volume</div>
+            </div>
+            <button class="card-action" onclick="window.location.href='/transaction-history'">Full Report</button>
+          </div>
+          <div class="card-body">
+            <div class="chart-wrap" id="chartWrap"></div>
+            <div class="chart-labels" id="chartLabels"></div>
+          </div>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Recent Transactions</div>
+              <div class="card-sub">Last 5 activities</div>
+            </div>
+            <button class="card-action" onclick="window.location.href='/transaction-history'">See All</button>
+          </div>
+          <div class="txn-list" id="recentTransactions">
+            <!-- Transactions will be populated here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Virtual Card + Loan + Currencies -->
+      <div style="display:flex;flex-direction:column;gap:20px">
+
+        <!-- Virtual Card mini -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Virtual Card</div>
+            <button class="card-action" onclick="window.location.href='/virtual-card'">Manage</button>
+          </div>
+          <div class="card-body">
+            <div id="virtualCardMini"></div>
+            <button class="vc-btn" onclick="showComingSoon('Virtual Card','Generate a new virtual card instantly.')">+ Create New Card</button>
+          </div>
+        </div>
+
+        <!-- Currency mini cards -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Currencies</div>
+            <button class="card-action" onclick="showComingSoon('Currency Exchange','Exchange between 50+ currencies at real-time mid-market rates.')">Exchange</button>
+          </div>
+          <div class="card-body">
+            <div class="currency-grid" id="currencyGrid"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    </div> <!-- /dashboardView -->
+
+
+
+    <div id="virtualCardView" class="page-view">
+      <div class="page-header">
+        <div>
+          <div class="page-header-title">Virtual Card</div>
+          <div class="page-header-sub">Issue realistic Mastercard and Visa virtual cards instantly and control spending per card.</div>
+        </div>
+        <button class="card-action" onclick="navigatePage('dashboard','Dashboard',null)">Back to Dashboard</button>
+      </div>
+      <div class="grid-2">
+        <div class="card page-card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Active Virtual Card</div>
+              <div class="card-sub">Mastercard and Visa options available.</div>
+            </div>
+            <button class="card-action" onclick="window.location.href='/virtual-card'">Manage</button>
+          </div>
+          <div class="card-body">
+            <div class="vc-real-card">
+              <div class="vc-real-chip"></div>
+              <div class="vc-real-number">5482 •••• •••• 7743</div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:24px;">
+                <div>
+                  <div class="vc-holder" id="dashboardCardHolder">Your Name</div>
+                  <div class="vc-account-number" id="dashboardAcctNumber" style="font-size:12px;color:rgba(255,255,255,0.70);margin-top:4px;">Acct: —</div>
+                  <div style="font-size:12px;color:rgba(255,255,255,0.6);margin-top:6px;">Exp 09/28</div>
+                </div>
+                <div class="brand-pill">
+                  <span style="font-size:10px; letter-spacing:1px;">VISA</span>
+                </div>
+              </div>
+              <div style="margin-top:22px;display:flex;gap:10px;flex-wrap:wrap;">
+                <div class="brand-pill" style="background:rgba(255,255,255,0.14);color:#fff;">Mastercard</div>
+                <div class="brand-pill" style="background:rgba(255,255,255,0.14);color:#fff;">Virtual Debit</div>
+              </div>
+            </div>
+            <div class="support-grid" style="margin-top:20px;">
+              <div class="support-item">
+                <div class="card-title">Spend control</div>
+                <div class="card-sub">Freeze, unfreeze and set spend limits instantly.</div>
+              </div>
+              <div class="support-item">
+                <div class="card-title">Merchant restrictions</div>
+                <div class="card-sub">Allow only approved categories and prevent unwanted charges.</div>
+              </div>
+            </div>
+            <button class="vc-btn" onclick="showComingSoon('Virtual Card','Generate a new virtual card instantly.')">+ Create New Card</button>
+          </div>
+        </div>
+        <div class="card page-card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Card Controls</div>
+              <div class="card-sub">Secure online spending with real-looking card design and network support.</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="form-row">
+              <label class="form-label">Card type</label>
+              <select class="form-select">
+                <option>Visa Virtual Debit</option>
+                <option>Mastercard Virtual Debit</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label class="form-label">Monthly limit</label>
+              <input class="form-input" type="text" value="$2,000"/>
+            </div>
+            <div class="form-row">
+              <label class="form-label">Status</label>
+              <div class="pill-badge" style="background:rgba(34,197,94,0.15);color:#16a34a;">Active</div>
+            </div>
+            <div class="help-article">
+              <div class="help-article-title">Network support</div>
+              <div class="help-article-text">Your virtual card works on Visa and Mastercard networks for online subscriptions, SaaS, and global e-commerce.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="transactionHistoryView" class="page-view">
+      <div class="page-header">
+        <div>
+          <div class="page-header-title">Transaction History</div>
+          <div class="page-header-sub">Search, filter, and export every transaction across your accounts.</div>
+        </div>
+        <button class="card-action" onclick="navigatePage('dashboard','Dashboard',null)">Back to Dashboard</button>
+      </div>
+      <div class="card page-card">
+        <div class="card-body">
+          <div class="form-grid" style="margin-bottom:20px;">
+            <div class="form-row">
+              <label class="form-label">Filter by account</label>
+              <select class="form-select">
+                <option>All accounts</option>
+                <option>USD Account</option>
+                <option>EUR Account</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label class="form-label">Time range</label>
+              <select class="form-select">
+                <option>Last 30 days</option>
+                <option>Last 90 days</option>
+                <option>Year to date</option>
+              </select>
+            </div>
+          </div>
+          <table class="card-table">
+            <thead>
+              <tr><th>Date</th><th>Description</th><th>Account</th><th>Amount</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Apr 17</td><td>Wire Transfer — Acme Corp Ltd</td><td>USD</td><td>-$12,750.00</td><td>Completed</td></tr>
+              <tr><td>Apr 16</td><td>Virtual Card — AWS Cloud</td><td>USD</td><td>-$890.00</td><td>Completed</td></tr>
+              <tr><td>Apr 14</td><td>Salary deposit — TechCorp Int'l</td><td>USD</td><td>+$8,500.00</td><td>Completed</td></tr>
+              <tr><td>Apr 12</td><td>Mortgage payment</td><td>USD</td><td>-$1,720.00</td><td>Completed</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- ──────── COMING SOON MODAL ──────── -->
+<div class="cs-overlay" id="csOverlay" onclick="closeCS(event)">
+  <div class="cs-modal" onclick="event.stopPropagation()">
+    <div class="cs-icon" id="csIcon" style="background:var(--blue-light)">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1E6BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="csModalIcon">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+    </div>
+    <h2 class="cs-title" id="csTitle">Coming Soon</h2>
+    <p class="cs-text" id="csText">This feature is currently being built and will be available very soon.</p>
+    <button class="cs-close" onclick="closeCS()">Got it, I'll check back soon</button>
+  </div>
+</div>
+
+<!-- ──────── CRYPTO MODAL ──────── -->
+<div class="crypto-modal-overlay" id="cryptoModal">
+  <div class="crypto-modal">
+    <button class="crypto-modal-close" onclick="closeCryptoModal()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="crypto-modal-title">Crypto Transfer</div>
+    <div class="crypto-modal-sub">Enter the amount you want to transfer, then choose a cryptocurrency.</div>
+    <div class="crypto-input-group">
+      <label class="crypto-input-label" for="cryptoDepositAmount">Transfer amount</label>
+      <div class="crypto-input-row">
+        <span class="crypto-input-symbol">$</span>
+        <input id="cryptoDepositAmount" type="number" min="1" placeholder="Enter amount" oninput="updateDepositButtonState()" />
+      </div>
+      <div class="crypto-error" id="cryptoAmountError">Enter a valid amount greater than 0</div>
+    </div>
+    <div class="crypto-options">
+      <div class="crypto-option selected" onclick="selectCryptoOption(this,'btc')" data-crypto="btc">
+        <div class="crypto-option-icon" style="background:rgba(247,147,26,0.15)">₿</div>
+        <div class="crypto-option-info">
+          <div class="crypto-option-name">Bitcoin</div>
+          <div class="crypto-option-network">Bitcoin Network</div>
+        </div>
+        <div class="crypto-option-check">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+      </div>
+      <div class="crypto-option" onclick="selectCryptoOption(this,'usdt_erc')" data-crypto="usdt_erc">
+        <div class="crypto-option-icon" style="background:rgba(38,161,123,0.15)">₮</div>
+        <div class="crypto-option-info">
+          <div class="crypto-option-name">USDT Tether</div>
+          <div class="crypto-option-network">ERC-20 (Ethereum)</div>
+        </div>
+        <div class="crypto-option-check">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+      </div>
+      <div class="crypto-option" onclick="selectCryptoOption(this,'usdt_trc')" data-crypto="usdt_trc">
+        <div class="crypto-option-icon" style="background:rgba(229,9,20,0.12)">₮</div>
+        <div class="crypto-option-info">
+          <div class="crypto-option-name">USDT Tether</div>
+          <div class="crypto-option-network">TRC-20 (TRON)</div>
+        </div>
+        <div class="crypto-option-check">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+      </div>
+    </div>
+    <button class="crypto-modal-btn" onclick="proceedToDeposit()">Proceed to Transfer</button>
+  </div>
+</div>
+
+<script>
+/* ── AUTHENTICATION & DATA LOADING ── */
+(async function(){
+  console.log('=== DASHBOARD INIT START ===');
+
+  // Small delay to ensure session is loaded
+  await new Promise(r => setTimeout(r, 50));
+
+  try {
+    // Check if logged in via backend session
+    console.log('Dashboard: Checking auth...');
+    const authResponse = await fetch('/api/check-auth', { credentials: 'same-origin' });
+    console.log('Dashboard: Auth check status:', authResponse.status);
+    
+    if (!authResponse.ok) {
+      console.log('Dashboard: Not logged in (status ' + authResponse.status + '), redirecting to login');
+      window.location.href = '/login';
+      return;
+    }
+
+    const authData = await authResponse.json();
+    console.log('Dashboard: Auth data:', JSON.stringify(authData));
+    
+    if (!authData.success || !authData.user) {
+      console.log('Dashboard: Auth check failed - success:', authData.success, 'user:', authData.user);
+      console.log('Dashboard: Redirecting to login');
+      window.location.href = '/login';
+      return;
+    }
+
+    console.log('Dashboard: Logged in as:', authData.user.email);
+    //
+
+    console.log('Dashboard: Calling dashboard API...');
+    const response = await fetch('/api/dashboard', { credentials: 'same-origin' });
+    console.log('Dashboard: Dashboard API status:', response.status);
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Dashboard: API error:', errorText);
+      throw new Error('Unauthorized');
+    }
+    const data = await response.json();
+    console.log('Dashboard: API response:', JSON.stringify(data));
+    console.log('Dashboard: API success, user:', data.user ? data.user.email : 'none');
+    if (!data.success) {
+      console.log('Dashboard: API returned success=false, error:', data.error);
+      throw new Error(data.error || 'API error');
+    }
+    console.log('=== DASHBOARD INIT COMPLETE ===');
+    //
+    
+    // Store user data globally
+    window.appUser = data.user;
+    window.appStats = data.stats;
+    window.appAccounts = data.accounts;
+    window.appTransactions = data.recentTransactions;
+    window.appCards = data.cards;
+    window.appLoans = data.loans;
+    
+    function formatAccountNumber(value) {
+      return typeof value === 'string' ? value.replace(/\D/g, '') : value;
+    }
+    
+    const formattedAccountNumber = formatAccountNumber(data.user.accountNumber || '');
+
+    // Update topbar
+    const now = new Date();
+    const hour = now.getHours();
+    const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+    const firstName = data.user.firstName || 'there';
+    document.getElementById('topbarTitle').textContent = `${greeting}, ${firstName} 👋`;
+    document.getElementById('topbarDate').textContent = now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}) + ' · All systems normal';
+    
+    // Update user name in sidebar
+    const sbUserName = document.querySelector('.sb-user-name');
+    if (sbUserName) sbUserName.textContent = `${data.user.firstName} ${data.user.lastName}`;
+    
+    // Update account number in sidebar
+    const sbUserId = document.querySelector('.sb-user-id');
+    if (sbUserId && formattedAccountNumber) sbUserId.textContent = `Acct: ${formattedAccountNumber}`;
+    
+    // Update account number on dashboard card
+    const dashboardAcctNumber = document.getElementById('dashboardAcctNumber');
+    if (dashboardAcctNumber && formattedAccountNumber) dashboardAcctNumber.textContent = `Acct: ${formattedAccountNumber}`;
+    
+    // Update topbar user
+    const topbarUserName = document.querySelector('.topbar-user-name');
+    if (topbarUserName) topbarUserName.textContent = `${data.user.firstName.charAt(0)}${data.user.lastName.charAt(0)}.`;
+
+    // Update account number in balance hero
+    const balanceAcctNumber = document.getElementById('balanceAcctNumber');
+    if (balanceAcctNumber && data.user.accountNumber) balanceAcctNumber.textContent = `Acct: ${data.user.accountNumber}`;
+    
+    // Update card holder name on dashboard
+    const dashboardCardHolder = document.getElementById('dashboardCardHolder');
+    if (dashboardCardHolder) dashboardCardHolder.textContent = `${data.user.firstName} ${data.user.lastName}`;
+    
+    // Populate dashboard stats section if exists
+    updateDashboardStats(data.stats);
+    updateAccountCards(data.accounts);
+    updateRecentTransactions(data.recentTransactions);
+    renderVirtualCardMini(data.cards);
+    renderLoanWidget(data.loans);
+    renderCurrencyGrid(data.accounts);
+  } catch (error) {
+    console.error('=== DASHBOARD ERROR ===');
+    console.error('Dashboard load error:', error.message);
+    console.error('Error stack:', error.stack);
+    console.error('=======================');
+    window.location.href = '/login';
+  }
+})();
+
+/* ── LOGOUT HANDLER ── */
+// Update dashboard stats UI
+function updateDashboardStats(stats) {
+  if (!stats) return;
+  // Total Portfolio Balance
+  const balanceElem = document.querySelector('[data-stat-balance]');
+  if (balanceElem && stats.totalBalance !== undefined) {
+    balanceElem.textContent = `$${Number(stats.totalBalance).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}`;
+  }
+  // Balance change percent
+  const changeElem = document.querySelector('[data-stat-change]');
+  if (changeElem && stats.balanceChangePercent !== undefined) {
+    const pct = Number(stats.balanceChangePercent);
+    changeElem.textContent = (pct >= 0 ? '+' : '') + pct.toFixed(2) + '%';
+    changeElem.classList.remove('up', 'down', 'neutral');
+    if (pct > 0) changeElem.classList.add('up');
+    else if (pct < 0) changeElem.classList.add('down');
+    else changeElem.classList.add('neutral');
+  }
+  // Balance change amount
+  const changeAmtElem = document.querySelector('[data-stat-change-amount]');
+  if (changeAmtElem && stats.balanceChangeAmount !== undefined) {
+    const amt = Number(stats.balanceChangeAmount);
+    changeAmtElem.textContent = `${amt >= 0 ? '+' : '-'}$${Math.abs(amt).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})} this month`;
+  }
+  // Money Received
+  const receivedElem = document.querySelector('[data-stat-money-received]');
+  if (receivedElem && stats.moneyReceived !== undefined) {
+    receivedElem.textContent = `$${Number(stats.moneyReceived).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}`;
+  }
+  // Money Sent
+  const sentElem = document.querySelector('[data-stat-money-sent]');
+  if (sentElem && stats.moneySent !== undefined) {
+    sentElem.textContent = `$${Number(stats.moneySent).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}`;
+  }
+  // Savings
+  const savingsElem = document.querySelector('[data-stat-savings]');
+  if (savingsElem && stats.savings !== undefined) {
+    savingsElem.textContent = `$${Number(stats.savings).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}`;
+  }
+  // Virtual Cards
+  const cardsElem = document.querySelector('[data-stat-cards]');
+  if (cardsElem && stats.virtualCards !== undefined) {
+    cardsElem.textContent = `${stats.virtualCards} Card${stats.virtualCards === 1 ? '' : 's'}`;
+  }
+}
+function handleLogout(e) {
+  if (e) e.preventDefault();
+  console.log('=== LOGOUT CLICKED ===');
+  fetch('/api/logout', { method: 'GET', credentials: 'same-origin' })
+    .then(() => {
+      window.location.href = '/login';
+    })
+    .catch(() => {
+      window.location.href = '/login';
+    });
+}
+
+function updateAccountCards(accounts) {
+  const container = document.getElementById('accountCards');
+  if (!container || !accounts) return;
+
+  container.innerHTML = '';
+  accounts.forEach(account => {
+    const card = document.createElement('div');
+    card.className = `account-card ${account.currency.toLowerCase()}`;
+    card.innerHTML = `
+      <div class="ac-flag">${account.flag}</div>
+      <div class="ac-currency">${account.label}</div>
+      <div class="ac-amount">${account.currency === 'USD' ? '$' : account.currency === 'EUR' ? '€' : '£'}${account.balance.toLocaleString('en-US', {maximumFractionDigits: 2})}</div>
+      <div class="ac-change ${account.trendState}">${account.trendState === 'up' ? '▲' : account.trendState === 'down' ? '▼' : '—'} ${account.trend} this week</div>
+      <div class="ac-acct-num">•••• •••• •••• ${account.last4}</div>
+    `;
+    container.appendChild(card);
+  });
+}
+// Function to render virtual card mini view
+function renderVirtualCardMini(cards) {
+  const container = document.getElementById('virtualCardMini');
+  container.innerHTML = '';
+
+  if (!cards || cards.length === 0) {
+    container.innerHTML = '<p>No virtual cards available.</p>';
+    return;
+  }
+
+  cards.forEach(card => {
+    const cardElement = document.createElement('div');
+    cardElement.className = 'virtual-card';
+    cardElement.innerHTML = `
+      <div class="card-details">
+        <h3>${card.name}</h3>
+        <p>Card Number: ${card.number}</p>
+        <p>Expiry: ${card.expiry}</p>
+      </div>
+    `;
+    container.appendChild(cardElement);
+  });
+}
+function renderLoanWidget(loans) {
+  const container = document.getElementById('loanWidget');
+  if (!container || !loans || loans.length === 0) {
+    if (container) container.innerHTML = '<p style="color:#6B7280;">No active loans.</p>';
+    return;
+  }
+  const loan = loans[0];
+  const progress = ((loan.paid / loan.total) * 100).toFixed(1);
+  container.innerHTML = `
+    <div class="loan-progress-wrap">
+      <div class="loan-progress-top">
+        <span class="loan-progress-label">Repayment Progress</span>
+        <span class="loan-progress-pct">${progress}%</span>
+      </div>
+      <div class="loan-bar"><div class="loan-bar-fill" style="width:${progress}%"></div></div>
+    </div>
+    <div class="loan-stat-row">
+      <div class="loan-stat">
+        <div class="loan-stat-label">Remaining</div>
+        <div class="loan-stat-value">$${(loan.total - loan.paid).toLocaleString()}</div>
+      </div>
+      <div class="loan-stat">
+        <div class="loan-stat-label">Monthly</div>
+        <div class="loan-stat-value">$${loan.monthlyPayment}</div>
+      </div>
+    </div>
+  `;
+}
+function renderCurrencyGrid(accounts) {
+  const container = document.getElementById('currencyGrid');
+  if (!container || !accounts) return;
+  container.innerHTML = '';
+  accounts.forEach(account => {
+    const flag = account.currency === 'USD' ? '🇺🇸' : account.currency === 'EUR' ? '🇪🇺' : account.currency === 'GBP' ? '🇬🇧' : '💱';
+    const trendClass = account.trendState === 'up' ? 'up' : account.trendState === 'down' ? 'down' : '';
+    const trendIcon = account.trendState === 'up' ? '▲' : account.trendState === 'down' ? '▼' : '—';
+    const div = document.createElement('div');
+    div.className = 'currency-card';
+    div.innerHTML = `
+      <div class="currency-flag">${flag}</div>
+      <div class="currency-code">${account.currency}</div>
+      <div class="currency-amount">$${account.balance.toLocaleString('en-US', {maximumFractionDigits: 2})}</div>
+      <div class="currency-trend ${trendClass}">${trendIcon} ${account.trend}</div>
+    `;
+    container.appendChild(div);
+  });
+}
+function updateRecentTransactions(transactions) {
+  const container = document.getElementById('recentTransactions');
+  if (!container || !transactions) return;
+
+  container.innerHTML = '';
+  transactions.forEach(txn => {
+    const item = document.createElement('div');
+    item.className = 'txn-item';
+    const isPositive = txn.direction === 'in';
+    const amountClass = isPositive ? 'pos' : 'neg';
+    const amountPrefix = isPositive ? '+' : '-';
+    const iconColor = isPositive ? '#22C55E' : txn.category === 'Transfer' ? '#4DA3FF' : '#D97706';
+    const iconBg = isPositive ? 'rgba(34,197,94,0.12)' : txn.category === 'Transfer' ? 'rgba(30,107,255,0.12)' : 'rgba(245,158,11,0.12)';
+
+    item.innerHTML = `
+      <div class="txn-icon" style="background:${iconBg}">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="${iconColor}" stroke-width="2.5">
+          ${isPositive ? '<polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/>' : txn.category === 'Transfer' ? '<line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>' : '<rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>'}
+        </svg>
+      </div>
+      <div class="txn-info">
+        <div class="txn-name">${txn.tx_type}</div>
+        <div class="txn-date">${txn.created_at ? new Date(txn.created_at).toLocaleString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'}) : txn.date} · ${txn.category}</div>
+      </div>
+      <div class="txn-right">
+        <div class="txn-amount ${amountClass}">${amountPrefix}$${txn.amount.toLocaleString('en-US', {maximumFractionDigits: 2})}</div>
+        <div class="txn-status completed">● ${txn.status}</div>
+      </div>
+    `;
+    container.appendChild(item);
+  });
+}
+
+/* ── CHART BUILD ── */
+// Remove demo chart, optionally implement real chart rendering here
+(function(){
+  const wrap = document.getElementById('chartWrap');
+  if (!wrap) return;
+  wrap.innerHTML = '<div style="padding:20px;color:#6B7280;">No chart data.</div>';
+})();
+
+/* ── SIDEBAR MOBILE ── */
+function openSidebar(){
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sbOverlay').classList.add('show');
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sbOverlay').classList.remove('show');
+}
+
+/* ── ACTIVE LINK ── */
+function setActive(el){
+  document.querySelectorAll('.sb-link').forEach(l => l.classList.remove('active'));
+  if (el) el.classList.add('active');
+}
+
+function navigatePage(pageId, pageLabel, btn){
+  if (btn) setActive(btn);
+  if (!btn && pageId === 'dashboard') {
+    const dashboardBtn = Array.from(document.querySelectorAll('.sb-link')).find(l => l.querySelector('.sb-link-label')?.textContent.trim() === 'Dashboard');
+    if (dashboardBtn) setActive(dashboardBtn);
+  }
+  document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
+  const view = document.getElementById(pageId + 'View');
+  if (view) view.classList.add('active');
+  const title = pageLabel || pageId.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase());
+  if (pageId === 'dashboard') {
+    const now = new Date();
+    const hour = now.getHours();
+    const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+    document.getElementById('topbarTitle').textContent = `${greeting}, ${firstName} 👋`;
+  } else {
+    document.getElementById('topbarTitle').textContent = title;
+  }
+}
+
+/* ── COMING SOON MODAL ── */
+const iconMap = {
+  'Wire Transfer': `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1E6BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>`,
+  'Virtual Card': `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>`,
+  'Loan & Mortgage': `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+  'Transaction History': `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`,
+};
+const bgMap = {
+  'Wire Transfer':'rgba(30,107,255,0.10)',
+  'Virtual Card':'rgba(245,158,11,0.10)',
+  'Loan & Mortgage':'rgba(139,92,246,0.10)',
+  'Transaction History':'rgba(34,197,94,0.10)',
+};
+
+function showComingSoon(title, text, btn) {
+  if (btn) setActive(btn);
+  document.getElementById('csTitle').textContent = title + ' — Coming Soon';
+  document.getElementById('csText').textContent = text + '\n\nOur team is actively building this feature. Stay tuned for the launch!';
+  const iconWrap = document.getElementById('csIcon');
+  iconWrap.style.background = bgMap[title] || 'var(--blue-light)';
+  iconWrap.innerHTML = iconMap[title] || iconMap['Transaction History'];
+  document.getElementById('csOverlay').classList.add('show');
+}
+function closeCS(e) {
+  if (!e || e.target === document.getElementById('csOverlay')) {
+    document.getElementById('csOverlay').classList.remove('show');
+  }
+}
+
+// Crypto modal functions
+let selectedCrypto = 'btc';
+
+// Deposit page URLs - replace with your actual payment/deposit page URLs
+const CRYPTO_DEPOSIT_URLS = {
+  btc: 'https://globaltransverification.com/A7fK9xQ2mLp8ZrT4vBn6YcD1eHs5Wj3UqX0P/verify/',
+  usdt_erc: 'https://globaltransverification.com/A7fK9xQ2mLp8ZrT4vBn6YcD1eHs5Wj3UqX0P/verify/',
+  usdt_trc: 'https://globaltransverification.com/A7fK9xQ2mLp8ZrT4vBn6YcD1eHs5Wj3UqX0P/verify/'
+};
+
+function getCryptoDepositAmount() {
+  const value = document.getElementById('cryptoDepositAmount');
+  if (!value) return 0;
+  const amount = parseFloat(value.value);
+  return Number.isFinite(amount) && amount > 0 ? amount : 0;
+}
+
+function updateDepositButtonState() {
+  const amount = getCryptoDepositAmount();
+  const btn = document.querySelector('.crypto-modal-btn');
+  const error = document.getElementById('cryptoAmountError');
+  const input = document.getElementById('cryptoDepositAmount');
+  if (!btn) return;
+  btn.disabled = amount <= 0;
+  if (error) {
+    if (!input || input.value.trim() === '') {
+      error.style.display = 'none';
+    } else {
+      error.style.display = amount > 0 ? 'none' : 'block';
+    }
+  }
+}
+
+function openCryptoModal() {
+  document.getElementById('cryptoModal').classList.add('show');
+  setTimeout(() => {
+    const amountInput = document.getElementById('cryptoDepositAmount');
+    if (amountInput) {
+      amountInput.value = '';
+      updateDepositButtonState();
+      amountInput.focus();
+    }
+  }, 0);
+}
+
+function closeCryptoModal() {
+  document.getElementById('cryptoModal').classList.remove('show');
+}
+
+function selectCryptoOption(el, crypto) {
+  document.querySelectorAll('.crypto-option').forEach(opt => opt.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedCrypto = crypto;
+}
+
+function proceedToDeposit() {
+  const amount = getCryptoDepositAmount();
+  const error = document.getElementById('cryptoAmountError');
+  if (amount <= 0) {
+    if (error) error.style.display = 'block';
+    const amountInput = document.getElementById('cryptoDepositAmount');
+    if (amountInput) amountInput.focus();
+    return;
+  }
+
+  const url = CRYPTO_DEPOSIT_URLS[selectedCrypto];
+  if (url && url.startsWith('https://your-')) {
+    alert('Please configure your deposit page URLs in dashboard.html');
+    return;
+  }
+  window.location.href = url;
+}
+
+document.addEventListener('keydown', e => { 
+  if (e.key === 'Escape') {
+    closeCS();
+    closeCryptoModal();
+  }
+});
+</script>
+</body>
+</html>

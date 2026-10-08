@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Wire Transfer — GLOBALEASYTRANSASSET</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#F0F4FB;color:#0A0A0A;min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+:root{
+  --blue:#1E6BFF;--blue-deep:#0B3D91;--blue-accent:#4DA3FF;--blue-light:#EBF2FF;
+  --text:#0A0A0A;--sec:#6B7280;--border:#E5EAF2;--bg:#F0F4FB;--white:#FFFFFF;
+  --ok:#22C55E;--warn:#F59E0B;--danger:#EF4444;
+  --sh:0 2px 16px rgba(30,107,255,0.07);--sh2:0 8px 40px rgba(11,61,145,0.13);
+  --r:14px;--t:0.24s cubic-bezier(0.4,0,0.2,1);
+}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#f1f5f9}::-webkit-scrollbar-thumb{background:var(--blue-accent);border-radius:99px}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:50;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:rgba(255,255,255,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);box-shadow:0 1px 0 var(--border)}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo-mark{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--blue),var(--blue-deep));display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(30,107,255,0.35)}
+.nav-logo-txt{font-size:16px;font-weight:800;letter-spacing:-.4px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px}.nav-logo-txt span{color:var(--blue)}
+.nav-mid{display:flex;align-items:center;gap:4px}
+.nav-link{font-size:13px;font-weight:600;color:var(--sec);text-decoration:none;padding:6px 12px;border-radius:8px;transition:all var(--t)}
+.nav-link:hover{color:var(--blue);background:var(--blue-light)}
+.nav-link.active{color:var(--blue);background:var(--blue-light)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.nav-back{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--sec);text-decoration:none;padding:7px 14px;border-radius:8px;border:1.5px solid var(--border);transition:all var(--t)}
+.nav-back:hover{color:var(--blue);border-color:var(--blue)}
+.nav-secure{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--ok);background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);padding:6px 12px;border-radius:99px}
+
+/* ── PAGE ── */
+.page{padding-top:64px;min-height:100vh}
+.inner{max-width:1160px;margin:0 auto;padding:44px 32px;display:grid;grid-template-columns:1fr 380px;gap:24px;align-items:start}
+
+/* ── LEFT: TRANSFER FORM ── */
+
+
+/* Page header */
+.page-badge{display:inline-flex;align-items:center;gap:6px;background:var(--blue-light);padding:4px 12px;border-radius:99px;font-size:11px;font-weight:700;color:var(--blue);letter-spacing:.4px;text-transform:uppercase;margin-bottom:12px}
+.page-title{font-family:'DM Serif Display',serif;font-size:clamp(24px,3vw,36px);letter-spacing:-.5px;color:var(--text);margin-bottom:8px;line-height:1.15}
+.page-title em{color:var(--blue);font-style:normal}
+.page-sub{font-size:15px;color:var(--sec);line-height:1.7;max-width:460px;margin-bottom:28px}
+
+/* Step tabs */
+.step-tabs{display:flex;gap:0;background:var(--white);border:1.5px solid var(--border);border-radius:11px;padding:4px;margin-bottom:24px;width:fit-content}
+.step-tab{display:flex;align-items:center;gap:7px;padding:8px 18px;border-radius:8px;font-size:13px;font-weight:600;color:var(--sec);cursor:pointer;transition:all var(--t);border:none;background:none;font-family:inherit}
+.step-tab.active{background:var(--blue);color:#fff;box-shadow:0 3px 12px rgba(30,107,255,0.30)}
+.step-tab.done{color:var(--ok)}
+.step-tab-dot{width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
+.step-tab.active .step-tab-dot{background:rgba(255,255,255,0.25)}
+.step-tab.done .step-tab-dot{background:rgba(34,197,94,0.15);color:var(--ok)}
+
+/* Card */
+.form-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);padding:26px;margin-bottom:18px;position:relative;overflow:hidden;box-shadow:var(--sh)}
+.form-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--blue-accent))}
+.card-head{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700;color:var(--text);margin-bottom:20px}
+.card-head-ico{width:32px;height:32px;border-radius:8px;background:var(--blue-light);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* Fields */
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.f{margin-bottom:18px}
+.f label{display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
+.req{color:var(--danger);margin-left:2px}
+.f-hint{font-size:11px;font-weight:500;color:var(--sec)}
+.fw{position:relative}
+.f input,.f select,.f textarea{width:100%;padding:11px 14px;border-radius:10px;border:1.5px solid var(--border);font-size:14px;font-weight:500;color:var(--text);font-family:inherit;background:#fff;outline:none;transition:all var(--t);appearance:none;-webkit-appearance:none}
+.f input:focus,.f select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(30,107,255,.09)}
+.f input.with-icon{padding-left:42px}.f input.err{border-color:var(--danger)}
+.fic{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--sec);pointer-events:none}
+.ferr{font-size:12px;color:var(--danger);margin-top:4px;display:none;align-items:center;gap:4px}.ferr.on{display:flex}
+.sel{position:relative}.sel::after{content:'';position:absolute;right:12px;top:50%;transform:translateY(-50%);width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:5px solid var(--sec);pointer-events:none}
+.f textarea{resize:none;height:64px;font-size:13px}
+
+/* Amount row special */
+.amount-row{display:flex;align-items:stretch;gap:0;border:1.5px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color var(--t);background:#fff}
+.amount-row:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px rgba(30,107,255,.09)}
+.amount-currency{padding:11px 14px;background:#F6F8FC;border-right:1.5px solid var(--border);font-size:14px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px;white-space:nowrap;min-width:80px}
+.amount-input{flex:1;border:none;padding:11px 14px;font-size:18px;font-weight:800;color:var(--text);font-family:inherit;outline:none;background:transparent}
+.amount-input::placeholder{color:var(--border);font-weight:500;font-size:15px}
+.amount-usd-equiv{padding:11px 14px;font-size:12px;font-weight:600;color:var(--sec);display:flex;align-items:center;white-space:nowrap;border-left:1.5px solid var(--border)}
+
+/* Fee row */
+.fee-breakdown{background:#F6F8FC;border-radius:10px;border:1px solid var(--border);padding:14px 16px;margin-top:4px;margin-bottom:0}
+.fee-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:5px 0;border-bottom:1px dashed var(--border)}
+.fee-row:last-child{border-bottom:none;font-weight:700;color:var(--text);font-size:14px;padding-top:8px}
+.fee-label{color:var(--sec)}
+.fee-val{font-weight:600;color:var(--text)}
+.fee-val.green{color:var(--ok)}
+.fee-val.blue{color:var(--blue)}
+
+/* Transfer type pills */
+.transfer-type-row{display:flex;gap:10px;margin-bottom:4px}
+.ttype{display:flex;align-items:center;gap:7px;padding:10px 16px;border-radius:10px;border:1.5px solid var(--border);cursor:pointer;font-size:13px;font-weight:600;color:var(--sec);transition:all var(--t);background:#fff;flex:1;justify-content:center}
+.ttype:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-light)}
+.ttype.selected{border-color:var(--blue);color:var(--blue);background:var(--blue-light)}
+.ttype-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:background var(--t)}
+.ttype.selected .ttype-dot{background:var(--blue)}
+
+/* Info/warn */
+.ibox{background:var(--blue-light);border:1px solid rgba(30,107,255,.18);border-radius:10px;padding:12px 14px;display:flex;gap:8px;margin-bottom:16px}
+.ibox p{font-size:13px;color:#0B3D91;line-height:1.6}
+.ibox p strong{font-weight:700}
+.wbox{background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.22);border-radius:10px;padding:12px 14px;display:flex;gap:8px;margin-bottom:16px}
+.wbox p{font-size:13px;color:#92400e;line-height:1.6}
+
+/* Estimated row */
+.eta-row{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--blue-light);border:1px solid rgba(30,107,255,.18);border-radius:10px;margin-bottom:18px}
+.eta-item{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--blue-deep)}
+
+/* Action row */
+.action-row{display:flex;align-items:center;gap:12px;padding-top:20px;border-top:1px solid var(--border)}
+.btn-submit{flex:1;padding:14px;border-radius:11px;background:linear-gradient(135deg,var(--blue),var(--blue-deep));border:none;color:#fff;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;box-shadow:0 5px 22px rgba(30,107,255,.32);transition:all var(--t);display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-submit:hover{transform:translateY(-2px);box-shadow:0 9px 32px rgba(30,107,255,.42)}
+.btn-submit.ld .btxt{display:none}.btn-submit.ld .spin{display:block}
+.buy-panel{background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:18px;margin-bottom:18px;box-shadow:var(--sh)}
+.buy-panel-head{font-size:14px;font-weight:700;color:var(--text);margin-bottom:10px}
+.buy-panel-note{font-size:13px;color:var(--sec);margin-bottom:16px;line-height:1.7}
+.buy-panel-price{font-size:13px;color:var(--text);margin-bottom:16px}
+.buy-network-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.crypto-option{padding:12px 14px;border-radius:12px;border:1.5px solid var(--border);background:#fff;color:var(--text);font-weight:700;cursor:pointer;transition:all var(--t);min-width:110px;text-align:center}
+.crypto-option.selected{border-color:var(--blue);background:var(--blue-light);color:var(--blue)}
+.buy-wallet{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;margin-bottom:0}
+.buy-wallet input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:12px;background:#F8FAFC;color:var(--text);font-size:13px}
+.buy-wallet button{padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);background:#fff;color:var(--text);cursor:pointer;transition:all var(--t)}
+.buy-wallet button:hover{border-color:var(--blue);color:var(--blue)}
+.buy-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:300}
+.buy-modal-overlay.show{display:flex}
+.buy-modal{background:#fff;border-radius:24px;padding:28px;max-width:440px;width:100%;box-shadow:0 24px 80px rgba(11,61,145,.18)}
+.buy-modal h2{font-size:20px;margin-bottom:14px;color:var(--text)}
+.buy-modal p{font-size:13px;color:var(--sec);line-height:1.7;margin-bottom:18px}
+.buy-modal .modal-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.buy-modal .modal-row label{font-size:13px;font-weight:700;color:var(--text)}
+.buy-modal .modal-row .modal-value{font-size:14px;font-weight:700;color:var(--blue)}
+.buy-modal .modal-actions{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:10px;margin-top:18px}
+.buy-modal .modal-btn{padding:12px 16px;border-radius:12px;border:none;cursor:pointer;font-weight:700;font-family:inherit}
+.buy-modal .modal-btn.primary{background:linear-gradient(135deg,var(--blue),var(--blue-deep));color:#fff}
+.buy-modal .modal-btn.secondary{background:#fff;border:1.5px solid var(--border);color:var(--text)}
+.spin{display:none;width:18px;height:18px;border:2px solid rgba(255,255,255,.25);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.btn-prev{padding:13px 20px;border-radius:11px;background:#fff;border:1.5px solid var(--border);color:var(--text);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:all var(--t);display:flex;align-items:center;gap:6px}
+.btn-prev:hover{border-color:var(--blue);color:var(--blue)}
+.sec-strip{display:flex;align-items:center;gap:16px;margin-top:12px;flex-wrap:wrap}
+.sc{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--sec)}
+
+/* STEP PANELS */
+.sp{display:none}.sp.active{display:block;animation:si .32s cubic-bezier(.4,0,.2,1)}
+@keyframes si{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
+
+/* ── RIGHT COL ── */
+.right-col{display:flex;flex-direction:column;gap:18px;position:sticky;top:80px}
+
+/* SUMMARY CARD */
+.summary-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
+.sc-header{background:linear-gradient(135deg,var(--blue-deep),var(--blue));padding:20px;position:relative;overflow:hidden}
+.sc-header::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.12) 0%,transparent 65%)}
+.sc-header-label{font-size:11px;font-weight:700;color:rgba(255,255,255,.6);letter-spacing:.4px;text-transform:uppercase;margin-bottom:6px;position:relative;z-index:1}
+.sc-header-amount{font-size:32px;font-weight:800;color:#fff;letter-spacing:-.8px;position:relative;z-index:1}
+.sc-header-sub{font-size:12px;color:rgba(255,255,255,.55);margin-top:4px;position:relative;z-index:1}
+.sc-body{padding:18px}
+.wire-card{position:relative;overflow:hidden;background:radial-gradient(circle at top left, rgba(255,255,255,.14), transparent 32%),linear-gradient(135deg,#151a4e,#0f4af7 52%,#1c51ff 100%);border:1px solid rgba(255,255,255,.16);border-radius:28px;padding:24px;box-shadow:0 36px 80px rgba(15,72,247,.16);min-height:190px;display:flex;flex-direction:column;gap:18px;color:#fff}
+.wire-card::before{content:'';position:absolute;right:-30px;top:-30px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.09);pointer-events:none}
+.wire-card::after{content:'';position:absolute;left:-20px;bottom:-20px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.06);pointer-events:none}
+.wire-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;position:relative;z-index:1}
+.wire-card-logo{width:52px;height:52px;border-radius:16px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:#fff;backdrop-filter:blur(10px);}
+.wire-card-brand{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.32em;color:rgba(255,255,255,.75);margin-bottom:8px}
+.wire-card-chip{width:54px;height:40px;border-radius:16px;background:linear-gradient(135deg,rgba(255,255,255,.9),rgba(255,255,255,.22));box-shadow:0 14px 36px rgba(0,0,0,.14);}
+.wire-card-number{font-size:22px;font-weight:800;color:#fff;letter-spacing:2.4px;font-family:monospace;line-height:1.4;position:relative;z-index:1}
+.wire-card-holder{font-size:13px;font-weight:700;color:rgba(255,255,255,.92);text-transform:uppercase;letter-spacing:.04em;position:relative;z-index:1}
+.wire-card-meta{display:flex;justify-content:space-between;align-items:center;gap:12px;position:relative;z-index:1}
+.wire-card-exp,.wire-card-type{font-size:12px;color:rgba(255,255,255,.75);font-weight:600}
+.wire-card-footer{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;position:relative;z-index:1}
+.wire-card-status{padding:7px 14px;border-radius:999px;font-size:11px;font-weight:700;text-transform:uppercase;display:inline-flex;align-items:center;gap:8px;letter-spacing:.04em}
+.wire-card-status.active{background:rgba(34,197,94,.18);color:var(--ok);border:1px solid rgba(34,197,94,.28)}
+.wire-card-status.pending{background:rgba(245,158,11,.18);color:var(--warn);border:1px solid rgba(245,158,11,.28)}
+.wire-card-action{padding:12px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.32);background:rgba(255,255,255,.12);color:#fff;font-weight:700;cursor:pointer;transition:all .2s ease}
+.wire-card-action:hover{background:rgba(255,255,255,.18);transform:translateY(-1px)}
+.wire-card-empty-state{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.wire-card-empty-state .wire-card-empty{color:rgba(255,255,255,.9);font-size:13px;line-height:1.8}
+.wire-card-empty-state .wire-card-action{width:100%;justify-content:center}
+.wire-card-empty{font-size:13px;line-height:1.8}
+.wire-card .btn-submit{width:100%;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.28);color:#fff;}
+.wire-card .btn-submit:hover{background:rgba(255,255,255,.18)}
+.sc-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
+.sc-row:last-child{border-bottom:none}
+.sc-label{color:var(--sec);font-weight:500}
+.sc-val{font-weight:700;color:var(--text)}
+.sc-val.blue{color:var(--blue)}.sc-val.ok{color:var(--ok)}.sc-val.warn{color:var(--warn)}
+.eta-badge{background:rgba(34,197,94,.10);border:1px solid rgba(34,197,94,.20);color:var(--ok);padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700}
+
+/* RECENT TRANSFERS */
+.recent-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);padding:18px;box-shadow:var(--sh)}
+.rc-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.rc-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
+.rc-item:last-child{border-bottom:none}
+.rc-ico{width:34px;height:34px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px}
+.rc-name{font-size:13px;font-weight:700;color:var(--text)}
+.rc-bank{font-size:11px;color:var(--sec);margin-top:1px}
+.rc-amount{font-size:13px;font-weight:700;color:var(--text);text-align:right}
+.rc-date{font-size:10px;color:var(--sec);margin-top:1px;text-align:right}
+.rc-status{font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;margin-top:2px}
+.rc-status.ok{background:rgba(34,197,94,.10);color:var(--ok)}
+.rc-status.pend{background:rgba(245,158,11,.10);color:var(--warn)}
+
+/* LIMITS CARD */
+.limits-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);padding:18px;box-shadow:var(--sh)}
+.lc-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px}
+.lc-item{margin-bottom:12px}
+.lc-item:last-child{margin-bottom:0}
+.lc-top{display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:var(--text);margin-bottom:5px}
+.lc-bar{height:5px;border-radius:99px;background:var(--border);overflow:hidden}
+.lc-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--blue),var(--blue-accent));transition:width .5s ease}
+.lc-fill.warn{background:linear-gradient(90deg,var(--warn),#f59e0b99)}
+.lc-sub{font-size:11px;color:var(--sec);margin-top:3px}
+
+/* ── SUCCESS SCREEN ── */
+.success-screen{display:none;text-align:center;padding:40px 20px}
+.success-screen.show{display:block;animation:si .4s ease}
+.succ-ico{width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,#22C55E,#16a34a);display:flex;align-items:center;justify-content:center;margin:0 auto 22px;box-shadow:0 10px 36px rgba(34,197,94,.28);animation:pop .6s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+.succ-title{font-family:'DM Serif Display',serif;font-size:28px;letter-spacing:-.4px;color:var(--text);margin-bottom:8px}
+.succ-sub{font-size:15px;color:var(--sec);line-height:1.7;margin-bottom:24px}
+.succ-ref{background:var(--blue-light);border:1px solid rgba(30,107,255,.20);border-radius:10px;padding:14px 18px;font-size:13px;font-weight:600;color:var(--blue-deep);margin-bottom:24px;display:inline-block}
+.succ-ref strong{color:var(--blue);font-size:16px;display:block;margin-top:3px;font-family:monospace}
+.succ-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-new{background:linear-gradient(135deg,var(--blue),var(--blue-deep));color:#fff;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:700;border:none;cursor:pointer;font-family:inherit;box-shadow:0 5px 20px rgba(30,107,255,.30);transition:all var(--t)}
+.btn-new:hover{transform:translateY(-2px)}
+.btn-dash{background:#fff;color:var(--text);padding:11px 20px;border-radius:10px;font-size:14px;font-weight:600;border:1.5px solid var(--border);cursor:pointer;font-family:inherit;transition:all var(--t);text-decoration:none;display:inline-flex;align-items:center;gap:7px}
+.btn-dash:hover{border-color:var(--blue);color:var(--blue)}
+
+/* ── PIN MODAL ── */
+.pin-overlay{position:fixed;inset:0;background:rgba(0,0,0,.50);z-index:200;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
+.pin-overlay.show{display:flex;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.pin-modal{background:#fff;border-radius:20px;padding:32px;max-width:360px;width:90%;text-align:center;box-shadow:0 20px 80px rgba(11,61,145,.20);animation:pop .35s cubic-bezier(.34,1.56,.64,1)}
+.pin-modal-ico{width:60px;height:60px;border-radius:50%;background:var(--blue-light);display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.pin-modal-title{font-family:'DM Serif Display',serif;font-size:22px;color:var(--text);margin-bottom:6px}
+.pin-modal-sub{font-size:13px;color:var(--sec);line-height:1.6;margin-bottom:20px}
+.pin-dots-row{display:flex;gap:10px;justify-content:center;margin-bottom:20px}
+.pin-dot-inp{width:50px;height:56px;border-radius:10px;border:1.5px solid var(--border);font-size:22px;font-weight:800;text-align:center;font-family:inherit;outline:none;transition:all var(--t)}
+.pin-dot-inp:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(30,107,255,.10)}
+.pin-dot-inp.on{border-color:var(--blue);background:var(--blue-light)}
+.pin-confirm-btn{width:100%;padding:13px;border-radius:10px;background:linear-gradient(135deg,var(--blue),var(--blue-deep));border:none;color:#fff;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;box-shadow:0 5px 20px rgba(30,107,255,.30);transition:all var(--t);margin-bottom:10px}
+.pin-confirm-btn:hover{transform:translateY(-1px)}
+.pin-cancel{font-size:13px;color:var(--sec);cursor:pointer;background:none;border:none;font-family:inherit;font-weight:600}
+.pin-cancel:hover{color:var(--danger)}
+.pin-confirm-btn.ld .ptxt{display:none}.pin-confirm-btn.ld .pspin{display:block}
+.pspin{display:none;width:18px;height:18px;border:2px solid rgba(255,255,255,.25);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;margin:0 auto}
+
+/* TOAST */
+.toast{position:fixed;bottom:28px;right:28px;z-index:999;background:var(--text);border-radius:12px;padding:13px 18px;display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:#fff;box-shadow:0 8px 32px rgba(0,0,0,.25);transform:translateY(80px);opacity:0;transition:all .4s cubic-bezier(.34,1.56,.64,1)}
+.toast.show{transform:translateY(0);opacity:1}
+
+@media(max-width:960px){.inner{grid-template-columns:1fr}.right-col{position:static}}
+@media(max-width:580px){.r2{grid-template-columns:1fr}.inner{padding:28px 16px}.transfer-type-row{flex-direction:column}.nav-mid{display:none}.nav-logo-txt{max-width:120px;font-size:14px}.nav{padding:0 16px}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="home" class="nav-logo">
+    <div class="nav-logo-mark">
+      <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M9 2L16 6V12L9 16L2 12V6L9 2Z" stroke="white" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 6L12 8V12L9 14L6 12V8L9 6Z" fill="white" opacity="0.7"/></svg>
+    </div>
+    <span class="nav-logo-txt">GLOBAL<span>EASYTRANSASSET</span></span>
+  </a>
+  <div class="nav-mid">
+    <a href="dashboard" class="nav-link">Dashboard</a>
+    <a href="virtual-card" class="nav-link">Virtual Card</a>
+    <a href="wire-transfer" class="nav-link active">Wire Transfer</a>
+  </div>
+  <div class="nav-right">
+    <a href="dashboard" class="nav-back"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Dashboard</a>
+    <div class="nav-secure"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>SSL Encrypted</div>
+  </div>
+</nav>
+
+<div class="page">
+<div class="inner">
+
+  <!-- ═══════════════════════════
+       LEFT COL — FORM
+  ═══════════════════════════ -->
+  <div class="form-col">
+    <div class="page-badge"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Wire Transfer</div>
+    <h1 class="page-title">Send Money <em>Anywhere in the World</em></h1>
+    <p class="page-sub">Fast, secure international wire transfers to 180+ countries. Real exchange rates, zero hidden fees.</p>
+
+    <!-- Step tabs -->
+    <div class="step-tabs" id="stepTabs">
+      <button class="step-tab active" id="tab1">
+        <div class="step-tab-dot">1</div>Details
+      </button>
+      <button class="step-tab" id="tab2">
+        <div class="step-tab-dot">2</div>Amount
+      </button>
+      <button class="step-tab" id="tab3">
+        <div class="step-tab-dot">3</div>Confirm
+      </button>
+    </div>
+
+    <!-- ══════════════ STEP 1 — RECIPIENT ══════════════ -->
+    <div class="sp active" id="sp1">
+
+      <!-- Recipient Details -->
+      <div class="form-card">
+        <div class="card-head"><div class="card-head-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1E6BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>Wire Transfer Details</div>
+
+        <div class="f">
+          <label>Account Number <span class="req">*</span></label>
+          <input type="text" id="accountNumber" placeholder="Enter recipient account number" />
+          <div class="ferr" id="e_accountNumber">Enter the recipient account number</div>
+        </div>
+
+        <div class="f">
+          <label>Country <span class="req">*</span></label>
+          <select id="countrySelect">
+            <option value="" hidden>Select country</option>
+            <option value="Afghanistan">Afghanistan</option>
+            <option value="Albania">Albania</option>
+            <option value="Algeria">Algeria</option>
+            <option value="Andorra">Andorra</option>
+            <option value="Angola">Angola</option>
+            <option value="Antigua and Barbuda">Antigua and Barbuda</option>
+            <option value="Argentina">Argentina</option>
+            <option value="Armenia">Armenia</option>
+            <option value="Australia">Australia</option>
+            <option value="Austria">Austria</option>
+            <option value="Azerbaijan">Azerbaijan</option>
+            <option value="Bahamas">Bahamas</option>
+            <option value="Bahrain">Bahrain</option>
+            <option value="Bangladesh">Bangladesh</option>
+            <option value="Barbados">Barbados</option>
+            <option value="Belarus">Belarus</option>
+            <option value="Belgium">Belgium</option>
+            <option value="Belize">Belize</option>
+            <option value="Benin">Benin</option>
+            <option value="Bhutan">Bhutan</option>
+            <option value="Bolivia">Bolivia</option>
+            <option value="Bosnia and Herzegovina">Bosnia and Herzegovina</option>
+            <option value="Botswana">Botswana</option>
+            <option value="Brazil">Brazil</option>
+            <option value="Brunei">Brunei</option>
+            <option value="Bulgaria">Bulgaria</option>
+            <option value="Burkina Faso">Burkina Faso</option>
+            <option value="Burundi">Burundi</option>
+            <option value="Cabo Verde">Cabo Verde</option>
+            <option value="Cambodia">Cambodia</option>
+            <option value="Cameroon">Cameroon</option>
+            <option value="Canada">Canada</option>
+            <option value="Central African Republic">Central African Republic</option>
+            <option value="Chad">Chad</option>
+            <option value="Chile">Chile</option>
+            <option value="China">China</option>
+            <option value="Colombia">Colombia</option>
+            <option value="Comoros">Comoros</option>
+            <option value="Costa Rica">Costa Rica</option>
+            <option value="Côte d'Ivoire">Côte d'Ivoire</option>
+            <option value="Croatia">Croatia</option>
+            <option value="Cuba">Cuba</option>
+            <option value="Cyprus">Cyprus</option>
+            <option value="Czechia">Czechia</option>
+            <option value="Denmark">Denmark</option>
+            <option value="Djibouti">Djibouti</option>
+            <option value="Dominica">Dominica</option>
+            <option value="Dominican Republic">Dominican Republic</option>
+            <option value="Ecuador">Ecuador</option>
+            <option value="Egypt">Egypt</option>
+            <option value="El Salvador">El Salvador</option>
+            <option value="Equatorial Guinea">Equatorial Guinea</option>
+            <option value="Eritrea">Eritrea</option>
+            <option value="Estonia">Estonia</option>
+            <option value="Eswatini">Eswatini</option>
+            <option value="Ethiopia">Ethiopia</option>
+            <option value="Fiji">Fiji</option>
+            <option value="Finland">Finland</option>
+            <option value="France">France</option>
+            <option value="Gabon">Gabon</option>
+            <option value="Gambia">Gambia</option>
+            <option value="Georgia">Georgia</option>
+            <option value="Germany">Germany</option>
+            <option value="Ghana">Ghana</option>
+            <option value="Greece">Greece</option>
+            <option value="Grenada">Grenada</option>
+            <option value="Guatemala">Guatemala</option>
+            <option value="Guinea">Guinea</option>
+            <option value="Guinea-Bissau">Guinea-Bissau</option>
+            <option value="Guyana">Guyana</option>
+            <option value="Haiti">Haiti</option>
+            <option value="Honduras">Honduras</option>
+            <option value="Hungary">Hungary</option>
+            <option value="Iceland">Iceland</option>
+            <option value="India">India</option>
+            <option value="Indonesia">Indonesia</option>
+            <option value="Iran">Iran</option>
+            <option value="Iraq">Iraq</option>
+            <option value="Ireland">Ireland</option>
+            <option value="Israel">Israel</option>
+            <option value="Italy">Italy</option>
+            <option value="Jamaica">Jamaica</option>
+            <option value="Japan">Japan</option>
+            <option value="Jordan">Jordan</option>
+            <option value="Kazakhstan">Kazakhstan</option>
+            <option value="Kenya">Kenya</option>
+            <option value="Kiribati">Kiribati</option>
+            <option value="Kosovo">Kosovo</option>
+            <option value="Kuwait">Kuwait</option>
+            <option value="Kyrgyzstan">Kyrgyzstan</option>
+            <option value="Laos">Laos</option>
+            <option value="Latvia">Latvia</option>
+            <option value="Lebanon">Lebanon</option>
+            <option value="Lesotho">Lesotho</option>
+            <option value="Liberia">Liberia</option>
+            <option value="Libya">Libya</option>
+            <option value="Liechtenstein">Liechtenstein</option>
+            <option value="Lithuania">Lithuania</option>
+            <option value="Luxembourg">Luxembourg</option>
+            <option value="Madagascar">Madagascar</option>
+            <option value="Malawi">Malawi</option>
+            <option value="Malaysia">Malaysia</option>
+            <option value="Maldives">Maldives</option>
+            <option value="Mali">Mali</option>
+            <option value="Malta">Malta</option>
+            <option value="Marshall Islands">Marshall Islands</option>
+            <option value="Mauritania">Mauritania</option>
+            <option value="Mauritius">Mauritius</option>
+            <option value="Mexico">Mexico</option>
+            <option value="Micronesia">Micronesia</option>
+            <option value="Moldova">Moldova</option>
+            <option value="Monaco">Monaco</option>
+            <option value="Mongolia">Mongolia</option>
+            <option value="Montenegro">Montenegro</option>
+            <option value="Morocco">Morocco</option>
+            <option value="Mozambique">Mozambique</option>
+            <option value="Myanmar">Myanmar</option>
+            <option value="Namibia">Namibia</option>
+            <option value="Nauru">Nauru</option>
+            <option value="Nepal">Nepal</option>
+            <option value="Netherlands">Netherlands</option>
+            <option value="New Zealand">New Zealand</option>
+            <option value="Nicaragua">Nicaragua</option>
+            <option value="Niger">Niger</option>
+            <option value="Nigeria">Nigeria</option>
+            <option value="North Macedonia">North Macedonia</option>
+            <option value="Norway">Norway</option>
+            <option value="Oman">Oman</option>
+            <option value="Pakistan">Pakistan</option>
+            <option value="Palau">Palau</option>
+            <option value="Panama">Panama</option>
+            <option value="Papua New Guinea">Papua New Guinea</option>
+            <option value="Paraguay">Paraguay</option>
+            <option value="Peru">Peru</option>
+            <option value="Philippines">Philippines</option>
+            <option value="Poland">Poland</option>
+            <option value="Portugal">Portugal</option>
+            <option value="Qatar">Qatar</option>
+            <option value="Romania">Romania</option>
+            <option value="Russia">Russia</option>
+            <option value="Rwanda">Rwanda</option>
+            <option value="Saint Kitts and Nevis">Saint Kitts and Nevis</option>
+            <option value="Saint Lucia">Saint Lucia</option>
+            <option value="Saint Vincent and the Grenadines">Saint Vincent and the Grenadines</option>
+            <option value="Samoa">Samoa</option>
+            <option value="San Marino">San Marino</option>
+            <option value="Sao Tome and Principe">Sao Tome and Principe</option>
+            <option value="Saudi Arabia">Saudi Arabia</option>
+            <option value="Senegal">Senegal</option>
+            <option value="Serbia">Serbia</option>
+            <option value="Seychelles">Seychelles</option>
+            <option value="Sierra Leone">Sierra Leone</option>
+            <option value="Singapore">Singapore</option>
+            <option value="Slovakia">Slovakia</option>
+            <option value="Slovenia">Slovenia</option>
+            <option value="Solomon Islands">Solomon Islands</option>
+            <option value="Somalia">Somalia</option>
+            <option value="South Africa">South Africa</option>
+            <option value="South Korea">South Korea</option>
+            <option value="South Sudan">South Sudan</option>
+            <option value="Spain">Spain</option>
+            <option value="Sri Lanka">Sri Lanka</option>
+            <option value="Sudan">Sudan</option>
+            <option value="Suriname">Suriname</option>
+            <option value="Sweden">Sweden</option>
+            <option value="Switzerland">Switzerland</option>
+            <option value="Syria">Syria</option>
+            <option value="Taiwan">Taiwan</option>
+            <option value="Tajikistan">Tajikistan</option>
+            <option value="Tanzania">Tanzania</option>
+            <option value="Thailand">Thailand</option>
+            <option value="Timor-Leste">Timor-Leste</option>
+            <option value="Togo">Togo</option>
+            <option value="Tonga">Tonga</option>
+            <option value="Trinidad and Tobago">Trinidad and Tobago</option>
+            <option value="Tunisia">Tunisia</option>
+            <option value="Turkey">Turkey</option>
+            <option value="Turkmenistan">Turkmenistan</option>
+            <option value="Tuvalu">Tuvalu</option>
+            <option value="Uganda">Uganda</option>
+            <option value="Ukraine">Ukraine</option>
+            <option value="United Arab Emirates">United Arab Emirates</option>
+            <option value="United Kingdom">United Kingdom</option>
+            <option value="United States">United States</option>
+            <option value="Uruguay">Uruguay</option>
+            <option value="Uzbekistan">Uzbekistan</option>
+            <option value="Vanuatu">Vanuatu</option>
+            <option value="Vatican City">Vatican City</option>
+            <option value="Venezuela">Venezuela</option>
+            <option value="Vietnam">Vietnam</option>
+            <option value="Yemen">Yemen</option>
+            <option value="Zambia">Zambia</option>
+            <option value="Zimbabwe">Zimbabwe</option>
+          </select>
+          <div class="ferr" id="e_country">Select a country</div>
+        </div>
+
+        <div class="f">
+          <label>Account Type <span class="req">*</span></label>
+          <select id="accountType">
+            <option value="" hidden>Select account type</option>
+            <option value="Savings">Savings</option>
+            <option value="Checking">Checking</option>
+            <option value="Current">Current</option>
+            <option value="Business">Business</option>
+            <option value="Corporate">Corporate</option>
+            <option value="Other">Other</option>
+          </select>
+          <div class="ferr" id="e_accountType">Select an account type</div>
+        </div>
+
+        <div class="f">
+          <label>Bank Name <span class="req">*</span></label>
+          <input type="text" id="bankName" placeholder="Enter bank name" />
+          <div class="ferr" id="e_bankName">Enter the bank name</div>
+        </div>
+
+        <div class="f">
+          <label>Amount <span class="req">*</span></label>
+          <div class="amount-row">
+            <div class="amount-currency">
+              <select id="fromCurr" onchange="updateConversion()" style="border:none;background:transparent;font-size:13px;font-weight:700;color:var(--text);outline:none;cursor:pointer;appearance:none;-webkit-appearance:none;padding-right:4px">
+              </select>
+            </div>
+            <input type="number" class="amount-input" id="sendAmount" placeholder="0.00" min="1" oninput="updateConversion()"/>
+            <div class="amount-usd-equiv" id="fromFlag">🇺🇸</div>
+          </div>
+          <div id="amountPolicyWarning" style="margin-top:12px;padding:12px 14px;background:rgba(219,234,254,.95);border:1px solid rgba(14,165,233,.25);border-radius:12px;color:#0c4a6e;font-size:13px;line-height:1.6">
+            Minimum $100. Maximum $1,000,000,000 per transfer. Daily max $1,000,000,000 with up to 10 transfers/day, monthly max $1,000,000,000 with up to 50 transfers/month.
+          </div>
+          <div class="ferr" id="e_amt" style="margin-top:6px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Enter an amount greater than $1</div>
+        </div>
+
+        <div class="f" style="margin-bottom:0">
+          <label>Narration <span class="f-hint">(optional)</span></label>
+          <textarea id="r_note" placeholder="Payment reference..."></textarea>
+        </div>
+
+        <div class="f" style="margin-bottom:0">
+          <label>Purpose <span class="req">*</span></label>
+          <select id="purposeSelect">
+            <option value="" hidden>Select purpose</option>
+            <option value="Personal">Personal</option>
+            <option value="Business">Business</option>
+            <option value="Salary">Salary</option>
+            <option value="Invoice Payment">Invoice Payment</option>
+            <option value="Investment">Investment</option>
+            <option value="Loan Repayment">Loan Repayment</option>
+            <option value="Gift">Gift</option>
+            <option value="Tuition">Tuition</option>
+            <option value="Other">Other</option>
+          </select>
+          <div class="ferr" id="e_purpose">Select a purpose for this transfer</div>
+        </div>
+      </div>
+
+      <div id="virtualCardWarning" style="display:none;margin-bottom:16px;padding:14px 16px;border:1px solid rgba(220,38,38,.2);background:rgba(254,226,226,.85);border-radius:12px;color:#991b1b;font-size:14px;line-height:1.5">
+        A virtual card is required before wire transfer. Please visit the Virtual Card page to buy or review your card.
+      </div>
+
+      <div id="transferPolicyWarning" style="margin-bottom:16px;padding:14px 16px;border:1px solid rgba(14,165,233,.2);background:rgba(219,234,254,.85);border-radius:12px;color:#0c4a6e;font-size:14px;line-height:1.5">
+        <strong>Wire transfer rules:</strong> Minimum $100, maximum $1,000,000,000 per transfer; daily amount max $1,000,000,000 with up to 10 transfers; monthly amount max $1,000,000,000 with up to 50 transfers.
+      </div>
+
+      <div id="virtualCardPurchasePanel" class="buy-panel" style="display:none;">
+        <div class="buy-panel-head">No virtual card detected</div>
+        <div class="buy-panel-note">A virtual card is required for wire transfers. Visit your virtual card dashboard to buy one or review your existing card.</div>
+        <div class="buy-panel-price">Ready when you are</div>
+        <div class="action-row" style="margin-top:18px;">
+          <button class="btn-submit" type="button" onclick="redirectToVirtualCard()">Go to Virtual Card</button>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <button class="btn-submit" id="btn1" onclick="confirmTransfer()">
+          <span class="btxt">Send</span>
+          <svg class="btxt" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <div class="spin"></div>
+        </button>
+      </div>
+      <div class="sec-strip">
+        <div class="sc"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--ok)" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>AES-256 encrypted</div>
+        <div class="sc"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--ok)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Secure transfer</div>
+      </div>
+    </div>
+
+    <!-- ══════════════ STEP 2 — AMOUNT ══════════════ -->
+    <div class="sp" id="sp2">
+      <div class="form-card">
+        <div class="card-head"><div class="card-head-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1E6BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>Send Amount</div>
+
+        <div class="f">
+          <label>You send</label>
+          <div class="amount-row">
+            <div class="amount-currency">
+              <select id="fromCurr" onchange="updateConversion()" style="border:none;background:transparent;font-size:13px;font-weight:700;color:var(--text);outline:none;cursor:pointer;appearance:none;-webkit-appearance:none;padding-right:4px">
+              </select>
+            </div>
+            <input type="number" class="amount-input" id="sendAmount" placeholder="0.00" min="1" oninput="updateConversion()"/>
+            <div class="amount-usd-equiv" id="fromFlag">🇺🇸</div>
+          </div>
+          <div class="ferr" id="e_amt" style="margin-top:6px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Enter an amount greater than $1</div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+          <div style="flex:1;height:1px;background:var(--border)"></div>
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--blue-light);border:1.5px solid rgba(30,107,255,.25);display:flex;align-items:center;justify-content:center">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+          </div>
+          <div style="flex:1;height:1px;background:var(--border)"></div>
+        </div>
+
+        <div class="f" style="margin-bottom:4px">
+          <label>Recipient gets <span class="f-hint" id="rateLabel">1 USD = 1.00 EUR</span></label>
+          <div class="amount-row">
+            <div class="amount-currency">
+              <select id="toCurr" onchange="updateConversion()" style="border:none;background:transparent;font-size:13px;font-weight:700;color:var(--text);outline:none;cursor:pointer;appearance:none;-webkit-appearance:none;padding-right:4px">
+              </select>
+            </div>
+            <input type="number" class="amount-input" id="recvAmount" placeholder="0.00" readonly style="background:#F6F8FC;color:var(--sec)"/>
+            <div class="amount-usd-equiv" id="toFlag">🇪🇺</div>
+          </div>
+        </div>
+
+        <!-- Fee breakdown -->
+        <div class="fee-breakdown" id="feeBreak" style="display:none">
+          <div class="fee-row"><span class="fee-label">Transfer amount</span><span class="fee-val" id="fb_send">—</span></div>
+          <div class="fee-row"><span class="fee-label">Transfer fee</span><span class="fee-val green">$0.00 FREE</span></div>
+          <div class="fee-row"><span class="fee-label">Exchange rate</span><span class="fee-val blue" id="fb_rate">—</span></div>
+          <div class="fee-row"><span class="fee-label">Recipient gets</span><span class="fee-val" id="fb_recv">—</span></div>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="f" style="margin-top:20px">
+          <label>Payment Method</label>
+        </div>
+
+      <!-- ETA -->
+      <div class="eta-row" id="etaRow" style="display:none">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <div class="eta-item">Estimated arrival: <strong id="etaText" style="color:var(--blue-deep)">1–2 business days</strong></div>
+        <div style="margin-left:auto"><span class="eta-badge" id="etaBadge">SWIFT</span></div>
+      </div>
+
+      <div class="ibox">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1E6BFF" stroke-width="2" style="flex-shrink:0;margin-top:2px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <p>GLOBALEASYTRANSASSET charges <strong>$0 in transfer fees</strong>. We use the real mid-market exchange rate. No markup, no hidden charges.</p>
+      </div>
+
+      <div class="action-row">
+        <button class="btn-prev" onclick="goStep(1)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back</button>
+        <button class="btn-submit" id="btn2" onclick="step2Next()">
+          <span class="btxt">Review Transfer</span>
+          <svg class="btxt" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <div class="spin"></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- ══════════════ STEP 3 — REVIEW ══════════════ -->
+    <div class="sp" id="sp3">
+      <div class="form-card">
+        <div class="card-head"><div class="card-head-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1E6BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>Review Transfer Details</div>
+
+        <div class="wbox"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" style="flex-shrink:0;margin-top:2px"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><p>Please verify all details carefully. <strong>Transfers cannot be reversed</strong> once confirmed. Ensure the account number and SWIFT code are correct.</p></div>
+
+        <!-- Review rows -->
+        <div id="reviewRows" style="display:flex;flex-direction:column;gap:0"></div>
+      </div>
+
+      <div class="action-row">
+        <button class="btn-prev" onclick="goStep(2)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Edit</button>
+        <button class="btn-submit" id="btn3" onclick="confirmTransfer()">
+          <span class="btxt">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Confirm &amp; Send
+          </span>
+          <div class="spin"></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- ══════════════ SUCCESS ══════════════ -->
+    <div class="success-screen" id="successScreen">
+      <div class="succ-ico"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <h2 class="succ-title">Transfer Sent!</h2>
+      <p class="succ-sub">Your wire transfer has been submitted and is being processed. The recipient will receive funds within the estimated timeframe.</p>
+      <div class="succ-ref">Transaction Reference<strong id="txRef">GA-TXN-xxxxxxxx</strong></div>
+      <div class="succ-btns">
+        <button class="btn-new" onclick="resetForm()">Send Another</button>
+        <a href="dashboard" class="btn-dash"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════
+       RIGHT COL
+  ═══════════════════════════ -->
+  <div class="right-col">
+
+    <!-- Transfer Summary -->
+    <div class="summary-card">
+      <div class="sc-header">
+        <div class="sc-header-label">You're sending</div>
+        <div class="sc-header-amount" id="sumAmount">$0.00</div>
+        <div class="sc-header-sub" id="sumRecv">Recipient gets — —</div>
+      </div>
+      <div class="sc-body">
+        <div class="sc-row"><span class="sc-label">To</span><span class="sc-val" id="sumTo">—</span></div>
+        <div class="sc-row"><span class="sc-label">Country</span><span class="sc-val" id="sumCountry">—</span></div>
+        <div class="sc-row"><span class="sc-label">Method</span><span class="sc-val blue" id="sumMethod">Bank Transfer</span></div>
+        <div class="sc-row"><span class="sc-label">Fee</span><span class="sc-val ok">FREE</span></div>
+        <div class="sc-row"><span class="sc-label">Exchange rate</span><span class="sc-val blue" id="sumRate">—</span></div>
+        <div class="sc-row"><span class="sc-label">Delivery</span><span class="eta-badge" id="sumEta">—</span></div>
+      </div>
+    </div>
+
+    <!-- Virtual Card Preview -->
+    <div class="summary-card">
+      <div class="sc-header">
+        <div class="sc-header-label">Your Virtual Card</div>
+        <div class="sc-header-amount" id="wireCardStatus">No Card</div>
+        <div class="sc-header-sub" id="wireCardSub">Buy a virtual card to start wire transfers.</div>
+      </div>
+      <div class="sc-body" id="wireCardPreview">
+        <div class="wire-card-empty">Loading card details...</div>
+      </div>
+    </div>
+
+    <!-- Recent Transfers -->
+    <div class="recent-card">
+      <div class="rc-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Recent Transfers</div>
+      <div id="recentList"></div>
+    </div>
+
+    <!-- Limits -->
+    <div class="limits-card">
+      <div class="lc-title">Transfer Limits</div>
+      <div class="lc-item">
+        <div class="lc-top"><span>Daily limit</span><span id="dailyLimit">Loading...</span></div>
+        <div class="lc-bar"><div class="lc-fill" id="dailyFill" style="width:0%"></div></div>
+        <div class="lc-sub" id="dailySub">Loading...</div>
+      </div>
+      <div class="lc-item">
+        <div class="lc-top"><span>Monthly limit</span><span id="monthlyLimit">Loading...</span></div>
+        <div class="lc-bar"><div class="lc-fill warn" id="monthlyFill" style="width:0%"></div></div>
+        <div class="lc-sub" id="monthlySub">Loading...</div>
+      </div>
+      <div class="lc-item">
+        <div class="lc-top"><span>Daily transfer count</span><span id="dailyCount">Loading...</span></div>
+        <div class="lc-bar"><div class="lc-fill" id="dailyCountFill" style="width:0%"></div></div>
+        <div class="lc-sub" id="dailyCountSub">Loading...</div>
+      </div>
+      <div class="lc-item">
+        <div class="lc-top"><span>Monthly transfer count</span><span id="monthlyCount">Loading...</span></div>
+        <div class="lc-bar"><div class="lc-fill" id="monthlyCountFill" style="width:0%"></div></div>
+        <div class="lc-sub" id="monthlyCountSub">Loading...</div>
+      </div>
+      <div class="lc-item">
+        <div class="lc-top"><span>Per transaction</span><span id="perTransLimit">Loading...</span></div>
+        <div class="lc-bar"><div class="lc-fill" style="width:0%"></div></div>
+        <div class="lc-sub">No limit hit</div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</div>
+
+<!-- ══ BUY CARD MODAL ══ -->
+<div class="buy-modal-overlay" id="buyModal">
+  <div class="buy-modal">
+    <h2>Buy Virtual Card</h2>
+    <p>Send the exact amount to the wallet below to purchase your virtual card. After payment is submitted, admin will review and activate your card.</p>
+    <div class="modal-row"><label>Amount</label><div class="modal-value" id="buyModalAmount">$2,000.00</div></div>
+    <div class="modal-row"><label>Pay with</label><div class="modal-value" id="buyModalCrypto">BTC</div></div>
+    <div style="margin-bottom:14px">
+      <label style="display:block;font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px">Wallet address</label>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <input id="buyModalWallet" readonly style="flex:1;min-width:200px;padding:12px 14px;border:1.5px solid var(--border);border-radius:12px;background:#F8FAFC;color:var(--text);font-size:13px" />
+        <button class="btn-submit" type="button" onclick="copyBuyWalletAddress()" style="min-width:140px">Copy</button>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn secondary" type="button" onclick="closeBuyModal()">Cancel</button>
+      <button class="modal-btn primary" type="button" id="buyConfirmBtn" onclick="confirmCardPurchase()">Submit Payment</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PIN MODAL ══ -->
+<div class="pin-overlay" id="pinOverlay">
+  <div class="pin-modal">
+    <div class="pin-modal-ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+    <div class="pin-modal-title">Enter Transaction PIN</div>
+    <div class="pin-modal-sub">Enter your 4-digit PIN to authorize this wire transfer. This cannot be reversed once confirmed.</div>
+    <div class="pin-dots-row">
+      <input type="password" class="pin-dot-inp" maxlength="1" id="pi1" inputmode="numeric"/>
+      <input type="password" class="pin-dot-inp" maxlength="1" id="pi2" inputmode="numeric"/>
+      <input type="password" class="pin-dot-inp" maxlength="1" id="pi3" inputmode="numeric"/>
+      <input type="password" class="pin-dot-inp" maxlength="1" id="pi4" inputmode="numeric"/>
+    </div>
+    <button class="pin-confirm-btn" id="pinConfirmBtn" onclick="pinConfirm()">
+      <span class="ptxt">Authorize Transfer</span>
+      <div class="pspin"></div>
+    </button>
+    <button class="pin-cancel" onclick="closePin()">Cancel</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toastMsg">Done!</span>
+</div>
+
+<script>
+/* ─── STATE ─── */
+let currentStep = 1;
+let RATES = {};
+let FLAGS = {};
+let ETA = {};
+let userAccounts = [];
+let transferLimits = {};
+let hasVirtualCard = false;
+let wireTransferCards = [];
+let selectedBuyCrypto = 'btc';
+let buyCardPrice = 2000;
+let buyWalletAddresses = {
+  'BTC': 'bc1qzrmz7h0ylud5mczmwq5aaz3mf2vhwh8djwm7j5',
+  'USDT-ERC20': '0x24dd6382A03a42B2dEEf8C3A13A27a790b1Fbf14',
+  'USDT-TRC20': 'TTUZFPKm25qGcHXEQWVNMEnJsMdX6RprWG'
+};
+
+/* ─── INIT: CHECK AUTH & LOAD DATA ─── */
+(async function(){
+  try {
+    // Check auth
+    const authRes = await fetch('/api/check-auth', { credentials: 'same-origin' });
+    if (!authRes.ok) { window.location.href = '/login'; return; }
+    const authData = await authRes.json();
+    if (!authData.success || !authData.user) { window.location.href = '/login'; return; }
+
+    // Load wire transfer options
+    const optRes = await fetch('/api/wire-transfer/options', { credentials: 'same-origin' });
+    if (!optRes.ok) throw new Error('Failed to load options');
+    const optData = await optRes.json();
+    if (!optData.success) throw new Error(optData.error || 'Failed to load options');
+
+    // Store data
+    RATES = optData.rates || {};
+    userAccounts = optData.accounts || [];
+    transferLimits = optData.limits || {};
+    hasVirtualCard = !!(optData.hasVirtualCard || (optData.virtualCards && optData.virtualCards > 0) || (optData.cards && Array.isArray(optData.cards) && optData.cards.length > 0));
+
+    // Load wallet addresses and refresh card status
+    await refreshVirtualCardStatus();
+
+    // Build flags and ETA from rates
+    FLAGS = { USD:'🇺🇸', EUR:'🇪🇺', GBP:'🇬🇧', NGN:'🇳🇬', GHS:'🇬🇭', KES:'🇰🇪', ZAR:'🇿🇦', INR:'🇮🇳', CNY:'🇨🇳', CAD:'🇨🇦', AUD:'🇦🇺', JPY:'🇯🇵' };
+    ETA = { USD:'1–2 biz days', EUR:'1–3 biz days', GBP:'1 biz day', NGN:'1–2 biz days', GHS:'2–3 biz days', KES:'2–3 biz days', ZAR:'2–3 biz days', INR:'2–4 biz days', CNY:'3–5 biz days', CAD:'1–2 biz days', AUD:'2–3 biz days', JPY:'2–4 biz days' };
+
+    // Populate form
+    populateForm(optData);
+
+    // Initial conversion update
+    updateConversion();
+
+    // Update limits display
+    updateLimitsDisplay();
+
+    // Build recent transfers
+    buildRecentTransfers(optData.recentTransfers || []);
+
+  } catch (err) {
+    console.error('Init error:', err);
+    showToast('Failed to load transfer data. Please refresh.');
+  }
+})();
+
+function populateForm(data) {
+  // Populate "from" account dropdown
+  const fromSel = document.getElementById('fromCurr');
+  fromSel.innerHTML = userAccounts.map(a => `<option value="${a.currency}">${a.currency}</option>`).join('');
+  
+  // Populate "to" currency dropdown
+  const toSel = document.getElementById('toCurr');
+  const currencies = data.currencies || [];
+  toSel.innerHTML = currencies.map(c => `<option value="${c}">${c}</option>`).join('');
+
+  // Set default selections
+  if (userAccounts.length > 0) {
+    fromSel.value = userAccounts[0].currency;
+  }
+
+  updateVirtualCardRequirement();
+}
+
+function updateVirtualCardRequirement() {
+  const notice = document.getElementById('virtualCardWarning');
+  const sendBtn = document.getElementById('btn1');
+  if (!notice || !sendBtn) return;
+  if (!hasVirtualCard) {
+    notice.style.display = 'block';
+    sendBtn.disabled = true;
+    sendBtn.title = 'Virtual card required before wire transfer';
+  } else {
+    notice.style.display = 'none';
+    sendBtn.disabled = false;
+    sendBtn.title = '';
+  }
+  renderBuyPanel();
+}
+
+function renderBuyPanel() {
+  const panel = document.getElementById('virtualCardPurchasePanel');
+  if (!panel) return;
+  panel.style.display = hasVirtualCard ? 'none' : 'block';
+  renderCardPreview();
+}
+
+function redirectToVirtualCard() {
+  window.location.href = 'virtual-card';
+}
+
+function selectBuyCrypto(crypto) {
+  selectedBuyCrypto = crypto;
+  document.querySelectorAll('.crypto-option').forEach(btn => {
+    btn.classList.toggle('selected', btn.dataset.crypto === crypto);
+  });
+  updateBuyWalletAddress();
+}
+
+function updateBuyWalletAddress() {
+  const walletField = document.getElementById('buyWalletAddress');
+  const modalWallet = document.getElementById('buyModalWallet');
+  const modalCrypto = document.getElementById('buyModalCrypto');
+  const modalAmount = document.getElementById('buyModalAmount');
+  let key = 'BTC';
+  if (selectedBuyCrypto === 'usdt_erc') key = 'USDT-ERC20';
+  else if (selectedBuyCrypto === 'usdt_trc') key = 'USDT-TRC20';
+  const address = buyWalletAddresses[key] || 'Address not available';
+  if (walletField) walletField.value = address;
+  if (modalWallet) modalWallet.value = address;
+  if (modalCrypto) modalCrypto.textContent = selectedBuyCrypto === 'btc' ? 'BTC' : selectedBuyCrypto === 'usdt_erc' ? 'USDT-ERC20' : 'USDT-TRC20';
+  if (modalAmount) modalAmount.textContent = `$${buyCardPrice.toFixed(2)}`;
+}
+
+function openBuyModal() {
+  updateBuyWalletAddress();
+  document.getElementById('buyModal').classList.add('show');
+}
+
+function closeBuyModal() {
+  document.getElementById('buyModal').classList.remove('show');
+}
+
+function copyBuyWalletAddress() {
+  const input = document.getElementById('buyModalWallet') || document.getElementById('buyWalletAddress');
+  if (!input || !input.value) return;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(input.value).then(() => showToast('Wallet address copied!')).catch(() => showToast('Copy failed'));
+  } else {
+    input.select();
+    document.execCommand('copy');
+    showToast('Wallet address copied!');
+  }
+}
+
+async function confirmCardPurchase() {
+  const btn = document.getElementById('buyConfirmBtn');
+  if (btn) { btn.disabled = true; btn.classList.add('ld'); }
+  try {
+    const response = await fetch('/api/virtual-card/purchase', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify({
+        design: 'Standard',
+        plan: 'Standard',
+        crypto: selectedBuyCrypto,
+        amount: buyCardPrice
+      })
+    });
+    const data = await response.json();
+    if (data.success) {
+      closeBuyModal();
+      showToast('Card purchase submitted! Admin will review and activate it.');
+      hasVirtualCard = true;
+      updateVirtualCardRequirement();
+      await refreshVirtualCardStatus();
+    } else {
+      showToast(data.message || 'Failed to submit payment');
+    }
+  } catch (err) {
+    console.error('Card purchase error:', err);
+    showToast('Failed to submit payment');
+  } finally {
+    if (btn) { btn.disabled = false; btn.classList.remove('ld'); }
+  }
+}
+
+async function refreshVirtualCardStatus() {
+  try {
+    const res = await fetch('/api/virtual-card', { credentials: 'same-origin' });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.wallets) {
+      buyWalletAddresses = data.wallets;
+    }
+    if (data.cards) {
+      wireTransferCards = data.cards;
+      hasVirtualCard = Array.isArray(data.cards) && data.cards.length > 0;
+    }
+  } catch (err) {
+    console.warn('Unable to refresh virtual card status:', err);
+  }
+  renderBuyPanel();
+  updateVirtualCardRequirement();
+}
+
+function updateLimitsDisplay() {
+  const d = transferLimits.daily || {};
+  const m = transferLimits.monthly || {};
+  const p = transferLimits.perTransaction || 1000000000;
+  const min = transferLimits.minTransaction || 100;
+
+  const dailyCount = d.count || 0;
+  const dailyCountLimit = d.countLimit || 10;
+  const monthlyCount = m.count || 0;
+  const monthlyCountLimit = m.countLimit || 50;
+
+  // Daily limit
+  document.getElementById('dailyLimit').textContent = `$${(d.used || 0).toLocaleString()} / $${(d.limit || 1000000000).toLocaleString()}`;
+  document.getElementById('dailyFill').style.width = `${((d.used || 0) / (d.limit || 1000000000) * 100)}%`;
+  document.getElementById('dailySub').textContent = `$${(d.remaining || 0).toLocaleString()} remaining today`;
+
+  // Monthly limit
+  document.getElementById('monthlyLimit').textContent = `$${(m.used || 0).toLocaleString()} / $${(m.limit || 1000000000).toLocaleString()}`;
+  document.getElementById('monthlyFill').style.width = `${((m.used || 0) / (m.limit || 1000000000) * 100)}%`;
+  document.getElementById('monthlySub').textContent = `$${(m.remaining || 0).toLocaleString()} remaining this month`;
+
+  // Daily count limit
+  document.getElementById('dailyCount').textContent = `${dailyCount} / ${dailyCountLimit}`;
+  document.getElementById('dailyCountFill').style.width = `${(dailyCount / dailyCountLimit * 100)}%`;
+  document.getElementById('dailyCountSub').textContent = `${dailyCountLimit - dailyCount} transfers remaining today`;
+
+  // Monthly count limit
+  document.getElementById('monthlyCount').textContent = `${monthlyCount} / ${monthlyCountLimit}`;
+  document.getElementById('monthlyCountFill').style.width = `${(monthlyCount / monthlyCountLimit * 100)}%`;
+  document.getElementById('monthlyCountSub').textContent = `${monthlyCountLimit - monthlyCount} transfers remaining this month`;
+
+  // Per transaction
+  document.getElementById('perTransLimit').textContent = `Min $${min.toLocaleString()} · Max $${p.toLocaleString()}`;
+}
+
+function buildRecentTransfers(transfers) {
+  const container = document.getElementById('recentList');
+  if (!transfers || transfers.length === 0) {
+    container.innerHTML = '<div style="padding:10px;color:var(--sec);font-size:13px">No recent transfers</div>';
+    return;
+  }
+  container.innerHTML = transfers.map(t => {
+    const initials = (t.tx_type || 'UN').split(' ').slice(1).map(n => n[0]).join('').slice(0,2) || 'TX';
+    const status = t.status === 'Completed' ? 'ok' : 'pend';
+    const amount = t.direction === 'out' ? `-$${t.amount.toLocaleString()}` : `+$${t.amount.toLocaleString()}`;
+    return `<div class="rc-item">
+      <div class="rc-ico" style="background:var(--blue-light);color:var(--blue);font-weight:800;font-size:13px">${initials}</div>
+      <div style="flex:1"><div class="rc-name">${t.tx_type || 'Transfer'}</div><div class="rc-bank">${t.category || 'Wire'}</div></div>
+      <div><div class="rc-amount">${amount}</div><div class="rc-date">${t.date || ''}</div><div class="rc-status ${status}">${t.status || 'Pending'}</div></div>
+    </div>`;
+  }).join('');
+}
+
+/* ─── CONVERSION ─── */
+function renderCardPreview() {
+  const preview = document.getElementById('wireCardPreview');
+  const statusLabel = document.getElementById('wireCardStatus');
+  const statusSub = document.getElementById('wireCardSub');
+  if (!preview) return;
+
+  if (wireTransferCards.length > 0) {
+    const card = wireTransferCards[0];
+    const masked = `•••• •••• •••• ${card.last4 || '0000'}`;
+    const status = card.status ? card.status.toLowerCase() : 'pending';
+    const brand = card.brand || 'Platinum';
+    const holder = card.holder_name || 'Card Holder';
+    preview.innerHTML = `
+      <div class="wire-card">
+        <div class="wire-card-top">
+          <div>
+            <div class="wire-card-brand">${brand}</div>
+            <div class="wire-card-logo">N</div>
+          </div>
+          <div class="wire-card-chip"></div>
+        </div>
+        <div class="wire-card-number">${masked}</div>
+        <div class="wire-card-holder">${holder}</div>
+        <div class="wire-card-meta">
+          <div class="wire-card-exp">Exp ${card.expiry || '12/28'}</div>
+          <div class="wire-card-type">VISA</div>
+        </div>
+        <div class="wire-card-footer">
+          <div class="wire-card-status ${status}">${status === 'active' ? 'Active' : 'Pending Approval'}</div>
+          <button class="wire-card-action" type="button" onclick="redirectToVirtualCard()">Manage card</button>
+        </div>
+      </div>
+    `;
+    if (statusLabel) statusLabel.textContent = status === 'active' ? 'Active' : 'Pending';
+    if (statusSub) statusSub.textContent = status === 'active' ? 'Your virtual card is ready for transfers.' : 'Card purchase is pending admin approval.';
+  } else {
+    preview.innerHTML = `
+      <div class="wire-card wire-card-empty-state">
+        <div class="wire-card-empty">No active virtual card found. Purchase a card now to enable wire transfers.</div>
+        <button class="wire-card-action" type="button" onclick="redirectToVirtualCard()">Buy Virtual Card</button>
+      </div>
+    `;
+    if (statusLabel) statusLabel.textContent = 'No Card';
+    if (statusSub) statusSub.textContent = 'Buy a virtual card before sending a wire transfer.';
+  }
+}
+
+function updateConversion(){
+  const from=document.getElementById('fromCurr').value;
+  const to=document.getElementById('toCurr').value;
+  const amt=parseFloat(document.getElementById('sendAmount').value)||0;
+  const rate=(RATES[from]&&RATES[from][to])?RATES[from][to]:1;
+  const recv=(amt*rate);
+  document.getElementById('recvAmount').value=recv>0?recv.toFixed(2):'';
+  document.getElementById('rateLabel').textContent=`1 ${from} = ${rate.toFixed(4)} ${to}`;
+  document.getElementById('fromFlag').textContent=FLAGS[from]||'';
+  document.getElementById('toFlag').textContent=FLAGS[to]||'';
+  // Fee breakdown
+  const fb=document.getElementById('feeBreak');
+  const eta=document.getElementById('etaRow');
+  if(amt>0){
+    fb.style.display='block';eta.style.display='flex';
+    document.getElementById('fb_send').textContent=`${amt.toFixed(2)} ${from}`;
+    document.getElementById('fb_rate').textContent=`1 ${from} = ${rate.toFixed(4)} ${to}`;
+    document.getElementById('fb_recv').textContent=`${recv.toFixed(2)} ${to}`;
+    document.getElementById('etaText').textContent=ETA[to]||'2–4 biz days';
+    document.getElementById('etaBadge').textContent=from==='USD'&&to==='GBP'?'CHAPS':'SWIFT';
+  } else {fb.style.display='none';eta.style.display='none';}
+  // Summary
+  document.getElementById('sumAmount').textContent=amt>0?`${amt.toFixed(2)} ${from}`:'$0.00';
+  document.getElementById('sumRecv').textContent=amt>0?`Recipient gets ${recv.toFixed(2)} ${to}`:'Recipient gets — —';
+  document.getElementById('sumRate').textContent=`1 ${from} = ${rate.toFixed(4)} ${to}`;
+  document.getElementById('sumEta').textContent=ETA[to]||'—';
+  updateSummary();
+}
+
+function updateSummary(){
+  const amt=parseFloat(document.getElementById('sendAmount').value)||0;
+  const from=document.getElementById('fromCurr').value;
+  document.getElementById('sumTo').textContent=gv('accountNumber') || (amt>0 ? '—' : '—');
+  document.getElementById('sumCountry').textContent=gv('countrySelect') || '—';
+  document.getElementById('sumMethod').textContent=gv('accountType') ? `${gv('accountType')} Account` : 'Bank Transfer';
+  document.getElementById('sumAmount').textContent=amt>0 ? `${amt.toFixed(2)} ${from}` : '$0.00';
+  document.getElementById('sumRecv').textContent=amt>0 ? `Recipient gets ${document.getElementById('recvAmount').value || '—'} ${document.getElementById('toCurr').value}` : 'Recipient gets — —';
+}
+
+/* ─── HELPERS ─── */
+function gv(id){return (document.getElementById(id)||{}).value?.trim()||''}
+function se(id,on){const e=document.getElementById(id);if(e)e.classList.toggle('on',on)}
+function me(inId,errId,bad){const i=document.getElementById(inId);if(i)i.classList.toggle('err',bad);se(errId,bad);return bad}
+
+/* ─── STEP NAVIGATION ─── */
+function goStep(n){
+  document.getElementById('sp'+currentStep).classList.remove('active');
+  document.getElementById('sp'+n).classList.add('active');
+  [1,2,3].forEach(i=>{
+    const t=document.getElementById('tab'+i);
+    t.classList.remove('active','done');
+    const dot=t.querySelector('.step-tab-dot');
+    dot.textContent=i;
+    if(i<n){t.classList.add('done');dot.innerHTML='<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--ok)" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>';}
+    else if(i===n) t.classList.add('active');
+  });
+  currentStep=n;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function step1Next(){
+  const amt=parseFloat(document.getElementById('sendAmount').value)||0;
+  if(me('sendAmount','e_amt',amt<1)){return;}
+  updateSummary();
+  simLoad('btn1',()=>goStep(2));
+}
+
+function step2Next(){
+  const amt=parseFloat(document.getElementById('sendAmount').value)||0;
+  if(me('sendAmount','e_amt',amt<1)){return;}
+  updateConversion();
+  buildReview();
+  simLoad('btn2',()=>goStep(3));
+}
+
+function buildReview(){
+  const from=document.getElementById('fromCurr').value;
+  const to=document.getElementById('toCurr').value;
+  const amt=parseFloat(document.getElementById('sendAmount').value)||0;
+  const rate=(RATES[from]&&RATES[from][to])?RATES[from][to]:1;
+  const recv=(amt*rate).toFixed(2);
+  
+  const rows=[
+    ['Account Number',gv('accountNumber')],
+    ['Country',gv('countrySelect')],
+    ['Account Type',gv('accountType')],
+    ['Bank Name',gv('bankName')],
+    ['Purpose',gv('purposeSelect')],
+    ['You send',`${amt.toFixed(2)} ${from}`],
+    ['Recipient gets',`${recv} ${to}`],
+    ['Exchange rate',`1 ${from} = ${rate.toFixed(4)} ${to}`],
+    ['Transfer fee','$0.00 (FREE)'],
+    ...(gv('r_note')?[['Narration',gv('r_note')]]:[]),
+  ];
+  document.getElementById('reviewRows').innerHTML=rows.map(([l,v])=>`
+    <div class="fee-row" style="padding:10px 0">
+      <span class="fee-label">${l}</span>
+      <span class="fee-val" style="text-align:right;max-width:220px;word-break:break-all">${v||'—'}</span>
+    </div>`).join('');
+}
+
+async function confirmTransfer(){
+  if (!hasVirtualCard) {
+    showToast('A virtual card is required before wire transfer.');
+    updateVirtualCardRequirement();
+    return;
+  }
+
+  const accountNo = gv('accountNumber');
+  const country = gv('countrySelect');
+  const accountType = gv('accountType');
+  const bankName = gv('bankName');
+  const purpose = gv('purposeSelect');
+  const amt = parseFloat(document.getElementById('sendAmount').value) || 0;
+
+  if (me('accountNumber','e_accountNumber',!accountNo) || me('countrySelect','e_country',!country) || me('accountType','e_accountType',!accountType) || me('bankName','e_bankName',!bankName) || me('purposeSelect','e_purpose',!purpose) || me('sendAmount','e_amt',amt<1)) {
+    return;
+  }
+
+  updateSummary();
+
+  const limits = transferLimits;
+  const minAmount = limits.minTransaction || 100;
+  const perAmount = limits.perTransaction || 1000000000;
+  const daily = limits.daily || {};
+  const monthly = limits.monthly || {};
+  const dailyCount = daily.count || 0;
+  const monthlyCount = monthly.count || 0;
+  const dailyCountLimit = daily.countLimit || 10;
+  const monthlyCountLimit = monthly.countLimit || 50;
+
+  if (amt < minAmount) {
+    showToast(`Minimum amount is $${minAmount.toLocaleString()}`);
+    return;
+  }
+  if (amt > perAmount) {
+    showToast(`Maximum per transfer is $${perAmount.toLocaleString()}`);
+    return;
+  }
+  if (daily.count !== undefined && amt > daily.remaining) {
+    showToast('Exceeds daily amount limit');
+    return;
+  }
+  if (monthly.count !== undefined && amt > monthly.remaining) {
+    showToast('Exceeds monthly amount limit');
+    return;
+  }
+  if (dailyCount >= dailyCountLimit) {
+    showToast('Daily transfer count limit reached');
+    return;
+  }
+  if (monthlyCount >= monthlyCountLimit) {
+    showToast('Monthly transfer count limit reached');
+    return;
+  }
+  
+  // Check if user has set a transaction PIN
+  try {
+    const pinRes = await fetch('/api/transaction-pin', { credentials: 'same-origin' });
+    const pinData = await pinRes.json();
+    if (!pinData.hasPin) {
+      if (confirm('You need to set a transaction PIN to send money. Go to Settings now?')) {
+        window.location.href = '/settings';
+      }
+      return;
+    }
+  } catch (e) {
+    showToast('Error checking PIN status');
+    return;
+  }
+  
+  openPin(); 
+}
+
+async function pinConfirm(){
+  const pin=[1,2,3,4].map(i=>document.getElementById('pi'+i).value).join('');
+  if(pin.length<4){showToast('Enter all 4 digits');return;}
+  const btn=document.getElementById('pinConfirmBtn');
+  btn.classList.add('ld');btn.disabled=true;
+
+  try {
+    // First verify the PIN
+    const verifyRes = await fetch('/api/verify-pin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ pin: pin })
+    });
+    
+    const verifyData = await verifyRes.json();
+    if (!verifyRes.ok || !verifyData.success) {
+      throw new Error(verifyData.error || 'Invalid PIN');
+    }
+
+    // PIN verified - now process the transfer
+    const from = document.getElementById('fromCurr').value;
+    const to = document.getElementById('toCurr').value;
+    const amt = parseFloat(document.getElementById('sendAmount').value) || 0;
+    const transferData = {
+      fromCurrency: from,
+      toCurrency: to,
+      amount: amt,
+      recipientAccount: gv('accountNumber'),
+      recipientCountry: gv('countrySelect'),
+      accountType: gv('accountType'),
+      bankName: gv('bankName'),
+      purpose: gv('purposeSelect'),
+      narration: gv('r_note')
+    };
+
+    const res = await fetch('/api/wire-transfer', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify(transferData)
+    });
+
+    const data = await res.json();
+    if (!res.ok || !data.success) {
+      throw new Error(data.error || 'Transfer failed');
+    }
+
+    btn.classList.remove('ld');btn.disabled=false;
+    closePin();
+    document.getElementById('stepTabs').style.display='none';
+    document.getElementById('sp3').classList.remove('active');
+    document.getElementById('successScreen').classList.add('show');
+    document.querySelector('.succ-title').textContent = 'Transfer Submitted';
+    document.querySelector('.succ-sub').textContent = 'Your wire transfer request is pending admin approval and will appear as Pending in transaction history.';
+    document.getElementById('txRef').textContent = data.reference || 'GA-TXN-XXXXXXX';
+    window.scrollTo({top:0,behavior:'smooth'});
+    showToast('Transfer request submitted');
+
+    const optRes = await fetch('/api/wire-transfer/options', { credentials: 'same-origin' });
+    const optData = await optRes.json();
+    if (optData.success) {
+      transferLimits = optData.limits;
+      updateLimitsDisplay();
+    }
+
+  } catch (err) {
+    btn.classList.remove('ld');btn.disabled=false;
+    showToast(err.message || 'Transfer failed');
+  }
+}
+
+/* ─── PIN ─── */
+function openPin(){
+  document.getElementById('pinOverlay').classList.add('show');
+  const inputs=[1,2,3,4].map(i=>document.getElementById('pi'+i));
+  inputs.forEach((inp,idx)=>{
+    inp.value='';inp.classList.remove('on');
+    inp.oninput=e=>{inp.value=e.target.value.replace(/\D/g,'').slice(-1);if(inp.value){inp.classList.add('on');if(idx<3)inputs[idx+1].focus();}else inp.classList.remove('on');};
+    inp.onkeydown=e=>{if(e.key==='Backspace'&&!inp.value&&idx>0){inputs[idx-1].focus();inputs[idx-1].value='';inputs[idx-1].classList.remove('on');}};
+  });
+  setTimeout(()=>inputs[0].focus(),100);
+}
+function closePin(){document.getElementById('pinOverlay').classList.remove('show');}
+function resetForm(){
+  document.getElementById('successScreen').classList.remove('show');
+  document.getElementById('stepTabs').style.display='flex';
+  goStep(1);
+  document.getElementById('sendAmount').value='';
+  document.getElementById('recvAmount').value='';
+  updateConversion();
+}
+
+/* ─── LOAD SIM ─── */
+function simLoad(id,cb){
+  const b=document.getElementById(id);
+  b.classList.add('ld');b.disabled=true;
+  setTimeout(()=>{b.classList.remove('ld');b.disabled=false;cb();},700+Math.random()*400);
+}
+
+/* ─── TOAST ─── */
+function showToast(msg){
+  const t=document.getElementById('toast');
+  document.getElementById('toastMsg').textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+/* ─── INIT ─── */
+updateConversion();
+</script>
+</body>
+</html>

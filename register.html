@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Open Account — GLOBALEASYTRANSASSET</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;height:100%}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#fff;color:#0A0A0A;min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+:root{
+  --bg:#FFFFFF;
+  --bg-soft:#F6F8FC;
+  --blue:#1E6BFF;
+  --blue-deep:#0B3D91;
+  --blue-accent:#4DA3FF;
+  --blue-light:#EBF2FF;
+  --text:#0A0A0A;
+  --text-sec:#6B7280;
+  --border:#E5EAF2;
+  --border-focus:#1E6BFF;
+  --radius:14px;
+  --shadow:0 4px 24px rgba(30,107,255,0.10);
+  --shadow-lg:0 16px 56px rgba(11,61,145,0.14);
+  --transition:0.28s cubic-bezier(0.4,0,0.2,1);
+  --error:#EF4444;
+  --success:#22C55E;
+}
+
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#f1f5f9}
+::-webkit-scrollbar-thumb{background:var(--blue-accent);border-radius:99px}
+
+/* ── NAVBAR ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 48px;height:70px;
+  background:rgba(255,255,255,0.95);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo-mark{
+  width:34px;height:34px;
+  background:linear-gradient(135deg,var(--blue) 0%,var(--blue-deep) 100%);
+  border-radius:9px;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 14px rgba(30,107,255,0.35);
+}
+.nav-logo-text{font-size:17px;font-weight:800;letter-spacing:-0.5px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px}
+.nav-logo-text span{color:var(--blue)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-back{
+  display:flex;align-items:center;gap:7px;
+  font-size:14px;font-weight:600;color:var(--text-sec);
+  text-decoration:none;padding:7px 14px;border-radius:8px;
+  transition:all var(--transition);
+}
+.nav-back:hover{color:var(--blue);background:var(--blue-light)}
+.nav-login-link{
+  font-size:14px;font-weight:600;color:var(--text);
+  text-decoration:none;padding:8px 18px;border-radius:9px;
+  border:1.5px solid var(--border);transition:all var(--transition);
+}
+.nav-login-link:hover{border-color:var(--blue);color:var(--blue)}
+
+/* ── LAYOUT ── */
+.page-wrap{
+  min-height:100vh;padding-top:70px;
+  display:grid;grid-template-columns:1fr 1fr;
+}
+
+/* ── LEFT PANEL ── */
+.left-panel{
+  background:linear-gradient(160deg,#060f22 0%,#0B3D91 55%,#1a5cd4 100%);
+  position:sticky;top:70px;height:calc(100vh - 70px);
+  overflow:hidden;display:flex;flex-direction:column;justify-content:center;
+  padding:64px 56px;
+}
+.left-panel::before{
+  content:'';position:absolute;top:-100px;right:-100px;
+  width:480px;height:480px;border-radius:50%;
+  background:radial-gradient(circle,rgba(77,163,255,0.14) 0%,transparent 65%);
+  pointer-events:none;
+}
+.left-panel::after{
+  content:'';position:absolute;bottom:-80px;left:-80px;
+  width:360px;height:360px;border-radius:50%;
+  background:radial-gradient(circle,rgba(30,107,255,0.18) 0%,transparent 65%);
+  pointer-events:none;
+}
+.left-grid-pattern{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);
+  background-size:44px 44px;pointer-events:none;
+}
+.left-content{position:relative;z-index:1}
+
+.left-stage-tracker{
+  display:flex;flex-direction:column;gap:20px;margin-bottom:44px;
+}
+.lst-item{
+  display:flex;align-items:center;gap:16px;
+  padding:16px 20px;border-radius:12px;
+  border:1px solid rgba(255,255,255,0.08);
+  background:rgba(255,255,255,0.04);
+  transition:all var(--transition);
+}
+.lst-item.active{
+  background:rgba(255,255,255,0.10);
+  border-color:rgba(255,255,255,0.20);
+}
+.lst-item.done{
+  background:rgba(34,197,94,0.08);
+  border-color:rgba(34,197,94,0.20);
+}
+.lst-num{
+  width:36px;height:36px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:800;
+  background:rgba(255,255,255,0.08);
+  border:2px solid rgba(255,255,255,0.12);
+  color:rgba(255,255,255,0.5);
+  transition:all var(--transition);
+}
+.lst-item.active .lst-num{
+  background:var(--blue);border-color:var(--blue);color:#fff;
+  box-shadow:0 4px 16px rgba(30,107,255,0.4);
+}
+.lst-item.done .lst-num{
+  background:var(--success);border-color:var(--success);color:#fff;
+}
+.lst-label{font-size:14px;font-weight:700;color:rgba(255,255,255,0.5);transition:color var(--transition)}
+.lst-sub{font-size:12px;color:rgba(255,255,255,0.3);margin-top:2px;transition:color var(--transition)}
+.lst-item.active .lst-label{color:#fff}
+.lst-item.active .lst-sub{color:rgba(255,255,255,0.6)}
+.lst-item.done .lst-label{color:rgba(34,197,94,0.9)}
+.lst-item.done .lst-sub{color:rgba(34,197,94,0.6)}
+
+.left-bottom{
+  padding-top:28px;border-top:1px solid rgba(255,255,255,0.1);
+}
+.left-trust-row{display:flex;flex-direction:column;gap:10px}
+.left-trust-item{display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.55);font-weight:500}
+.left-trust-item svg{flex-shrink:0}
+
+/* Floating badges */
+.left-float-badge{
+  position:absolute;z-index:2;
+  background:rgba(255,255,255,0.96);border-radius:12px;
+  padding:10px 14px;box-shadow:0 12px 40px rgba(0,0,0,0.25);
+  border:1px solid rgba(255,255,255,0.5);
+}
+.badge-top-left{
+  top:12%;right:6%;
+  animation:floatBadge1 4.5s ease-in-out infinite;
+}
+.badge-bottom-left{
+  bottom:22%;left:4%;
+  animation:floatBadge2 5.5s ease-in-out infinite;
+}
+@keyframes floatBadge1{0%,100%{transform:translateY(0) rotate(1.5deg)}50%{transform:translateY(-9px) rotate(1.5deg)}}
+@keyframes floatBadge2{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(9px) rotate(-1deg)}}
+.badge-icon-row{display:flex;align-items:center;gap:8px}
+.badge-icon-circle{
+  width:28px;height:28px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.badge-label{font-size:11px;font-weight:700;color:#0A0A0A}
+.badge-sub{font-size:10px;color:#6B7280;margin-top:1px}
+.badge-stat-big{font-size:18px;font-weight:800;color:#0A0A0A;letter-spacing:-0.5px}
+.badge-stat-label{font-size:10px;color:#6B7280;font-weight:500}
+
+/* ── RIGHT PANEL ── */
+.right-panel{
+  display:flex;flex-direction:column;
+  padding:48px 56px;background:#fff;overflow-y:auto;
+}
+.form-wrap{max-width:440px;width:100%;margin:0 auto}
+
+/* Step indicator (top) */
+.step-indicator{display:flex;align-items:center;margin-bottom:36px}
+.step-item{display:flex;align-items:center;gap:8px;flex:1}
+.step-dot{
+  width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;flex-shrink:0;
+  transition:all var(--transition);border:2px solid var(--border);
+  background:#fff;color:var(--text-sec);
+}
+.step-dot.active{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 4px 14px rgba(30,107,255,0.35)}
+.step-dot.done{background:var(--success);border-color:var(--success);color:#fff}
+.step-label{font-size:12px;font-weight:600;color:var(--text-sec);transition:color var(--transition)}
+.step-label.active{color:var(--blue)}
+.step-label.done{color:var(--success)}
+.step-line{flex:1;height:2px;background:var(--border);margin:0 8px;border-radius:99px;transition:background var(--transition)}
+.step-line.done{background:var(--success)}
+
+/* Form steps */
+.form-step{display:none}
+.form-step.active{display:block;animation:slideIn 0.35s cubic-bezier(0.4,0,0.2,1)}
+@keyframes slideIn{from{opacity:0;transform:translateX(22px)}to{opacity:1;transform:translateX(0)}}
+
+.form-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--blue-light);padding:5px 12px;border-radius:99px;
+  font-size:12px;font-weight:700;color:var(--blue);letter-spacing:0.5px;
+  text-transform:uppercase;margin-bottom:14px;
+}
+.form-title{
+  font-family:'DM Serif Display',Georgia,serif;
+  font-size:28px;letter-spacing:-0.5px;color:var(--text);
+  margin-bottom:6px;
+}
+.form-sub{font-size:14px;color:var(--text-sec);margin-bottom:28px;line-height:1.65}
+
+/* Fields */
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{margin-bottom:18px;position:relative}
+.field label{display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:7px}
+.field label span.req{color:var(--error)}
+.field-input-wrap{position:relative}
+.field input,.field select,.field textarea{
+  width:100%;padding:12px 16px;border-radius:10px;
+  border:1.5px solid var(--border);
+  font-size:14px;font-weight:500;color:var(--text);
+  font-family:inherit;background:#fff;
+  transition:all var(--transition);outline:none;
+  appearance:none;-webkit-appearance:none;
+}
+.field textarea{resize:vertical;min-height:80px}
+.field input:focus,.field select:focus,.field textarea:focus{
+  border-color:var(--border-focus);
+  box-shadow:0 0 0 3px rgba(30,107,255,0.12);
+}
+.field input.has-icon{padding-left:44px}
+.field-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-sec);pointer-events:none}
+.field-icon-right{position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--text-sec);transition:color var(--transition)}
+.field-icon-right:hover{color:var(--blue)}
+.field-hint{font-size:12px;color:var(--text-sec);margin-top:5px}
+.field-error{font-size:12px;color:var(--error);margin-top:5px;display:none}
+.field-error.show{display:block}
+
+/* Select arrow */
+.select-wrap{position:relative}
+.select-wrap::after{
+  content:'';position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;
+  border-top:5px solid var(--text-sec);pointer-events:none;
+}
+
+/* Phone */
+.phone-wrap{display:flex;gap:10px}
+.phone-code-select{
+  width:120px;flex-shrink:0;padding:12px 10px;border-radius:10px;
+  border:1.5px solid var(--border);font-size:13px;font-weight:600;
+  color:var(--text);font-family:inherit;background:#fff;
+  cursor:pointer;outline:none;appearance:none;-webkit-appearance:none;
+  transition:all var(--transition);
+}
+.phone-code-select:focus{border-color:var(--border-focus);box-shadow:0 0 0 3px rgba(30,107,255,0.12)}
+.phone-input{flex:1}
+
+/* Password strength */
+.pw-strength{margin-top:8px}
+.pw-strength-bars{display:flex;gap:4px;margin-bottom:5px}
+.pw-bar{height:4px;flex:1;border-radius:99px;background:var(--border);transition:background 0.3s}
+.pw-bar.weak{background:#EF4444}
+.pw-bar.fair{background:#F59E0B}
+.pw-bar.good{background:#3B82F6}
+.pw-bar.strong{background:#22C55E}
+.pw-label{font-size:12px;font-weight:600;color:var(--text-sec)}
+
+/* Optional section header */
+.optional-header{
+  display:flex;align-items:center;gap:12px;
+  margin:24px 0 18px;
+}
+.optional-header::before,.optional-header::after{
+  content:'';flex:1;height:1px;background:var(--border);
+}
+.optional-header span{
+  font-size:12px;font-weight:700;color:var(--text-sec);
+  white-space:nowrap;
+}
+
+/* Occupation chips */
+.chips-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.chip{
+  padding:7px 14px;border-radius:8px;border:1.5px solid var(--border);
+  font-size:13px;font-weight:600;color:var(--text-sec);
+  cursor:pointer;transition:all var(--transition);background:#fff;
+  font-family:inherit;
+}
+.chip:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-light)}
+.chip.selected{background:var(--blue);border-color:var(--blue);color:#fff}
+
+/* Terms */
+.terms-wrap{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:14px;background:var(--bg-soft);border-radius:10px;
+  border:1.5px solid var(--border);margin-bottom:20px;cursor:pointer;
+  transition:border-color var(--transition);
+}
+.terms-wrap:hover{border-color:var(--blue)}
+.terms-checkbox{
+  width:18px;height:18px;border-radius:5px;border:1.5px solid var(--border);
+  flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;
+  transition:all var(--transition);background:#fff;
+}
+.terms-checkbox.checked{background:var(--blue);border-color:var(--blue)}
+.terms-text{font-size:13px;color:var(--text-sec);line-height:1.6}
+.terms-text a{color:var(--blue);text-decoration:none;font-weight:600}
+
+/* Buttons */
+.btn-submit{
+  width:100%;padding:14px;border-radius:11px;
+  background:linear-gradient(135deg,var(--blue) 0%,var(--blue-deep) 100%);
+  border:none;color:#fff;font-size:15px;font-weight:700;
+  font-family:inherit;cursor:pointer;
+  box-shadow:0 6px 24px rgba(30,107,255,0.38);
+  transition:all var(--transition);display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn-submit:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(30,107,255,0.48)}
+.btn-submit:disabled{opacity:0.65;cursor:not-allowed;transform:none}
+.btn-submit.loading .btn-text{display:none}
+.btn-submit.loading .btn-spinner{display:block}
+.btn-spinner{display:none;width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.btn-back{
+  width:100%;padding:12px;border-radius:11px;
+  background:none;border:1.5px solid var(--border);
+  color:var(--text);font-size:14px;font-weight:600;
+  font-family:inherit;cursor:pointer;margin-bottom:12px;
+  transition:all var(--transition);
+}
+.btn-back:hover{border-color:var(--blue);color:var(--blue)}
+
+.btn-skip{
+  width:100%;padding:11px;border-radius:11px;
+  background:none;border:none;
+  color:var(--text-sec);font-size:14px;font-weight:600;
+  font-family:inherit;cursor:pointer;margin-top:8px;
+  transition:color var(--transition);
+}
+.btn-skip:hover{color:var(--blue)}
+
+.form-footer{text-align:center;font-size:13px;color:var(--text-sec);margin-top:20px}
+.form-footer a{color:var(--blue);font-weight:700;text-decoration:none}
+.form-footer a:hover{text-decoration:underline}
+
+/* Security row */
+.security-row{
+  display:flex;align-items:center;justify-content:center;gap:20px;
+  margin-top:24px;padding-top:20px;border-top:1px solid var(--border);flex-wrap:wrap;
+}
+.security-badge{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--text-sec)}
+
+/* Success */
+.success-screen{text-align:center;padding:20px 0;display:none}
+.success-screen.show{display:block;animation:slideIn 0.4s ease}
+.success-icon{
+  width:80px;height:80px;border-radius:50%;
+  background:linear-gradient(135deg,#22C55E,#16a34a);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 24px;
+  box-shadow:0 8px 32px rgba(34,197,94,0.30);
+  animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes popIn{from{transform:scale(0)}to{transform:scale(1)}}
+.success-title{
+  font-family:'DM Serif Display',serif;
+  font-size:28px;color:var(--text);letter-spacing:-0.5px;margin-bottom:10px;
+}
+.success-text{font-size:14px;color:var(--text-sec);line-height:1.7;margin-bottom:28px}
+.btn-go{
+  display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,var(--blue),var(--blue-deep));
+  color:#fff;padding:14px 32px;border-radius:11px;
+  font-size:15px;font-weight:700;border:none;cursor:pointer;
+  font-family:inherit;box-shadow:0 6px 24px rgba(30,107,255,0.35);
+  transition:all var(--transition);text-decoration:none;
+}
+.btn-go:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(30,107,255,0.45)}
+
+@media(max-width:900px){
+  .page-wrap{grid-template-columns:1fr}
+  .left-panel{display:none}
+  nav{padding:0 20px}
+  .right-panel{padding:32px 20px}
+}
+@media(max-width:480px){
+  .field-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="home" class="nav-logo">
+    <div class="nav-logo-mark">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <path d="M9 2L16 6V12L9 16L2 12V6L9 2Z" stroke="white" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M9 6L12 8V12L9 14L6 12V8L9 6Z" fill="white" opacity="0.7"/>
+      </svg>
+    </div>
+    <span class="nav-logo-text">GLOBAL<span>EASYTRANSASSET</span></span>
+  </a>
+  <div class="nav-right">
+    <a href="home" class="nav-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Back to Home
+    </a>
+    <a href="login" class="nav-login-link">Sign In</a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- LEFT PANEL -->
+  <div class="left-panel">
+    <div class="left-grid-pattern"></div>
+
+    <!-- Floating badges -->
+    <div class="left-float-badge badge-top-left">
+      <div class="badge-icon-row">
+        <div class="badge-icon-circle" style="background:#DCFCE7">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div>
+          <div class="badge-label">Account Verified</div>
+          <div class="badge-sub">KYC approved · instant</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="left-float-badge badge-bottom-left">
+      <div class="badge-stat-big" style="color:#1E6BFF">1M<span style="font-size:13px;color:#22C55E"> +</span></div>
+      <div class="badge-stat-label">Accounts opened</div>
+    </div>
+
+    <div class="left-content">
+      <div style="margin-bottom:36px">
+        <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.18);padding:6px 14px;border-radius:99px;margin-bottom:20px">
+          <span style="width:7px;height:7px;border-radius:50%;background:#22C55E;animation:pulse 2s infinite;display:block"></span>
+          <span style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.9);letter-spacing:0.4px">Open in under 2 minutes</span>
+        </div>
+        <div style="font-family:'DM Serif Display',serif;font-size:clamp(24px,2.4vw,34px);color:#fff;line-height:1.2;letter-spacing:-0.6px;margin-bottom:12px">Set up your global<br/>account in 3 steps</div>
+        <div style="font-size:14px;color:rgba(255,255,255,0.6);line-height:1.7">Complete each section below to activate your account and unlock all GLOBALEASYTRANSASSET features.</div>
+      </div>
+
+      <!-- Stage tracker -->
+      <div class="left-stage-tracker" id="leftStageTracker">
+        <div class="lst-item active" id="lst1">
+          <div class="lst-num" id="lstNum1">1</div>
+          <div class="lst-text">
+            <div class="lst-label">Personal Information</div>
+            <div class="lst-sub">Full name · DOB · Nationality · Address</div>
+          </div>
+        </div>
+        <div class="lst-item" id="lst2">
+          <div class="lst-num" id="lstNum2">2</div>
+          <div class="lst-text">
+            <div class="lst-label">Create Your Login</div>
+            <div class="lst-sub">Email · Password · Security setup</div>
+          </div>
+        </div>
+        <div class="lst-item" id="lst3">
+          <div class="lst-num" id="lstNum3">3</div>
+          <div class="lst-text">
+            <div class="lst-label">Additional Information</div>
+            <div class="lst-sub">Employment · Income · Preferences (optional)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trust row -->
+      <div class="left-bottom">
+        <div class="left-trust-row">
+          <div class="left-trust-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            256-bit SSL Encrypted
+          </div>
+          <div class="left-trust-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            FCA Regulated · KYC Compliant
+          </div>
+          <div class="left-trust-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            No credit check required
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right-panel">
+    <div class="form-wrap">
+
+      <!-- Top step indicator -->
+      <div class="step-indicator" id="stepIndicator">
+        <div class="step-item">
+          <div class="step-dot active" id="dot1">1</div>
+          <div class="step-label active" id="lbl1">Personal</div>
+        </div>
+        <div class="step-line" id="line1"></div>
+        <div class="step-item">
+          <div class="step-dot" id="dot2">2</div>
+          <div class="step-label" id="lbl2">Login</div>
+        </div>
+        <div class="step-line" id="line2"></div>
+        <div class="step-item">
+          <div class="step-dot" id="dot3">3</div>
+          <div class="step-label" id="lbl3">Additional</div>
+        </div>
+      </div>
+
+      <!-- ═══════ STEP 1: Personal Information + Residency Address ═══════ -->
+      <div class="form-step active" id="step1">
+        <div class="form-tag">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Step 1 of 3
+        </div>
+        <h1 class="form-title">Personal Information</h1>
+        <p class="form-sub">Tell us about yourself so we can verify your identity and set up your account.</p>
+
+        <div class="field-row">
+          <div class="field">
+            <label>First name <span class="req">*</span></label>
+            <input type="text" id="firstName" placeholder="James" autocomplete="given-name"/>
+            <div class="field-error" id="firstNameError">Required.</div>
+          </div>
+          <div class="field">
+            <label>Last name <span class="req">*</span></label>
+            <input type="text" id="lastName" placeholder="leo" autocomplete="family-name"/>
+            <div class="field-error" id="lastNameError">Required.</div>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Date of birth <span class="req">*</span></label>
+            <input type="date" id="dob" autocomplete="bday"/>
+            <div class="field-hint">Must be 18 or older.</div>
+            <div class="field-error" id="dobError">You must be 18+.</div>
+          </div>
+          <div class="field">
+            <label>Nationality <span class="req">*</span></label>
+            <div class="select-wrap">
+              <select id="nationality" size="1">
+              <option>Afghan</option><option>Albanian</option><option>Algerian</option>
+              <option>American</option><option>Andorran</option><option>Angolan</option>
+              <option>Argentine</option><option>Armenian</option><option>Australian</option>
+              <option>Austrian</option><option>Azerbaijani</option><option>Bahamian</option>
+              <option>Bahraini</option><option>Bangladeshi</option><option>Barbadian</option>
+              <option>Belarusian</option><option>Belgian</option><option>Belizean</option>
+              <option>Beninese</option><option>Bhutanese</option><option>Bolivian</option>
+              <option>Bosnian</option><option>Botswanan</option><option>Brazilian</option>
+              <option>British</option><option>Bruneian</option><option>Bulgarian</option>
+              <option>Burkinabe</option><option>Burundian</option><option>Cambodian</option>
+              <option>Cameroonian</option><option>Canadian</option><option>Cape Verdean</option>
+              <option>Central African</option><option>Chadian</option><option>Chilean</option>
+              <option>Chinese</option><option>Colombian</option><option>Comorian</option>
+              <option>Congolese</option><option>Costa Rican</option><option>Croatian</option>
+              <option>Cuban</option><option>Cypriot</option><option>Czech</option>
+              <option>Danish</option><option>Djiboutian</option><option>Dominican</option>
+              <option>Dutch</option><option>Ecuadorian</option><option>Egyptian</option>
+              <option>Emirati</option><option>Eritrean</option><option>Estonian</option>
+              <option>Ethiopian</option><option>Fijian</option><option>Finnish</option>
+              <option>French</option><option>Gabonese</option><option>Gambian</option>
+              <option>Georgian</option><option>German</option><option>Ghanaian</option>
+              <option>Greek</option><option>Grenadian</option><option>Guatemalan</option>
+              <option>Guinean</option><option>Guyanese</option><option>Haitian</option>
+              <option>Honduran</option><option>Hungarian</option><option>Icelandic</option>
+              <option>Indian</option><option>Indonesian</option><option>Iranian</option>
+              <option>Iraqi</option><option>Irish</option><option>Israeli</option>
+              <option>Italian</option><option>Jamaican</option><option>Japanese</option>
+              <option>Jordanian</option><option>Kazakhstani</option><option>Kenyan</option>
+              <option>Kuwaiti</option><option>Kyrgyz</option><option>Laotian</option>
+              <option>Latvian</option><option>Lebanese</option><option>Lesothan</option>
+              <option>Liberian</option><option>Libyan</option><option>Lithuanian</option>
+              <option>Luxembourgish</option><option>Malagasy</option><option>Malawian</option>
+              <option>Malaysian</option><option>Maldivian</option><option>Malian</option>
+              <option>Maltese</option><option>Mauritanian</option><option>Mauritian</option>
+              <option>Mexican</option><option>Moldovan</option><option>Mongolian</option>
+              <option>Montenegrin</option><option>Moroccan</option><option>Mozambican</option>
+              <option>Namibian</option><option>Nepali</option><option>New Zealander</option>
+              <option>Nicaraguan</option><option>Nigerian</option><option>Norwegian</option>
+              <option>Omani</option><option>Pakistani</option><option>Panamanian</option>
+              <option>Papua New Guinean</option><option>Paraguayan</option><option>Peruvian</option>
+              <option>Filipino</option><option>Polish</option><option>Portuguese</option>
+              <option>Qatari</option><option>Romanian</option><option>Russian</option>
+              <option>Rwandan</option><option>Saudi Arabian</option><option>Senegalese</option>
+              <option>Serbian</option><option>Sierra Leonean</option><option>Singaporean</option>
+              <option>Slovak</option><option>Slovenian</option><option>Somali</option>
+              <option>South African</option><option>South Korean</option><option>South Sudanese</option>
+              <option>Spanish</option><option>Sri Lankan</option><option>Sudanese</option>
+              <option>Surinamese</option><option>Swedish</option><option>Swiss</option>
+              <option>Syrian</option><option>Taiwanese</option><option>Tajik</option>
+              <option>Tanzanian</option><option>Thai</option><option>Togolese</option>
+              <option>Trinidadian</option><option>Tunisian</option><option>Turkish</option>
+              <option>Turkmen</option><option>Ugandan</option><option>Ukrainian</option>
+              <option>Uruguayan</option><option>Uzbek</option><option>Venezuelan</option>
+              <option>Vietnamese</option><option>Yemeni</option><option>Zambian</option>
+              <option>Zimbabwean</option>
+                
+              </select>
+            </div>
+            <div class="field-error" id="nationalityError">Required.</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Phone number <span class="req">*</span></label>
+          <div class="phone-wrap">
+            <select class="phone-code-select" id="phoneCode">
+              <option value="+1">🇺🇸 +1</option>
+              <option value="+44">🇬🇧 +44</option>
+              <option value="+234" selected>🇳🇬 +234</option>
+              <option value="+33">🇫🇷 +33</option>
+              <option value="+49">🇩🇪 +49</option>
+              <option value="+91">🇮🇳 +91</option>
+              <option value="+27">🇿🇦 +27</option>
+              <option value="+254">🇰🇪 +254</option>
+              <option value="+233">🇬🇭 +233</option>
+              <option value="+971">🇦🇪 +971</option>
+              <option value="+65">🇸🇬 +65</option>
+            </select>
+            <div class="field-input-wrap phone-input">
+              <span class="field-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              </span>
+              <input type="tel" id="phone" class="has-icon" placeholder="8012345678"/>
+            </div>
+          </div>
+          <div class="field-error" id="phoneError">Enter a valid phone number.</div>
+        </div>
+
+        <div class="field">
+          <label>Gender</label>
+          <div class="select-wrap">
+            <select id="gender">
+              <option value="">Prefer not to say</option>
+              <option>Male</option><option>Female</option><option>Non-binary</option><option>Other</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Residency Address sub-section -->
+        <div style="display:flex;align-items:center;gap:12px;margin:24px 0 18px">
+          <div style="flex:1;height:1px;background:var(--border)"></div>
+          <span style="font-size:12px;font-weight:700;color:var(--text-sec);white-space:nowrap;display:flex;align-items:center;gap:6px">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Residency Address
+          </span>
+          <div style="flex:1;height:1px;background:var(--border)"></div>
+        </div>
+
+        <div class="field">
+          <label>Street address <span class="req">*</span></label>
+          <div class="field-input-wrap">
+            <span class="field-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </span>
+            <input type="text" id="streetAddress" class="has-icon" placeholder="14 Marina Drive" autocomplete="street-address"/>
+          </div>
+          <div class="field-error" id="streetError">Required.</div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>City <span class="req">*</span></label>
+            <input type="text" id="city" placeholder="Lagos" autocomplete="address-level2"/>
+            <div class="field-error" id="cityError">Required.</div>
+          </div>
+          <div class="field">
+            <label>State / Region</label>
+            <input type="text" id="state" placeholder="Lagos State" autocomplete="address-level1"/>
+          </div>
+        </div>
+
+        <label>Postal / ZIP code</label>
+        <input type="text" id="postal" placeholder="100001" autocomplete="postal-code"/>
+      </div>
+          <div class="security-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            GDPR Compliant
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════ STEP 2: Create Your Login ═══════ -->
+      <div class="form-step" id="step2">
+        <div class="form-tag">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Step 2 of 3
+        </div>
+        <h1 class="form-title">Create Your Login</h1>
+        <p class="form-sub">Set up your email and a strong password to secure your GLOBALEASYTRANSASSET account.</p>
+
+        <div class="field">
+          <label>Email address <span class="req">*</span></label>
+          <div class="field-input-wrap">
+            <span class="field-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </span>
+            <input type="email" id="email" class="has-icon" placeholder="you@example.com" autocomplete="email"/>
+          </div>
+          <div class="field-error" id="emailError">Enter a valid email address.</div>
+        </div>
+
+        <div class="field">
+          <label>Username <span class="req">*</span></label>
+          <div class="field-input-wrap">
+            <span class="field-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </span>
+            <input type="text" id="username" class="has-icon" placeholder="james" autocomplete="username"/>
+          </div>
+          <div class="field-hint">Letters, numbers, and underscores only.</div>
+          <div class="field-error" id="usernameError">Username must be at least 4 characters.</div>
+        </div>
+
+        <div class="field">
+          <label>Password <span class="req">*</span></label>
+          <div class="field-input-wrap">
+            <span class="field-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </span>
+            <input type="password" id="password" class="has-icon" placeholder="Create a strong password" autocomplete="new-password"/>
+            <span class="field-icon-right" id="togglePw">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </span>
+          </div>
+          <div class="pw-strength" id="pwStrength" style="display:none">
+            <div class="pw-strength-bars">
+              <div class="pw-bar" id="bar1"></div><div class="pw-bar" id="bar2"></div>
+              <div class="pw-bar" id="bar3"></div><div class="pw-bar" id="bar4"></div>
+            </div>
+            <div class="pw-label" id="pwLabel">Weak</div>
+          </div>
+          <div class="field-hint">Min. 8 characters with uppercase, number & symbol.</div>
+          <div class="field-error" id="pwError">Password must be at least 8 characters.</div>
+        </div>
+
+        <div class="field">
+          <label>Confirm password <span class="req">*</span></label>
+          <div class="field-input-wrap">
+            <span class="field-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </span>
+            <input type="password" id="confirmPw" class="has-icon" placeholder="Re-enter your password" autocomplete="new-password"/>
+            <span class="field-icon-right" id="toggleCpw">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </span>
+          </div>
+          <div class="field-error" id="confirmPwError">Passwords do not match.</div>
+        </div>
+
+        <!-- Security question -->
+        <div style="display:flex;align-items:center;gap:12px;margin:24px 0 18px">
+          <div style="flex:1;height:1px;background:var(--border)"></div>
+          <span style="font-size:12px;font-weight:700;color:var(--text-sec);white-space:nowrap;display:flex;align-items:center;gap:6px">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Security Question
+          </span>
+          <div style="flex:1;height:1px;background:var(--border)"></div>
+        </div>
+
+        <div class="field">
+          <label>Security question <span class="req">*</span></label>
+          <div class="select-wrap">
+            <select id="secQuestion">
+              <option value="">Choose a question</option>
+              <option>What was the name of your first pet?</option>
+              <option>What is your mother's maiden name?</option>
+              <option>What city were you born in?</option>
+              <option>What was the name of your first school?</option>
+              <option>What is your favourite film?</option>
+              <option>What street did you grow up on?</option>
+            </select>
+          </div>
+          <div class="field-error" id="secQuestionError">Please select a security question.</div>
+        </div>
+
+        <div class="field">
+          <label>Your answer <span class="req">*</span></label>
+          <input type="text" id="secAnswer" placeholder="Your answer (case-sensitive)"/>
+          <div class="field-hint">This is used to recover your account if needed.</div>
+          <div class="field-error" id="secAnswerError">Required.</div>
+        </div>
+
+        <div class="terms-wrap" id="termsWrap">
+          <div class="terms-checkbox" id="termsCheck">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" style="display:none" id="termsIcon"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="terms-text">
+            I agree to the <a href="#">Terms of Service</a>, <a href="#">Privacy Policy</a>, and <a href="#">AML/KYC Policy</a> of GLOBALEASYTRANSASSET Financial Technologies Ltd.
+          </div>
+        </div>
+
+        <button class="btn-back" id="back1Btn" type="button">← Back to Personal Info</button>
+        <button class="btn-submit" id="step2Btn" type="button">
+          <span class="btn-text">Continue to Additional Info</span>
+          <svg class="btn-text" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <div class="btn-spinner"></div>
+        </button>
+
+        <div class="security-row">
+          <div class="security-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            End-to-End Encrypted
+          </div>
+          <div class="security-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            FIDO2 Ready
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════ STEP 3: Additional Information (optional) ═══════ -->
+      <div class="form-step" id="step3">
+        <div class="form-tag" style="background:rgba(245,158,11,0.1);color:#D97706">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Optional · Step 3 of 3
+        </div>
+        <h1 class="form-title">Additional Information</h1>
+        <p class="form-sub">These details are optional but help us personalise your account and offer the best products for you.</p>
+
+        <div class="field">
+          <label>Employment status</label>
+          <div class="select-wrap">
+            <select id="employment">
+              <option value="">Prefer not to say</option>
+              <option>Employed — Full-time</option>
+              <option>Employed — Part-time</option>
+              <option>Self-employed / Freelancer</option>
+              <option>Business owner</option>
+              <option>Student</option>
+              <option>Retired</option>
+              <option>Unemployed</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Industry / Sector</label>
+          <div class="chips-wrap" id="industryChips">
+            <button class="chip" type="button" data-value="finance">Finance & Banking</button>
+            <button class="chip" type="button" data-value="tech">Technology</button>
+            <button class="chip" type="button" data-value="health">Healthcare</button>
+            <button class="chip" type="button" data-value="trade">Trade & Commerce</button>
+            <button class="chip" type="button" data-value="education">Education</button>
+            <button class="chip" type="button" data-value="creative">Creative & Media</button>
+            <button class="chip" type="button" data-value="realestate">Real Estate</button>
+            <button class="chip" type="button" data-value="other">Other</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Annual income range</label>
+          <div class="select-wrap">
+            <select id="income">
+              <option value="">Prefer not to disclose</option>
+              <option>Under $10,000</option>
+              <option>$10,000 – $25,000</option>
+              <option>$25,000 – $50,000</option>
+              <option>$50,000 – $100,000</option>
+              <option>$100,000 – $250,000</option>
+              <option>$250,000 – $500,000</option>
+              <option>Over $500,000</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Primary account purpose</label>
+          <div class="select-wrap">
+         <select id="purpose">
+            <option value="">Select account purpose</option>
+            <option>Current Account — Everyday banking</option>
+            <option>Savings Account — Save & grow funds</option>
+            <option>Business Account — Company payments</option>
+            <option>International Transfers — Send globally</option>
+            <option>Freelance & Remote Work Income</option>
+            <option>Investment & Wealth Management</option>
+            <option>Online Shopping & Subscriptions</option>
+            <option>Student Account</option>
+            <option>Joint Account</option>
+            <option>Other</option>
+          </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Referral code</label>
+          <div class="field-input-wrap">
+            <span class="field-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            </span>
+            <input type="text" id="referral" class="has-icon" placeholder="e.g. FRIEND2025" autocomplete="off"/>
+          </div>
+          <div class="field-hint">Have a referral code? Enter it to unlock rewards.</div>
+        </div>
+
+        <div class="field">
+          <label>Anything else you'd like us to know?</label>
+          <textarea id="notes" placeholder="Optional — e.g. I manage accounts for multiple businesses…"></textarea>
+        </div>
+
+        <!-- Notification preferences -->
+        <div style="display:flex;align-items:center;gap:12px;margin:8px 0 18px">
+          <div style="flex:1;height:1px;background:var(--border)"></div>
+          <span style="font-size:12px;font-weight:700;color:var(--text-sec);white-space:nowrap">Notification Preferences</span>
+          <div style="flex:1;height:1px;background:var(--border)"></div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px">
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:14px;color:var(--text-sec);font-weight:500">
+            <input type="checkbox" id="notifEmail" style="width:16px;height:16px;accent-color:var(--blue)" checked/>
+            Email notifications for transactions & alerts
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:14px;color:var(--text-sec);font-weight:500">
+            <input type="checkbox" id="notifSMS" style="width:16px;height:16px;accent-color:var(--blue)" checked/>
+            SMS alerts for large transactions
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:14px;color:var(--text-sec);font-weight:500">
+            <input type="checkbox" id="notifNews" style="width:16px;height:16px;accent-color:var(--blue)"/>
+            Product updates & promotional offers
+          </label>
+        </div>
+
+        <button class="btn-back" id="back2Btn" type="button">← Back to Login Setup</button>
+        <button class="btn-submit" id="step3Btn" type="button">
+          <span class="btn-text">Create My Account</span>
+          <svg class="btn-text" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <div class="btn-spinner"></div>
+        </button>
+
+        <button class="btn-skip" id="skipBtn" type="button">Skip and create account without additional info →</button>
+
+        <div class="security-row">
+          <div class="security-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Data Encrypted
+          </div>
+          <div class="security-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            GDPR · AML Compliant
+          </div>
+        </div>
+      </div>
+
+      <!-- SUCCESS -->
+      <div class="success-screen" id="successScreen">
+        <div class="success-icon">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h2 class="success-title">Account Created!</h2>
+        <p class="success-text">Welcome to GLOBALEASYTRANSASSET. Your account is now active. You're ready to send, save, and grow money globally.</p>
+        <a href="dashboard" class="btn-go">
+          Go to My Dashboard
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+let currentStep = 1;
+let termsAccepted = false;
+
+/* ── STEP NAVIGATION ── */
+function goToStep(n) {
+  document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('step' + n);
+  if (el) el.classList.add('active');
+  currentStep = n;
+  updateStepUI(n);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function updateStepUI(n) {
+  for (let i = 1; i <= 3; i++) {
+    const dot = document.getElementById('dot' + i);
+    const lbl = document.getElementById('lbl' + i);
+    const line = document.getElementById('line' + i);
+    const lst = document.getElementById('lst' + i);
+    const lstNum = document.getElementById('lstNum' + i);
+    dot.classList.remove('active','done');
+    lbl.classList.remove('active','done');
+    if (line) line.classList.remove('done');
+    lst.classList.remove('active','done');
+    if (i < n) {
+      dot.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>`;
+      dot.classList.add('done'); lbl.classList.add('done');
+      if (line) line.classList.add('done');
+      lst.classList.add('done');
+      lstNum.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>`;
+    } else if (i === n) {
+      dot.textContent = i; dot.classList.add('active'); lbl.classList.add('active');
+      lst.classList.add('active');
+      lstNum.textContent = i;
+    } else {
+      dot.textContent = i;
+      lstNum.textContent = i;
+    }
+  }
+}
+
+/* ── TERMS ── */
+const termsWrap = document.getElementById('termsWrap');
+const termsCheck = document.getElementById('termsCheck');
+const termsIcon = document.getElementById('termsIcon');
+termsWrap.addEventListener('click', () => {
+  termsAccepted = !termsAccepted;
+  termsCheck.classList.toggle('checked', termsAccepted);
+  termsIcon.style.display = termsAccepted ? 'block' : 'none';
+});
+
+/* ── PASSWORD TOGGLE ── */
+const pwInput = document.getElementById('password');
+const cpwInput = document.getElementById('confirmPw');
+document.getElementById('togglePw').addEventListener('click', () => {
+  pwInput.type = pwInput.type === 'password' ? 'text' : 'password';
+});
+document.getElementById('toggleCpw').addEventListener('click', () => {
+  cpwInput.type = cpwInput.type === 'password' ? 'text' : 'password';
+});
+
+/* ── PASSWORD STRENGTH ── */
+pwInput.addEventListener('input', () => {
+  const v = pwInput.value;
+  const strength = document.getElementById('pwStrength');
+  strength.style.display = v ? 'block' : 'none';
+  let score = 0;
+  if (v.length >= 8) score++;
+  if (/[A-Z]/.test(v)) score++;
+  if (/[0-9]/.test(v)) score++;
+  if (/[^A-Za-z0-9]/.test(v)) score++;
+  const labels = ['','Weak','Fair','Good','Strong'];
+  const cls = ['','weak','fair','good','strong'];
+  const colors = ['','#EF4444','#F59E0B','#3B82F6','#22C55E'];
+  document.getElementById('pwLabel').textContent = labels[score];
+  document.getElementById('pwLabel').style.color = colors[score];
+  for (let i = 1; i <= 4; i++) {
+    const bar = document.getElementById('bar' + i);
+    bar.className = 'pw-bar';
+    if (i <= score) bar.classList.add(cls[score]);
+  }
+});
+
+/* ── INDUSTRY CHIPS ── */
+document.getElementById('industryChips').addEventListener('click', e => {
+  const chip = e.target.closest('.chip');
+  if (!chip) return;
+  chip.classList.toggle('selected');
+});
+
+/* ── STEP 1 SUBMIT ── */
+document.getElementById('step1Btn').addEventListener('click', () => {
+  const fn = document.getElementById('firstName').value.trim();
+  const ln = document.getElementById('lastName').value.trim();
+  const dob = document.getElementById('dob').value;
+  const nat = document.getElementById('nationality').value;
+  const phone = document.getElementById('phone').value.trim();
+  const street = document.getElementById('streetAddress').value.trim();
+  const city = document.getElementById('city').value.trim();
+  const country = document.getElementById('country').value;
+  let valid = true;
+  showErr('firstNameError', !fn); if (!fn) valid = false;
+  showErr('lastNameError', !ln); if (!ln) valid = false;
+  if (dob) {
+    const age = (Date.now() - new Date(dob)) / (1000*60*60*24*365.25);
+    showErr('dobError', age < 18); if (age < 18) valid = false;
+  } else { showErr('dobError', true); valid = false; }
+  showErr('nationalityError', !nat); if (!nat) valid = false;
+  showErr('phoneError', phone.length < 7); if (phone.length < 7) valid = false;
+  showErr('streetError', !street); if (!street) valid = false;
+  showErr('cityError', !city); if (!city) valid = false;
+  showErr('countryError', !country); if (!country) valid = false;
+  if (!valid) return;
+  simulateLoad('step1Btn', () => goToStep(2));
+});
+const countries = [
+  "Afghanistan","Albania","Algeria","Angola","Argentina","Armenia","Australia",
+  "Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Belarus","Belgium",
+  "Bolivia","Bosnia and Herzegovina","Botswana","Brazil","Bulgaria","Cambodia",
+  "Cameroon","Canada","Chile","China","Colombia","Congo","Costa Rica","Croatia",
+  "Cuba","Czech Republic","Denmark","Ecuador","Egypt","Estonia","Ethiopia",
+  "Finland","France","Germany","Ghana","Greece","Guatemala","Hungary","Iceland",
+  "India","Indonesia","Iran","Iraq","Ireland","Israel","Italy","Jamaica","Japan",
+  "Jordan","Kazakhstan","Kenya","Kuwait","Latvia","Lebanon","Libya","Lithuania",
+  "Luxembourg","Malaysia","Mexico","Moldova","Mongolia","Morocco","Mozambique",
+  "Myanmar","Namibia","Nepal","Netherlands","New Zealand","Nicaragua","Niger",
+  "Nigeria","Norway","Oman","Pakistan","Panama","Paraguay","Peru","Philippines",
+  "Poland","Portugal","Qatar","Romania","Russia","Rwanda","Saudi Arabia",
+  "Senegal","Serbia","Sierra Leone","Singapore","Slovakia","Slovenia","Somalia",
+  "South Africa","South Korea","South Sudan","Spain","Sri Lanka","Sudan","Sweden",
+  "Switzerland","Syria","Taiwan","Tanzania","Thailand","Togo","Trinidad and Tobago",
+  "Tunisia","Turkey","Uganda","Ukraine","United Arab Emirates","United Kingdom",
+  "United States","Uruguay","Uzbekistan","Venezuela","Vietnam","Yemen","Zambia","Zimbabwe"
+];
+
+function renderCountryList(filter='') {
+  const list = document.getElementById('countryList');
+  const filtered = countries.filter(c => c.toLowerCase().includes(filter.toLowerCase()));
+  list.innerHTML = filtered.map(c =>
+    `<div onclick="selectCountry(this.textContent)"
+      style="padding:11px 16px;font-size:14px;font-weight:500;cursor:pointer;
+      border-bottom:1px solid var(--border);transition:background 0.15s;"
+      onmouseover="this.style.background='var(--blue-light)'"
+      onmouseout="this.style.background=''">${c}</div>`
+  ).join('') || '<div style="padding:12px 16px;color:var(--text-sec);font-size:13px">No results</div>';
+}
+
+function selectCountry(name) {
+  document.getElementById('countrySearch').value = name;
+  document.getElementById('country').value = name;
+  document.getElementById('countryList').style.display = 'none';
+  document.getElementById('countrySearch').style.borderColor = 'var(--border-focus)';
+}
+
+document.getElementById('countrySearch').addEventListener('input', function() {
+  document.getElementById('country').value = '';
+  renderCountryList(this.value);
+  document.getElementById('countryList').style.display = 'block';
+});
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e) {
+  if (!document.getElementById('countryDropdown').contains(e.target)) {
+    document.getElementById('countryList').style.display = 'none';
+  }
+});
+
+renderCountryList();
+document.getElementById('countrySearch').addEventListener('focus', function() {
+  this.style.borderColor = 'var(--border-focus)';
+  this.style.boxShadow = '0 0 0 3px rgba(30,107,255,0.12)';
+  document.getElementById('countryList').style.display = 'block';
+});
+/* ── STEP 2 SUBMIT ── */
+document.getElementById('step2Btn').addEventListener('click', () => {
+  const email = document.getElementById('email').value.trim();
+  const username = document.getElementById('username').value.trim();
+  const pw = document.getElementById('password').value;
+  const cpw = document.getElementById('confirmPw').value;
+  const secQ = document.getElementById('secQuestion').value;
+  const secA = document.getElementById('secAnswer').value.trim();
+  const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  let valid = true;
+  showErr('emailError', !emailRx.test(email)); if (!emailRx.test(email)) valid = false;
+  showErr('usernameError', username.length < 4); if (username.length < 4) valid = false;
+  showErr('pwError', pw.length < 8); if (pw.length < 8) valid = false;
+  showErr('confirmPwError', pw !== cpw); if (pw !== cpw) valid = false;
+  showErr('secQuestionError', !secQ); if (!secQ) valid = false;
+  showErr('secAnswerError', !secA); if (!secA) valid = false;
+  if (!termsAccepted) { alert('Please accept the Terms of Service to continue.'); return; }
+  if (!valid) return;
+  simulateLoad('step2Btn', () => goToStep(3));
+});
+
+/* ── STEP 3 SUBMIT ── */
+document.getElementById('step3Btn').addEventListener('click', () => {
+  simulateLoad('step3Btn', finishRegistration);
+});
+document.getElementById('skipBtn').addEventListener('click', () => {
+  finishRegistration();
+});
+
+function finishRegistration() {
+  const fn = document.getElementById('firstName').value.trim();
+  const ln = document.getElementById('lastName').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const pw = document.getElementById('password').value;
+  const phone = document.getElementById('phone').value.trim();
+
+  const btn = document.getElementById('step3Btn');
+  btn.classList.add('loading');
+  btn.disabled = true;
+
+  fetch('/api/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      firstName: fn,
+      lastName: ln,
+      email: email,
+      password: pw,
+      phone: phone,
+      preferredCurrency: 'USD'
+    }),
+    credentials: 'same-origin'
+  })
+    .then(r => r.json())
+    .then(data => {
+      btn.classList.remove('loading');
+      btn.disabled = false;
+      if (!data.success) {
+        alert('Registration failed: ' + (data.error || 'Unknown error'));
+        return;
+      }
+      localStorage.setItem('authToken', data.token);
+      document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+      document.getElementById('stepIndicator').style.display = 'none';
+      for (let i = 1; i <= 3; i++) {
+        const lst = document.getElementById('lst' + i);
+        const lstNum = document.getElementById('lstNum' + i);
+        lst.classList.remove('active');
+        lst.classList.add('done');
+        lstNum.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>`;
+      }
+      const ss = document.getElementById('successScreen');
+      ss.classList.add('show');
+      setTimeout(() => { window.location.href = '/dashboard'; }, 2000);
+    })
+    .catch(err => {
+      btn.classList.remove('loading');
+      btn.disabled = false;
+      alert('Network error: ' + err.message);
+    });
+}
+
+/* ── BACK BUTTONS ── */
+document.getElementById('back1Btn').addEventListener('click', () => goToStep(1));
+document.getElementById('back2Btn').addEventListener('click', () => goToStep(2));
+
+/* ── HELPERS ── */
+function showErr(id, show) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('show', show);
+}
+function simulateLoad(btnId, cb) {
+  const btn = document.getElementById(btnId);
+  btn.classList.add('loading');
+  btn.disabled = true;
+  setTimeout(() => { btn.classList.remove('loading'); btn.disabled = false; cb(); }, 900 + Math.random()*400);
+}
+</script>
+<style>
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.3)}}
+</style>
+</body>
+</html>
