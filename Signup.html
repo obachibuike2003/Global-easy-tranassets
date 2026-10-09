@@ -1111,10 +1111,13 @@ document.getElementById('step2Btn').addEventListener('click', async () => {
       const result = await response.json();
       
       if (result.success) {
-        // OTP sent successfully, go to step 3
-        goToStep(3);
+        // Account created (email verification is off for now) - go to the dashboard
+        document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+        document.getElementById('stepIndicator').style.display = 'none';
+        document.getElementById('successScreen').classList.add('show');
+        setTimeout(() => { window.location.href = 'dashboard.html'; }, 1500);
       } else {
-        alert(result.error || 'Failed to send verification code. Please try again.');
+        alert(result.error || 'Sign-up failed. Please try again.');
       }
     } catch (err) {
       alert('Network error. Please try again.');

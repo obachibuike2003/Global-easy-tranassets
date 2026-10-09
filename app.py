@@ -75,6 +75,7 @@ def get_session_user():
 
 # ═══════════════════════════ EMAIL SERVICE ═══════════════════════════
 import smtplib
+import threading
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
@@ -88,6 +89,12 @@ SMTP_USER = os.environ.get('SMTP_USER', '')
 SMTP_PASS = os.environ.get('SMTP_PASS', '')
 
 def send_email(to_email, subject, html_content):
+    """Send HTML email in the background so a slow or blocked mail server never delays a request"""
+    threading.Thread(target=_send_email_now, args=(to_email, subject, html_content), daemon=True).start()
+    return True
+
+
+def _send_email_now(to_email, subject, html_content):
     """Send HTML email matching website design"""
     if not SMTP_USER or not SMTP_PASS:
         # Log to console if SMTP not configured
@@ -113,7 +120,7 @@ def send_email(to_email, subject, html_content):
         html_part = MIMEText(html_content, 'html')
         msg.attach(html_part)
         
-        server = smtplib.SMTP(SMTP_HOST, SMTP_PORT)
+        server = smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=20)
         server.starttls()
         server.login(SMTP_USER, SMTP_PASS)
         server.sendmail(SMTP_USER, to_email, msg.as_string())
@@ -629,35 +636,37 @@ def api_register():
     if User.query.filter_by(email=email).first():
         return jsonify(success=False, error='Account already exists with that email.'), 409
 
-    # Generate OTP for email verification
-    otp_code = ''.join(random.choices(string.digits, k=6))
-    
-    # Store OTP in database
-    otp_record = VerificationOTP(email=email, otp_code=otp_code)
-    db.session.add(otp_record)
+    # Email verification is switched off for now: create the account right away
+    while True:
+        acc_num = ''.join([str(random.randint(1, 9))] + random.choices(string.digits, k=9))
+        if not User.query.filter_by(account_number=acc_num).first():
+            break
+
+    # Usernames must be unique: add digits if this one is taken
+    base_username = (username or email.split('@')[0])[:90]
+    username = base_username
+    while User.query.filter_by(username=username).first():
+        username = base_username + ''.join(random.choices(string.digits, k=4))
+
+    user = User(
+        email=email,
+        username=username,
+        first_name=first_name,
+        last_name=last_name,
+        phone=phone,
+        preferred_currency='USD',
+        status='Active',
+        account_number=acc_num
+    )
+    user.set_password(password)
+
+    db.session.add(user)
     db.session.commit()
 
-    # Send OTP email with styled template
-    otp_html = get_email_template(
-        title='Verify Your Email',
-        content=f'''
-          <p style="margin-bottom: 20px;">Thanks for signing up with GLOBALEASYTRANSASSET!</p>
-          <p style="margin-bottom: 10px;">Your verification code is:</p>
-          <div style="background: #EBF2FF; padding: 20px; border-radius: 12px; display: inline-block; margin: 20px 0;">
-            <span style="font-size: 32px; font-weight: 700; color: #1E6BFF; letter-spacing: 8px;">{otp_code}</span>
-          </div>
-          <p style="color: #6B7280; font-size: 14px;">This code expires in 10 minutes.</p>
-          <p style="color: #9CA3AF; font-size: 13px; margin-top: 20px;">If you didn't create an account, you can safely ignore this email.</p>
-        '''
-    )
-    send_email(
-        to_email=email,
-        subject='Verify your GLOBALEASYTRANSASSET account',
-        html_content=otp_html
-    )
+    # Create backend session (no token needed - uses cookies)
+    create_session(user)
 
-    # Return success - frontend should show OTP screen
-    return jsonify(success=True, email=email, message='Verification code sent to your email'), 201
+    return jsonify(success=True, email=email, user=user.to_dict()), 201
 
 
 @app.route('/api/verify-otp', methods=['POST'])
